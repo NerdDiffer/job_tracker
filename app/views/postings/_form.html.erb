@@ -12,12 +12,20 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :company_id %><br>
-    <%= f.text_field :company_id %>
-  </div>
-  <div class="field">
     <%= f.label :job_application_id %><br>
     <%= f.text_field :job_application_id %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_field :content %>
+  </div>
+  <div class="field">
+    <%= f.label :posting_date %><br>
+    <%= f.date_field :posting_date %>
+  </div>
+  <div class="field">
+    <%= f.label :source %><br>
+    <%= f.text_field :source %>
   </div>
   <div class="actions">
     <%= f.submit %>

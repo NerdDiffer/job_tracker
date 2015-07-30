@@ -12,16 +12,20 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :approx_date %><br>
+    <%= f.date_select :approx_date %>
+  </div>
+  <div class="field">
     <%= f.label :contact_id %><br>
     <%= f.text_field :contact_id %>
   </div>
   <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
+    <%= f.label :medium %><br>
+    <%= f.text_field :medium %>
   </div>
   <div class="field">
-    <%= f.label :approx_date %><br>
-    <%= f.date_select :approx_date %>
+    <%= f.label :notes %><br>
+    <%= f.text_field :notes %>
   </div>
   <div class="actions">
     <%= f.submit %>

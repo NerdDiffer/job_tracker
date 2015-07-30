@@ -9,6 +9,7 @@
     <tr>
       <th>Approx date</th>
       <th>Contact</th>
+      <th>Medium</th>
       <th>Notes</th>
       <th class='actions' colspan="3">Actions</th>
     </tr>
@@ -19,6 +20,7 @@
       <tr>
         <td><%= interaction.approx_date %></td>
         <td><%= interaction.contact %></td>
+        <td><%= interaction.medium %></td>
         <td><%= interaction.notes %></td>
         <td><%= link_to 'Show', interaction %></td>
         <td><%= link_to 'Edit', edit_interaction_path(interaction) %></td>

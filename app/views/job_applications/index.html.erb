@@ -9,7 +9,6 @@
     <tr>
       <th>Last Updated</th>
       <th>Company</th>
-      <th>Position</th>
       <th class='actions' colspan="3">Actions</th>
     </tr>
   </thead>
@@ -19,7 +18,6 @@
       <tr>
         <td><%= job_application.updated_at %></td>
         <td><%= job_application.company %></td>
-        <td><%= job_application.position %></td>
         <td><%= link_to 'Show', job_application %></td>
         <td><%= link_to 'Edit', edit_job_application_path(job_application) %></td>
         <td><%= link_to 'Destroy', job_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>

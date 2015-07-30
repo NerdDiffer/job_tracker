@@ -1,13 +1,23 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Company:</strong>
-  <%= @posting.company %>
+  <strong>Job application:</strong>
+  <%= @posting.job_application %>
 </p>
 
 <p>
-  <strong>Job application:</strong>
-  <%= @posting.job_application %>
+  <strong>Posting date:</strong>
+  <%= @posting.posting_date %>
+</p>
+
+<p>
+  <strong>Source:</strong>
+  <%= @posting.source %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @posting.content %>
 </p>
 
 <%= link_to 'Edit', edit_posting_path(@posting) %> |
