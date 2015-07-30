@@ -2,13 +2,24 @@
 <html>
 <head>
   <title>JobTracker</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= yield %>
+  <header>
+    <nav>
+      <%= render partial: 'shared/navigation' %>
+    </nav>
+  </header>
+
+  <div class='content'>
+    <%= yield %>
+  </div>
+
+  <footer>
+  </footer>
 
 </body>
 </html>

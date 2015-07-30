@@ -1,0 +1,16 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+// and the rest of the applications customizations
+@import "variables";
+@import "mixins";
+@import "main";
+
+// resource-specific styles
+@import "companies";
+@import "contacts";
+@import "cover_letters";
+@import "home";
+@import "interactions";
+@import "job_applications";
+@import "postings";
