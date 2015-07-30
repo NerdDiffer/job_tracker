@@ -99,4 +99,8 @@ table {
   }
   &.table-striped > tbody > tr:nth-of-type(odd) {
   }
+  td.actions {
+    list-style-type: none;
+    width: 10%;
+  }
 }

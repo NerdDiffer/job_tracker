@@ -4,14 +4,15 @@
 
 <%= link_to 'New contact', new_contact_path %>
 
+
 <table class='table table-striped table-hover'>
   <thead>
     <tr>
-      <th>Company</th>
       <th>Name</th>
       <th>Title</th>
-      <th>Phone1</th>
-      <th>Phone2</th>
+      <th>Company</th>
+      <th>Office Phone</th>
+      <th>Mobile Phone</th>
       <th>Email</th>
       <th class='actions' colspan="3">Actions</th>
     </tr>
@@ -20,15 +21,24 @@
   <tbody>
     <% @contacts.each do |contact| %>
       <tr>
-        <td><%= contact.company %></td>
-        <td><%= contact.name %></td>
+        <td><%= link_to(contact.name, contact) %></td>
         <td><%= contact.title %></td>
-        <td><%= contact.phone1 %></td>
-        <td><%= contact.phone2 %></td>
+        <td><%= link_to(contact.company.name, contact.company) %></td>
+        <td><%= contact.phone_office %></td>
+        <td><%= contact.phone_mobile %></td>
         <td><%= contact.email %></td>
-        <td><%= link_to 'Show', contact %></td>
-        <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
-        <td><%= link_to 'Destroy', contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td class='actions' colspan="3">
+          <%
+            actions = [
+              link_to("Show", contact),
+              link_to("Edit", edit_contact_path(contact)),
+              link_to("Delete", delete_contact_path(contact))
+            ]
+          %>
+          <% actions.each do |action| %>
+            <li><%= action %></li>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

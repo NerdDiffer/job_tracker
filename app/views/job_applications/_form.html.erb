@@ -15,6 +15,15 @@
     <%= f.label :company_id %><br>
     <%= f.text_field :company_id %>
   </div>
+
+  <div class="field">
+    <% opts = options_for_select(
+      [["Yes", true], ["No", false]],
+      :selected => @job_application.active
+    ) %>
+    <%= f.label :active %><br>
+    <%= f.select(:active, opts, :include_blank => true) %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

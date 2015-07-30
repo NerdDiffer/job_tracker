@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Active:</strong>
+  <%= status_tag @job_application.active %>
+</p>
+
+<p>
   <strong>Last updated:</strong>
   <%= @job_application.updated_at %>
 </p>

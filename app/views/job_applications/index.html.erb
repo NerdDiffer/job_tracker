@@ -7,6 +7,7 @@
 <table class='table table-striped table-hover'>
   <thead>
     <tr>
+      <th>Active</th>
       <th>Last Updated</th>
       <th>Company</th>
       <th class='actions' colspan="3">Actions</th>
@@ -16,6 +17,7 @@
   <tbody>
     <% @job_applications.each do |job_application| %>
       <tr>
+        <td><%= status_tag job_application.active %></td>
         <td><%= job_application.updated_at %></td>
         <td><%= job_application.company %></td>
         <td><%= link_to 'Show', job_application %></td>

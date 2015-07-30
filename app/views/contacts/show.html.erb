@@ -12,17 +12,17 @@
 
 <p>
   <strong>Company:</strong>
-  <%= @contact.company %>
+  <%= link_to(@contact.company.name, @contact.company) %>
 </p>
 
 <p>
-  <strong>Phone1:</strong>
-  <%= @contact.phone1 %>
+  <strong>Office Phone:</strong>
+  <%= @contact.phone_office %>
 </p>
 
 <p>
-  <strong>Phone2:</strong>
-  <%= @contact.phone2 %>
+  <strong>Mobile Phone:</strong>
+  <%= @contact.phone_mobile %>
 </p>
 
 <p>
