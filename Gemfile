@@ -24,13 +24,13 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use pry instead of irb when calling `$ rails console` from command line
 gem 'pry-rails', '~> 0.3.4'
 
+# auto completion
+gem 'redis'
+gem 'hiredis'
+
 group :development, :test do
   gem 'byebug'
-
   gem 'web-console', '~> 2.0'
-
   gem 'spring'
-
   gem 'rspec-rails', '~>3.0'
-
 end
