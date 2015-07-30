@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Posting:</strong>
+  <%= @cover_letter.posting %>
+</p>
+
+<p>
+  <strong>Job application:</strong>
+  <%= @cover_letter.job_application %>
+</p>
+
+<%= link_to 'Edit', edit_cover_letter_path(@cover_letter) %> |
+<%= link_to 'Back', cover_letters_path %>

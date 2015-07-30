@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+
+  resources :job_applications
+  resources :companies
+  resources :interactions
+  resources :cover_letters
+  resources :postings
+  resources :contacts
+
+  # default, root route
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

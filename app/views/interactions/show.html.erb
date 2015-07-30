@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Contact:</strong>
+  <%= @interaction.contact %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @interaction.description %>
+</p>
+
+<p>
+  <strong>Approx date:</strong>
+  <%= @interaction.approx_date %>
+</p>
+
+<%= link_to 'Edit', edit_interaction_path(@interaction) %> |
+<%= link_to 'Back', interactions_path %>
