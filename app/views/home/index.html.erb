@@ -1,2 +1,7 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class='jumbotron'>
+  <h1>Get a Job Rafael</h1>
+</div>
+
+<% main_links.each do |link| %>
+  <p><%= link_to link[:name], link[:path] %></p>
+<% end %>

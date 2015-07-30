@@ -2,20 +2,24 @@
 
 <h1>Listing Cover Letters</h1>
 
-<table>
+<%= link_to 'New cover letter', new_cover_letter_path %>
+
+<table class='table table-striped table-hover'>
   <thead>
     <tr>
-      <th>Posting</th>
       <th>Job application</th>
-      <th colspan="3"></th>
+      <th>Content</th>
+      <th>Sent date</th>
+      <th class='actions' colspan="3">Actions</th>
     </tr>
   </thead>
 
   <tbody>
     <% @cover_letters.each do |cover_letter| %>
       <tr>
-        <td><%= cover_letter.posting %></td>
         <td><%= cover_letter.job_application %></td>
+        <td><%= cover_letter.content %></td>
+        <td><%= cover_letter.sent_date %></td>
         <td><%= link_to 'Show', cover_letter %></td>
         <td><%= link_to 'Edit', edit_cover_letter_path(cover_letter) %></td>
         <td><%= link_to 'Destroy', cover_letter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -23,7 +27,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Cover letter', new_cover_letter_path %>

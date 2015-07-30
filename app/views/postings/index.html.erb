@@ -2,20 +2,26 @@
 
 <h1>Listing Postings</h1>
 
-<table>
+<%= link_to 'New posting', new_posting_path %>
+
+<table class='table table-striped table-hover'>
   <thead>
     <tr>
-      <th>Company</th>
       <th>Job application</th>
-      <th colspan="3"></th>
+      <th>Date</th>
+      <th>Content</th>
+      <th>Source</th>
+      <th class='actions' colspan="3">Actions</th>
     </tr>
   </thead>
 
   <tbody>
     <% @postings.each do |posting| %>
       <tr>
-        <td><%= posting.company %></td>
         <td><%= posting.job_application %></td>
+        <td><%= posting.posting_date %></td>
+        <td><%= posting.content %></td>
+        <td><%= posting.source %></td>
         <td><%= link_to 'Show', posting %></td>
         <td><%= link_to 'Edit', edit_posting_path(posting) %></td>
         <td><%= link_to 'Destroy', posting, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -23,7 +29,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Posting', new_posting_path %>

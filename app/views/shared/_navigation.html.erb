@@ -1,8 +1,5 @@
-<ul>
-  <li><%= link_to 'Companies', companies_path %></li>
-  <li><%= link_to 'Contacts', contacts_path %></li>
-  <li><%= link_to 'Interactions', interactions_path %></li>
-  <li><%= link_to 'Job Applications', job_applications_path %></li>
-  <li><%= link_to 'Postings', postings_path %></li>
-  <li><%= link_to 'Cover Letters', cover_letters_path %></li>
+<ul class='nav nav-pills'>
+  <% main_links.each do |link| %>
+    <li role='presentation'><%= link_to link[:name], link[:path] %></li>
+  <% end %>
 </ul>

@@ -1,0 +1,102 @@
+@import 'variables';
+
+/* Space out content a bit */
+body {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  background-color: white;
+  color: $warriors-black;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+/* Custom page header */
+.header {
+  background-color: $warriors-yellow;
+  border-radius: 0.5rem;
+
+  /* Make the masthead heading the same height as the navigation */
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 3rem;
+  }
+}
+
+nav {
+  padding-right: 1rem;
+
+  ul.nav > li > a:hover {
+    background-color: $warriors-blue; 
+    color: $warriors-yellow;
+  }
+  ul.nav {
+    & > li > a {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+  ul.nav-pills {
+    padding: 0.5rem 0;
+    & > li { 
+      margin-top: 0.7rem; 
+    }
+    &  > li > a {
+      border-radius: 0.5rem;
+    }
+  }
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 1.6rem;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+.content {
+  margin-top: 1.5rem;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+.container-narrow > hr {
+  margin: 2.2rem 0;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 2.2rem;
+  }
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+
+/* Tables */
+table {
+  &.table-hover > tbody > tr:hover {
+  }
+  &.table-striped > tbody > tr:nth-of-type(odd) {
+  }
+}

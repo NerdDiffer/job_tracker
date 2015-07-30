@@ -7,7 +7,11 @@
 
 <p>
   <strong>Website:</strong>
-  <%= @company.website %>
+  <%= link_to(
+    @company.website,
+    interpolate_link(@company.website),
+    target: '_blank'
+  ) %>
 </p>
 
 <p>

@@ -7,19 +7,18 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div class='container'>
+    <div class='header clearfix'>
+      <%= link_to 'Home', root_path, class: 'navbar-brand' %>
+      <nav>
+        <%= render partial: 'shared/navigation' %>
+      </nav>
+    </div>
 
-  <header>
-    <nav>
-      <%= render partial: 'shared/navigation' %>
-    </nav>
-  </header>
+    <div class='container content'>
+      <%= yield %>
+    </div>
 
-  <div class='content'>
-    <%= yield %>
   </div>
-
-  <footer>
-  </footer>
-
 </body>
 </html>

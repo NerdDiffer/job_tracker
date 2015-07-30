@@ -2,13 +2,15 @@
 
 <h1>Listing Companies</h1>
 
-<table>
+<%= link_to 'New company', new_company_path %>
+
+<table class='table table-striped table-hover'>
   <thead>
     <tr>
       <th>Name</th>
       <th>Website</th>
       <th>Category</th>
-      <th colspan="3"></th>
+      <th class='actions' colspan="3">Actions</th>
     </tr>
   </thead>
 
@@ -16,7 +18,13 @@
     <% @companies.each do |company| %>
       <tr>
         <td><%= company.name %></td>
-        <td><%= company.website %></td>
+        <td>
+          <%= link_to(
+            company.website,
+            interpolate_link(company.website),
+            target: '_blank'
+          ) %>
+        </td>
         <td><%= company.category %></td>
         <td><%= link_to 'Show', company %></td>
         <td><%= link_to 'Edit', edit_company_path(company) %></td>
@@ -25,7 +33,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Company', new_company_path %>
