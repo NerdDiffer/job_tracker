@@ -14,7 +14,8 @@ class JobApplicationsController < ApplicationController
 
   # GET /job_applications/new
   def new
-    @job_application = JobApplication.new
+    opts = { company_id: params[:company_id] }
+    @job_application = JobApplication.new(opts)
   end
 
   # GET /job_applications/1/edit
@@ -69,6 +70,6 @@ class JobApplicationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_application_params
-      params.require(:job_application).permit(:company_id)
+      params.require(:job_application).permit(:company_id, :active)
     end
 end

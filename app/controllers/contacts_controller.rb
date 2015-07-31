@@ -14,7 +14,8 @@ class ContactsController < ApplicationController
 
   # GET /contacts/new
   def new
-    @contact = Contact.new
+    opts = { company_id: params[:company_id] }
+    @contact = Contact.new(opts)
   end
 
   # GET /contacts/1/edit

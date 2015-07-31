@@ -12,7 +12,7 @@
 
 <p>
   <strong>Company:</strong>
-  <%= link_to(@contact.company.name, @contact.company) %>
+  <%= link_to(@contact.company.name, @contact.company) if @contact.company.present? %>
 </p>
 
 <p>
@@ -32,3 +32,10 @@
 
 <%= link_to 'Edit', edit_contact_path(@contact) %> |
 <%= link_to 'Back', contacts_path %>
+
+<div class='attached_records'>
+  <h2>Interactions</h2>
+  <% @contact.interactions.each do |interaction| %>
+    <li><%= link_to interaction.approx_date, interaction %></li>
+  <% end %>
+</div>
