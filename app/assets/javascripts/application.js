@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
+//= require jquery-ujs
+//= require jquery-ui/autocomplete
 //= require bootstrap-sprockets
 //= require_tree .
