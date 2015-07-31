@@ -23,7 +23,7 @@
       <tr>
         <td><%= link_to(contact.name, contact) %></td>
         <td><%= contact.title %></td>
-        <td><%= link_to(contact.company.name, contact.company) %></td>
+        <td><%= link_to(contact.company.name, contact.company) if contact.company.present? %></td>
         <td><%= contact.phone_office %></td>
         <td><%= contact.phone_mobile %></td>
         <td><%= contact.email %></td>
@@ -32,7 +32,6 @@
             actions = [
               link_to("Show", contact),
               link_to("Edit", edit_contact_path(contact)),
-              link_to("Delete", delete_contact_path(contact))
             ]
           %>
           <% actions.each do |action| %>

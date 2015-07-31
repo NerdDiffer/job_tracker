@@ -14,7 +14,11 @@ class CoverLettersController < ApplicationController
 
   # GET /cover_letters/new
   def new
-    @cover_letter = CoverLetter.new
+    opts = {
+      job_application_id: params[:job_application_id],
+      sent_date: Time.now
+    }
+    @cover_letter = CoverLetter.new(opts)
   end
 
   # GET /cover_letters/1/edit
@@ -69,6 +73,6 @@ class CoverLettersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cover_letter_params
-      params.require(:cover_letter).permit(:posting_id, :job_application_id)
+      params.require(:cover_letter).permit(:job_application_id, :sent_date, :content)
     end
 end

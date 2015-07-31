@@ -9,8 +9,8 @@
     <tr>
       <th>Job application</th>
       <th>Date</th>
-      <th>Content</th>
       <th>Source</th>
+      <th>Content</th>
       <th class='actions' colspan="3">Actions</th>
     </tr>
   </thead>
@@ -18,10 +18,10 @@
   <tbody>
     <% @postings.each do |posting| %>
       <tr>
-        <td><%= posting.job_application %></td>
+        <td><%= link_to posting.job_application.title, posting.job_application %></td>
         <td><%= posting.posting_date %></td>
-        <td><%= posting.content %></td>
         <td><%= posting.source %></td>
+        <td><%= truncate posting.content %></td>
         <td><%= link_to 'Show', posting %></td>
         <td><%= link_to 'Edit', edit_posting_path(posting) %></td>
         <td><%= link_to 'Destroy', posting, method: :delete, data: { confirm: 'Are you sure?' } %></td>

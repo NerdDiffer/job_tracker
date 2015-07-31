@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class='container'>
+    <%= debug(params) if Rails.env.development? %>
     <div class='header clearfix'>
       <%= link_to 'Home', root_path, class: 'navbar-brand' %>
       <nav>
@@ -20,5 +21,7 @@
     </div>
 
   </div>
+
+  <%= console if Rails.env.development? %>
 </body>
 </html>

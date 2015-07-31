@@ -12,8 +12,38 @@
 
 <p>
   <strong>Company:</strong>
-  <%= @job_application.company %>
+  <%= link_to @job_application.title, @job_application.company %>
 </p>
 
 <%= link_to 'Edit', edit_job_application_path(@job_application) %> |
 <%= link_to 'Back', job_applications_path %>
+
+<div class='attached_records'>
+  <h2>Posting</h2>
+  <% if @job_application.posting.present? %>
+    <li><%= link_to(
+      @job_application.posting.job_title,
+      @job_application.posting
+    ) %></li>
+  <% else %>
+    <%= link_to(
+      'Add Posting',
+      new_posting_path({ job_application_id: @job_application.id })
+    ) %>
+  <% end %>
+</div>
+
+<div class='attached_records'>
+  <h2>Cover Letter</h2>
+  <% if @job_application.cover_letter.present? %>
+    <li><%= link_to(
+      @job_application.cover_letter.sent_date,
+      @job_application.cover_letter
+    ) %></li>
+  <% else %>
+    <%= link_to(
+      'Add Cover Letter',
+      new_cover_letter_path({ job_application_id: @job_application.id })
+    ) %>
+  <% end %>
+</div>

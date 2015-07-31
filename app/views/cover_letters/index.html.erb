@@ -17,9 +17,9 @@
   <tbody>
     <% @cover_letters.each do |cover_letter| %>
       <tr>
-        <td><%= cover_letter.job_application %></td>
+        <td><%= cover_letter.job_application.company.name %></td>
         <td><%= cover_letter.sent_date %></td>
-        <td><%= cover_letter.content %></td>
+        <td><%= truncate cover_letter.content %></td>
         <td><%= link_to 'Show', cover_letter %></td>
         <td><%= link_to 'Edit', edit_cover_letter_path(cover_letter) %></td>
         <td><%= link_to 'Destroy', cover_letter, method: :delete, data: { confirm: 'Are you sure?' } %></td>

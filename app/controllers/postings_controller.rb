@@ -14,7 +14,11 @@ class PostingsController < ApplicationController
 
   # GET /postings/new
   def new
-    @posting = Posting.new
+    opts = {
+      job_application_id: params[:job_application_id],
+      posting_date: Time.now
+    }
+    @posting = Posting.new(opts)
   end
 
   # GET /postings/1/edit
@@ -69,6 +73,6 @@ class PostingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def posting_params
-      params.require(:posting).permit(:company_id, :job_application_id)
+      params.require(:posting).permit(:job_application_id, :posting_date, :source, :job_title, :content)
     end
 end
