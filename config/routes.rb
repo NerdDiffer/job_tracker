@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   resources :postings
   resources :contacts
 
+  # search suggestions
+  match '/search_suggestions',
+    :to  => 'search_suggestions#index',
+    :via => :get
+
   # default, root route
   root 'home#index'
 

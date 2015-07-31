@@ -3,7 +3,6 @@
 <head>
   <title>JobTracker</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -23,5 +22,6 @@
   </div>
 
   <%= console if Rails.env.development? %>
+  <%= javascript_include_tag 'application' %>
 </body>
 </html>

@@ -1,3 +1,6 @@
+// vendor code
+// if using 'jquery-ui*', then it should be required before 'bootstrap*'
+@import "jquery-ui";
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
@@ -5,13 +8,6 @@
 @import "variables";
 @import "mixins";
 @import "main";
-@import "jquery-ui/autocomplete";
 
-// resource-specific styles
-@import "companies";
-@import "contacts";
-@import "cover_letters";
-@import "home";
-@import "interactions";
-@import "job_applications";
-@import "postings";
+// glob the rest of the directory, including all resource-specific files
+@import "./*"

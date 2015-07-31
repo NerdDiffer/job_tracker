@@ -12,7 +12,10 @@ class SearchSuggestion
     seed(Company, :name, @company_names_key)
   end
 
-  # search for a term return the top x search results
+  # search for a term return the top x search results.
+  # by default, will return the top 10 results.
+  # @param query [String], the term to search for
+  # @param options [Hash], options for your search
   def self.terms_for(query, options = {})
     options[:min] ||= 0 # zero-indexed results
     options[:max] ||= 9 # zero-indexed results
