@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<h1><%= @job_application.title %></h1>
 <p>
   <strong>Active:</strong>
   <%= status_tag @job_application.active %>
@@ -12,7 +13,7 @@
 
 <p>
   <strong>Company:</strong>
-  <%= link_to @job_application.title, @job_application.company %>
+  <%= link_to @job_application.company.name, @job_application.company %>
 </p>
 
 <%= link_to 'Edit', edit_job_application_path(@job_application) %> |

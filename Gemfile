@@ -5,6 +5,9 @@ gem 'pg'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+# semantic urls
+gem 'friendly_id', '~> 5.1.0'
+
 # front-end stuff
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

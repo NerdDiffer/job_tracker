@@ -4,10 +4,14 @@ class JobApplication < ActiveRecord::Base
   has_one :cover_letter
 
   def title
-    t = ''
+    title = ''
+
     self.company.present? ?
-      t += self.company.name :
-      t += Time.now.strftime("%Y%m%d%H%M%S")
-    t += " - #{posting.job_title}" if posting.present?
+      title += self.company.name :
+      title += Time.now.strftime("%Y%m%d%H%M%S")
+
+    title += " - #{posting.job_title}" if posting.present?
+
+    title
   end
 end

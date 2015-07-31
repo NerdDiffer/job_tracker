@@ -29,10 +29,7 @@
         <td><%= contact.email %></td>
         <td class='actions' colspan="3">
           <%
-            actions = [
-              link_to("Show", contact),
-              link_to("Edit", edit_contact_path(contact)),
-            ]
+            actions = [link_to("Edit", edit_contact_path(contact))]
           %>
           <% actions.each do |action| %>
             <li><%= action %></li>
