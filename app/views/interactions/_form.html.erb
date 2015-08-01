@@ -4,7 +4,7 @@
 
   <div class="field">
     <%= f.label :approx_date %><br>
-    <%= f.date_select :approx_date %>
+    <%= f.date_field :approx_date %>
   </div>
   <div class="field">
     <%= f.label :contact_id %><br>
@@ -20,7 +20,7 @@
   </div>
   <div class="field">
     <%= f.label :notes %><br>
-    <%= f.text_field :notes %>
+    <%= f.text_area :notes, rows: '10', cols: '60' %>
   </div>
   <div class="actions">
     <%= f.submit %>

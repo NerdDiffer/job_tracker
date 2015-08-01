@@ -14,7 +14,8 @@ class InteractionsController < ApplicationController
 
   # GET /interactions/new
   def new
-    @interaction = Interaction.new
+    opts = { contact_id: params[:contact_id] }
+    @interaction = Interaction.new(opts)
   end
 
   # GET /interactions/1/edit
