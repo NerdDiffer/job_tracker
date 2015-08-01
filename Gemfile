@@ -17,7 +17,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'bootstrap-sass', '~> 3.3.5'
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use pry instead of irb when calling `$ rails console` from command line
 gem 'pry-rails', '~> 0.3.4'
