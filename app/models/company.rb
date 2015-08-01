@@ -11,6 +11,9 @@ class Company < ActiveRecord::Base
   validates :permalink,
     uniqueness: true
 
+  # scopes
+  scope :sorted, lambda { order(:name) }
+
   def permalink
     self.permalink = self.name.parameterize
   end

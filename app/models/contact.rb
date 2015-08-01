@@ -13,6 +13,9 @@ class Contact < ActiveRecord::Base
   validates :permalink,
     uniqueness: true
 
+  # scopes
+  scope :sorted, lambda { order(:first_name => :asc) }
+
   # instance methods
   def name
     "#{self.first_name} #{self.last_name}"

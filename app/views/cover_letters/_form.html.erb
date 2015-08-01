@@ -1,15 +1,6 @@
 <%= form_for(@cover_letter) do |f| %>
-  <% if @cover_letter.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@cover_letter.errors.count, "error") %> prohibited this cover_letter from being saved:</h2>
 
-      <ul>
-      <% @cover_letter.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= error_messages_for @cover_letter %>
 
   <div class="field">
     <%= f.label :job_application_id %><br>

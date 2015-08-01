@@ -3,6 +3,18 @@ class JobApplication < ActiveRecord::Base
   has_one :posting
   has_one :cover_letter
 
+  # scopes
+  scope :sorted, lambda { order(:updated_at => :desc) }
+
+  # class methods
+
+  # @param show_active [Boolean], show active or inactive records
+  # @return list of job applications
+  def self.active(show_active = true)
+    where(:active => show_active)
+  end
+
+  # instance methods
   def title
     title = ''
 

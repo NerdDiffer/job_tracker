@@ -10,7 +10,7 @@
       <th>Active</th>
       <th>Company &amp; Title</th>
       <th>Last Updated</th>
-      <th class='actions' colspan="3">Actions</th>
+      <th class='actions' colspan="2">Actions</th>
     </tr>
   </thead>
 
@@ -18,9 +18,8 @@
     <% @job_applications.each do |job_application| %>
       <tr>
         <td><%= status_tag job_application.active %></td>
-        <td><%= job_application.title %></td>
+        <td><%= link_to job_application.title, job_application %></td>
         <td><%= job_application.updated_at %></td>
-        <td><%= link_to 'Show', job_application %></td>
         <td><%= link_to 'Edit', edit_job_application_path(job_application) %></td>
         <td><%= link_to 'Destroy', job_application, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

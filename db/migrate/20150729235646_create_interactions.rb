@@ -5,7 +5,7 @@ class CreateInteractions < ActiveRecord::Migration
 
       t.string      :notes
       t.date        :approx_date
-      t.string      :medium
+      t.integer     :medium # this gets pluralized as 'media'
 
       t.timestamps null: false
     end
