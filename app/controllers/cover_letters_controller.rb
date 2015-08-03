@@ -1,4 +1,5 @@
 class CoverLettersController < ApplicationController
+  before_action :logged_in_user
   before_action :set_cover_letter, only: [:show, :edit, :update, :destroy]
 
   # GET /cover_letters
