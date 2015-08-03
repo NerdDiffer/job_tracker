@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  # accounts & sessions
+  get    'signup' => 'users#new' 
+  get    'login'  => 'sessions#new'
+  post   'login'  => 'sessions#create'
+  delete 'logout' => 'sessions#destroy'
+
   resources :users
   resources :job_applications
   resources :companies
