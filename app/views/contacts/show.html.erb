@@ -32,6 +32,10 @@
 
 <div class='attached_records'>
   <h2>Interactions</h2>
+  <%= link_to(
+    'Add new interaction',
+    new_interaction_path({contact_id: @contact.id})
+  ) %>
   <% @contact.interactions.each do |interaction| %>
     <li><%= link_to interaction.approx_date, interaction %></li>
   <% end %>

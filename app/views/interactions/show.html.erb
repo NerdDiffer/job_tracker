@@ -7,7 +7,7 @@
 
 <p>
   <strong>Contact:</strong>
-  <%= @interaction.contact %>
+  <%= link_to(@interaction.contact.name, @interaction.contact) if @interaction.contact %>
 </p>
 
 <p>
