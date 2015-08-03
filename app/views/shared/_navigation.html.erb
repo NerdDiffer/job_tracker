@@ -1,5 +1,22 @@
-<ul class='nav nav-pills'>
-  <% main_links.each do |link| %>
-    <li role='presentation'><%= link_to link[:name], link[:path] %></li>
-  <% end %>
-</ul>
+<div class='container-fluid'>
+  <!-- link to home page -->
+  <div class='navbar-header'>
+    <%= button_tag(type: 'button', class:'navbar-toggle collapsed') do %>
+    <% end %>
+    <%= link_to 'Home', root_path, class: 'navbar-brand' %>
+  </div>
+  <div class='collapse navbar-collapse'>
+    <!-- links to job-search features -->
+    <ul class='nav navbar-nav nav-pills'>
+      <% main_links.each do |link| %>
+        <li role='presentation'><%= link_to link[:name], link[:path] %></li>
+      <% end %>
+    </ul>
+     <!-- links to account management -->
+    <ul class='nav navbar-nav navbar-right nav-pills'>
+      <li role='presentation'>
+        <%= link_to 'Register', new_user_path %>
+      </li>
+    </ul>
+  </div>
+</div>

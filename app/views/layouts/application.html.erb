@@ -8,12 +8,9 @@
 <body>
   <div class='container'>
     <%= debug(params) if Rails.env.development? %>
-    <div class='header clearfix'>
-      <%= link_to 'Home', root_path, class: 'navbar-brand' %>
-      <nav>
-        <%= render partial: 'shared/navigation' %>
-      </nav>
-    </div>
+    <nav class='nav navbar-inverse'>
+      <%= render partial: 'shared/navigation' %>
+    </nav>
 
     <div class='container content'>
       <%= yield %>

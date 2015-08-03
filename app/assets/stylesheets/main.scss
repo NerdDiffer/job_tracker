@@ -18,9 +18,6 @@ body {
 
 /* Custom page header */
 .header {
-  background-color: $warriors-yellow;
-  border-radius: 0.5rem;
-
   /* Make the masthead heading the same height as the navigation */
   h3 {
     margin-top: 0;
@@ -29,25 +26,34 @@ body {
   }
 }
 
+/* Navigation */
 nav {
-  padding-right: 1rem;
+  font-size: 1.3rem; // just enough to get links to fit on one line
 
-  ul.nav > li > a:hover {
-    background-color: $warriors-blue; 
-    color: $warriors-yellow;
-  }
-  ul.nav {
-    & > li > a {
-      padding: 0.5rem 0.75rem;
+  &.navbar-inverse {
+    background-color: $warriors-yellow;
+    border-radius: 0.5rem;
+
+    & .navbar-brand, & .navbar-nav > li > a {
+      color: $warriors-blue;
     }
-  }
-  ul.nav-pills {
-    padding: 0.5rem 0;
-    & > li { 
-      margin-top: 0.7rem; 
+    ul.nav > li > a:hover {
+      background-color: $warriors-blue;
+      color: $warriors-yellow;
     }
-    &  > li > a {
-      border-radius: 0.5rem;
+    ul.nav {
+      & > li > a {
+        padding: 0.5rem 0.75rem;
+      }
+    }
+    ul.nav-pills {
+      padding: 0.5rem 0;
+      & > li {
+        margin-top: 0.7rem;
+      }
+      &  > li > a {
+        border-radius: 0.5rem;
+      }
     }
   }
 }

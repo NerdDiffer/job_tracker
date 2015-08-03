@@ -1,5 +1,9 @@
 class JobApplication < ActiveRecord::Base
+
   belongs_to :company
+  belongs_to :applicant,
+    :class_name => 'User',
+    :foreign_key => 'user_id'
   has_one :posting
   has_one :cover_letter
 
