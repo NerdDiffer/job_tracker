@@ -1,4 +1,5 @@
 class InteractionsController < ApplicationController
+  before_action :logged_in_user
   before_action :set_interaction, only: [:show, :edit, :update, :destroy]
 
   # GET /interactions
@@ -14,7 +15,8 @@ class InteractionsController < ApplicationController
 
   # GET /interactions/new
   def new
-    @interaction = Interaction.new
+    opts = { contact_id: params[:contact_id] }
+    @interaction = Interaction.new(opts)
   end
 
   # GET /interactions/1/edit

@@ -1,5 +1,5 @@
 <div class='jumbotron'>
-  <h1>Get a Job Rafael</h1>
+  <h1>Get a Job <%= current_user.first_name if current_user %></h1>
 </div>
 
 <% main_links.each do |link| %>

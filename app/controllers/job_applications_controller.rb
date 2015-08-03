@@ -1,4 +1,5 @@
 class JobApplicationsController < ApplicationController
+  before_action :logged_in_user
   before_action :set_job_application, only: [:show, :edit, :update, :destroy]
 
   # GET /job_applications
