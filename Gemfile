@@ -32,3 +32,14 @@ group :development, :test do
   gem 'spring'
   gem 'rspec-rails', '~>3.0'
 end
+
+group :production do
+  # serve static assets & produce logs
+  # needed b/c Rails plugin system was removed for Rails 4
+  gem 'rails_12factor'
+
+  # puma is better than webrick for handling incoming requests
+  gem 'puma'
+end
+
+ruby "2.2.2"
