@@ -14,7 +14,7 @@
       <th>Office Phone</th>
       <th>Mobile Phone</th>
       <th>Email</th>
-      <th class='actions' colspan="3">Actions</th>
+      <th class='actions'>Actions</th>
     </tr>
   </thead>
 
@@ -27,13 +27,8 @@
         <td><%= contact.phone_office %></td>
         <td><%= contact.phone_mobile %></td>
         <td><%= contact.email %></td>
-        <td class='actions' colspan="3">
-          <%
-            actions = [link_to("Edit", edit_contact_path(contact))]
-          %>
-          <% actions.each do |action| %>
-            <li><%= action %></li>
-          <% end %>
+        <td class='actions'>
+          <%= link_to("Edit", edit_contact_path(contact)) %>
         </td>
       </tr>
     <% end %>

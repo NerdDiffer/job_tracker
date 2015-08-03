@@ -1,15 +1,6 @@
 <%= form_for(@interaction) do |f| %>
-  <% if @interaction.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@interaction.errors.count, "error") %> prohibited this interaction from being saved:</h2>
 
-      <ul>
-      <% @interaction.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= error_messages_for @interaction %>
 
   <div class="field">
     <%= f.label :approx_date %><br>
@@ -20,8 +11,12 @@
     <%= f.text_field :contact_id %>
   </div>
   <div class="field">
+    <% media_opts = options_for_select(
+      generate_select_opts_for_media,
+      @interaction.medium
+    ) %>
     <%= f.label :medium %><br>
-    <%= f.text_field :medium %>
+    <%= f.select :medium, media_opts, include_blank: true %>
   </div>
   <div class="field">
     <%= f.label :notes %><br>

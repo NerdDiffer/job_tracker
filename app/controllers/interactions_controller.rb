@@ -4,7 +4,7 @@ class InteractionsController < ApplicationController
   # GET /interactions
   # GET /interactions.json
   def index
-    @interactions = Interaction.all
+    @interactions = Interaction.sorted
   end
 
   # GET /interactions/1
@@ -69,6 +69,6 @@ class InteractionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def interaction_params
-      params.require(:interaction).permit(:contact_id, :description, :approx_date)
+      params.require(:interaction).permit(:contact_id, :notes, :approx_date, :medium)
     end
 end

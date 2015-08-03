@@ -4,7 +4,7 @@ class CoverLettersController < ApplicationController
   # GET /cover_letters
   # GET /cover_letters.json
   def index
-    @cover_letters = CoverLetter.all
+    @cover_letters = CoverLetter.sorted
   end
 
   # GET /cover_letters/1
