@@ -31,6 +31,9 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'rspec-rails', '~>3.0'
+
+  # seed data
+  gem 'faker', '~> 1.4.3'
 end
 
 group :production do
