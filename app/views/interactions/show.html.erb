@@ -1,5 +1,8 @@
 <p id="notice"><%= notice %></p>
 
+<%= link_to 'Edit', edit_interaction_path(@interaction) %> |
+<%= link_to 'Back', interactions_path %>
+
 <p>
   <strong>Approx date:</strong>
   <%= @interaction.approx_date %>
@@ -17,8 +20,5 @@
 
 <p>
   <strong>Notes:</strong>
-  <%= @interaction.notes %>
+  <%= markdown(@interaction.notes) %>
 </p>
-
-<%= link_to 'Edit', edit_interaction_path(@interaction) %> |
-<%= link_to 'Back', interactions_path %>

@@ -41,4 +41,22 @@ module ApplicationHelper
             params.merge(:sort => attribute, :direction => direction),
             {:class => css_class})
   end
+
+  def markdown(text)
+    renderer_options = {
+      with_toc_data: true
+    }
+
+    md_extensions = {
+      no_intra_emphasis: true,
+      fenced_code_blocks: true,
+      disable_indented_code_blocks: true
+    }
+
+    renderer = Redcarpet::Render::HTML.new(renderer_options)
+    md = Redcarpet::Markdown.new(renderer, md_extensions)
+
+    md.render(text).html_safe
+  end
+
 end

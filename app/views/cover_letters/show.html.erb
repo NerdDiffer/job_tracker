@@ -1,5 +1,8 @@
 <p id="notice"><%= notice %></p>
 
+<%= link_to 'Edit', edit_cover_letter_path(@cover_letter) %> |
+<%= link_to 'Back', cover_letters_path %>
+
 <p>
   <strong>Job application:</strong>
   <%= link_to @cover_letter.job_application.title, @cover_letter.job_application %>
@@ -12,8 +15,5 @@
 
 <p>
   <strong>Content:</strong>
-  <%= @cover_letter.content %>
+  <%= markdown(@cover_letter.content) %>
 </p>
-
-<%= link_to 'Edit', edit_cover_letter_path(@cover_letter) %> |
-<%= link_to 'Back', cover_letters_path %>

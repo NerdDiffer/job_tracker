@@ -1,5 +1,8 @@
 <p id="notice"><%= notice %></p>
 
+<%= link_to 'Edit', edit_posting_path(@posting) %> |
+<%= link_to 'Back', postings_path %>
+
 <p>
   <strong>Job application:</strong>
   <%= link_to @posting.job_application.title, @posting.job_application %>
@@ -22,8 +25,5 @@
 
 <p>
   <strong>Content:</strong>
-  <%= @posting.content %>
+  <%= markdown(@posting.content) %>
 </p>
-
-<%= link_to 'Edit', edit_posting_path(@posting) %> |
-<%= link_to 'Back', postings_path %>
