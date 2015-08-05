@@ -1,4 +1,7 @@
 class PostingsController < ApplicationController
+
+  helper_method :sort_column
+
   before_action :logged_in_user
   before_action :set_posting, only: [:show, :edit, :update, :destroy]
 
@@ -6,6 +9,11 @@ class PostingsController < ApplicationController
   # GET /postings.json
   def index
     @postings = Posting.sorted
+    if params[:sort]
+      @postings = Posting.sort_by_attribute(@postings,
+                                            params[:sort],
+                                            params[:direction])
+    end
   end
 
   # GET /postings/1
@@ -67,13 +75,21 @@ class PostingsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_posting
       @posting = Posting.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def whitelisted_attr
+      [:job_application_id, :posting_date, :source, :job_title, :content,
+       :job_application_title]
+    end
+
     def posting_params
-      params.require(:posting).permit(:job_application_id, :posting_date, :source, :job_title, :content)
+      params.require(:posting).permit(whitelisted_attr)
+    end
+
+    def sort_column
+      sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
+      whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'posting_date'
     end
 end

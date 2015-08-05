@@ -1,5 +1,7 @@
 class JobApplication < ActiveRecord::Base
 
+  include Filterable
+
   belongs_to :company
   belongs_to :applicant,
     :class_name => 'User',
@@ -12,6 +14,7 @@ class JobApplication < ActiveRecord::Base
 
   # class methods
 
+  # A named scope for selecting active or inactive job applications
   # @param show_active [Boolean], show active or inactive records
   # @return list of job applications
   def self.active(show_active = true)

@@ -1,5 +1,7 @@
 class Contact < ActiveRecord::Base
   extend FriendlyId
+  include Filterable
+
   friendly_id :name
 
   belongs_to :company
@@ -22,5 +24,8 @@ class Contact < ActiveRecord::Base
   end
   def permalink
     self.permalink = name.parameterize
+  end
+  def company_name
+    self.company.name if self.company
   end
 end

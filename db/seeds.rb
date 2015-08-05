@@ -16,7 +16,7 @@ def seed_companies_contacts_and_interactions(num)
     company = Company.create!(name: name,
                               website: website,
                               category: category)
-  
+
     # create contacts
     first_name = Faker::Name.first_name
     last_name  = Faker::Name.last_name
@@ -24,7 +24,6 @@ def seed_companies_contacts_and_interactions(num)
     phone2 = Faker::PhoneNumber.phone_number
     email = Faker::Internet.safe_email(first_name)
     title = Faker::Name.title
-  
     contact = Contact.create!(first_name: first_name, last_name: last_name,
                               phone_office: phone1, phone_mobile: phone2,
                               email: email, title: title,
@@ -66,8 +65,8 @@ def seed_job_applications_postings_and_cover_letters
   end
 end
 
-# Do not let this run in production. Use another data set for testing.
-if Rails.env == 'development'
+# Do not let this run in production. Make it available for testing.
+unless Rails.env == 'production'
   # Feel free to comment out seeding methods you don't need.
   # By default, create 30 records for:
   #   Company, Contacts, Interaction, JobApplication, Posting, CoverLetter

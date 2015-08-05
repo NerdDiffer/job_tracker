@@ -7,9 +7,9 @@
 <table class='table table-striped table-hover'>
   <thead>
     <tr>
-      <th>Active</th>
-      <th>Company &amp; Title</th>
-      <th>Last Updated</th>
+      <th><%= render partial: 'filter_active' %></th>
+      <th><%= sortable('title', 'Company & Job Title') %></th>
+      <th><%= sortable('updated_at', "Last Updated") %></th>
       <th class='actions' colspan="2">Actions</th>
     </tr>
   </thead>

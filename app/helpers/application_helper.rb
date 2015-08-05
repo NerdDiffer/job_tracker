@@ -23,4 +23,22 @@ module ApplicationHelper
            :locals  => { :curr_object => object })
   end
 
+  # Generate an HTML link for use in sorting for #index views
+  # @param attribute [String], the name of the attribute to sort by
+  # @param title [String], the name you want to display
+  # @return [String], a generated HTML link
+  def sortable(attribute, title = nil)
+    attribute = attribute.to_s unless attribute.class == String
+    title ||= attribute.titleize
+
+    css_class = attribute == sort_column ? "current #{sort_direction}" : nil
+
+    direction = (attribute == sort_column && sort_direction == 'asc') ?
+      'desc' :
+      'asc'
+
+    link_to(title,
+            params.merge(:sort => attribute, :direction => direction),
+            {:class => css_class})
+  end
 end
