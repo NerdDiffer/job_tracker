@@ -13,7 +13,14 @@ class Company < ActiveRecord::Base
 
   # scopes
   scope :sorted, lambda { order(:name) }
+  scope :by_name, lambda { |q| where("name ILIKE ?", "%#{q}%") }
 
+  # other class methods
+  def self.search(search)
+    search ? by_name(search) : unscoped
+  end
+
+  # instance methods
   def permalink
     self.permalink = self.name.parameterize
   end

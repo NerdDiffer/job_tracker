@@ -1,11 +1,15 @@
 class CompaniesController < ApplicationController
+
+  helper_method :sort_column
+
   before_action :logged_in_user
   before_action :set_company, only: [:show, :edit, :update, :destroy]
 
   # GET /companies
   # GET /companies.json
   def index
-    @companies = Company.sorted
+    @companies = Company.search(params[:search]).order(sort_column + " " +
+                                                       sort_direction)
   end
 
   # GET /companies/1
@@ -68,8 +72,13 @@ class CompaniesController < ApplicationController
       @company = Company.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def company_params
-      params.require(:company).permit(:name, :website, :category)
+      params.require(:company).permit(:name, :website, :category,
+                                      :sort, :direction, :search)
+    end
+
+    def sort_column
+      # only allow column names from this model
+      Company.column_names.include?(params[:sort]) ? params[:sort] : 'name'
     end
 end

@@ -1,4 +1,6 @@
 class Interaction < ActiveRecord::Base
+  include Filterable
+
   belongs_to :contact
 
   # enum
@@ -9,4 +11,8 @@ class Interaction < ActiveRecord::Base
   # scopes
   scope :sorted, lambda { order(:approx_date => :desc) }
 
+  # instance methods
+  def contact_name
+    self.contact.name if self.contact
+  end
 end

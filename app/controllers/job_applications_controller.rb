@@ -1,11 +1,19 @@
 class JobApplicationsController < ApplicationController
+
+  helper_method :sort_column
+
   before_action :logged_in_user
   before_action :set_job_application, only: [:show, :edit, :update, :destroy]
 
   # GET /job_applications
   # GET /job_applications.json
   def index
-    @job_applications = JobApplication.active.sorted
+    @job_applications = JobApplication.filter(params.slice(:active))
+    if params[:sort]
+      @job_applications = JobApplication.sort_by_attribute(@job_applications,
+                                                           params[:sort],
+                                                           params[:direction])
+    end
   end
 
   # GET /job_applications/1
@@ -69,8 +77,19 @@ class JobApplicationsController < ApplicationController
       @job_application = JobApplication.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def whitelisted_attr
+      [:company_id, :active, :sort, :direction, :title]
+    end
+
     def job_application_params
-      params.require(:job_application).permit(:company_id, :active)
+      params.require(:job_application).permit(whitelisted_attr)
+    end
+
+    def sort_column
+      # Make sure to call '#to_sym' on params, (if necessary) because
+      # all keys in params hash are strings and you're comparing it against
+      # the array from the #whitelisted_attr method.
+      sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
+      whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'updated_at'
     end
 end

@@ -1,4 +1,7 @@
 class CoverLettersController < ApplicationController
+
+  helper_method :sort_column
+
   before_action :logged_in_user
   before_action :set_cover_letter, only: [:show, :edit, :update, :destroy]
 
@@ -6,6 +9,12 @@ class CoverLettersController < ApplicationController
   # GET /cover_letters.json
   def index
     @cover_letters = CoverLetter.sorted
+    if params[:sort]
+      @cover_letters = CoverLetter.sort_by_attribute(@cover_letters,
+                                                     params[:sort],
+                                                     params[:direction])
+
+    end
   end
 
   # GET /cover_letters/1
@@ -67,13 +76,21 @@ class CoverLettersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_cover_letter
       @cover_letter = CoverLetter.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def whitelisted_attr
+      [:job_application_id, :sent_date, :content,
+       :job_application_title]
+    end
+
     def cover_letter_params
-      params.require(:cover_letter).permit(:job_application_id, :sent_date, :content)
+      params.require(:cover_letter).permit(whitelisted_attr)
+    end
+
+    def sort_column
+      sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
+      whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'sent_date'
     end
 end

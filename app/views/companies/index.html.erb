@@ -4,31 +4,44 @@
 
 <%= link_to 'New company', new_company_path %>
 
-<table class='table table-striped table-hover'>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Website</th>
-      <th>Category</th>
-      <th class='actions' colspan="2">Actions</th>
-    </tr>
-  </thead>
+<%= form_tag companies_path, method: 'get' do %>
+  <!-- these 2 hidden fields help you sort/search w/ multiple criteria -->
+  <%= hidden_field_tag(:direction, params[:direction]) %>
+  <%= hidden_field_tag(:sort, params[:sort]) %>
 
-  <tbody>
-    <% @companies.each do |company| %>
+  <%= content_tag :p do %>
+    <%= search_field_tag :search, params[:search] %>
+    <%= submit_tag('Search', :name => nil) %>
+  <% end %>
+<% end %>
+
+<div id='companies'>
+  <table class='table table-striped table-hover'>
+    <thead>
       <tr>
-        <td><%= link_to company.name, company %></td>
-        <td>
-          <%= link_to(
-            company.website,
-            interpolate_link(company.website),
-            target: '_blank'
-          ) %>
-        </td>
-        <td><%= company.category %></td>
-        <td><%= link_to 'Edit', edit_company_path(company) %></td>
-        <td><%= link_to 'Destroy', company, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th><%= sortable('name', 'Name') %></th>
+        <th>Website</th>
+        <th><%= sortable('category', 'Category') %></th>
+        <th class='actions' colspan="2">Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+  
+    <tbody>
+      <% @companies.each do |company| %>
+        <tr>
+          <td><%= link_to company.name, company %></td>
+          <td>
+            <%= link_to(
+              company.website,
+              interpolate_link(company.website),
+              target: '_blank'
+            ) %>
+          </td>
+          <td><%= company.category %></td>
+          <td><%= link_to 'Edit', edit_company_path(company) %></td>
+          <td><%= link_to 'Destroy', company, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
