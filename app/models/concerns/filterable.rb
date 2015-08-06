@@ -37,5 +37,23 @@ module Filterable
       end
     end
 
+    # Return a record's attribute by searching for some other attribute first.
+    # Can work with attributes on other models. Those attributes must be actual
+    # database columns. This won't work on virtual attributes.
+    # Will return the first match only.
+    # TODO: Find a way to return several matches
+    # @param search_attr [String, Symbol], the column name to search by
+    #   (no virtual attributes)
+    # @param value [String], the value to search for within the search_attribute
+    # @param options [Hash], set of named parameter options
+    # @return, the first matching record's id or nil
+    def get_record_val_by(attribute, value, options = {})
+      model       = options[:model] || self
+      return_attr = options[:return_attr] || :id
+
+      record = model.public_send("find_by_#{attribute.to_s}", value)
+      record.read_attribute(return_attr) unless record.nil?
+    end
+
   end
 end

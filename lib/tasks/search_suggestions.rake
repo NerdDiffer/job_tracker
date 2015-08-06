@@ -1,9 +1,9 @@
 namespace :search_suggestions do
 
-  desc 'refresh search suggestions for company names'
+  desc 'Refresh search suggestions for company names'
   task :seed_company_names => :environment do |task, args|
-    puts "Refreshing company names..."
-    SearchSuggestion.seed_company_names
+    puts "Deleting existing keys for company names and refreshing..."
+    SearchSuggestion.reseed_company_names
   end
 
   desc 'run all seed tasks for search suggestions'

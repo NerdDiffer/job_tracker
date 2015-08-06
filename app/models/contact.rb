@@ -2,6 +2,8 @@ class Contact < ActiveRecord::Base
   extend FriendlyId
   include Filterable
 
+  attr_accessor :company_name
+
   friendly_id :name
 
   belongs_to :company

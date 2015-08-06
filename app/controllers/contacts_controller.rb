@@ -34,7 +34,8 @@ class ContactsController < ApplicationController
   # POST /contacts
   # POST /contacts.json
   def create
-    @contact = Contact.new(contact_params)
+    # NOTE: company_id is set by a private method
+    @contact = Contact.new(contact_params.merge(company_id: set_company_id))
 
     respond_to do |format|
       if @contact.save
@@ -51,7 +52,8 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1.json
   def update
     respond_to do |format|
-      if @contact.update(contact_params)
+      # NOTE: company_id is set by a private method
+      if @contact.update(contact_params.merge(company_id: set_company_id))
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @contact }
       else
@@ -88,5 +90,11 @@ class ContactsController < ApplicationController
     def sort_column
       sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
       whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'name'
+    end
+
+    def set_company_id
+      Contact.get_record_val_by(:name,
+                                params[:contact][:company_name],
+                                model: Company)
     end
 end
