@@ -1,6 +1,8 @@
 class Interaction < ActiveRecord::Base
   include Filterable
 
+  attr_accessor :contact_name
+
   belongs_to :contact
 
   # enum

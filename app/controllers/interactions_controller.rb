@@ -23,7 +23,7 @@ class InteractionsController < ApplicationController
 
   # GET /interactions/new
   def new
-    opts = { contact_id: params[:contact_id] }
+    opts = { contact_id: params[:contact_id], approx_date: Time.now }
     @interaction = Interaction.new(opts)
   end
 
@@ -34,7 +34,8 @@ class InteractionsController < ApplicationController
   # POST /interactions
   # POST /interactions.json
   def create
-    @interaction = Interaction.new(interaction_params)
+    int_params = interaction_params.merge(contact_id: set_contact_id)
+    @interaction = Interaction.new(int_params)
 
     respond_to do |format|
       if @interaction.save
@@ -51,7 +52,8 @@ class InteractionsController < ApplicationController
   # PATCH/PUT /interactions/1.json
   def update
     respond_to do |format|
-      if @interaction.update(interaction_params)
+      int_params = interaction_params.merge(contact_id: set_contact_id)
+      if @interaction.update(int_params)
         format.html { redirect_to @interaction, notice: 'Interaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @interaction }
       else
@@ -87,5 +89,10 @@ class InteractionsController < ApplicationController
     def sort_column
       sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
       whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'approx_date'
+    end
+
+    def set_contact_id
+      Contact.get_record_val_by(:name,
+                                params[:interaction][:contact_name])
     end
 end

@@ -2,6 +2,8 @@ class JobApplication < ActiveRecord::Base
 
   include Filterable
 
+  attr_accessor :company_name
+
   belongs_to :company
   belongs_to :applicant,
     :class_name => 'User',

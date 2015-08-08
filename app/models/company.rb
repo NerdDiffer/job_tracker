@@ -1,5 +1,7 @@
 class Company < ActiveRecord::Base
   extend FriendlyId
+  include Filterable
+
   friendly_id :name
 
   has_many :contacts

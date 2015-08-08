@@ -34,7 +34,8 @@ class JobApplicationsController < ApplicationController
   # POST /job_applications
   # POST /job_applications.json
   def create
-    @job_application = JobApplication.new(job_application_params)
+    ja_params = job_application_params.merge(company_id: set_company_id)
+    @job_application = JobApplication.new(ja_params)
 
     respond_to do |format|
       if @job_application.save
@@ -51,7 +52,9 @@ class JobApplicationsController < ApplicationController
   # PATCH/PUT /job_applications/1.json
   def update
     respond_to do |format|
-      if @job_application.update(job_application_params)
+
+      ja_params = job_application_params.merge(company_id: set_company_id)
+      if @job_application.update(ja_params)
         format.html { redirect_to @job_application, notice: 'Job application was successfully updated.' }
         format.json { render :show, status: :ok, location: @job_application }
       else
@@ -78,7 +81,9 @@ class JobApplicationsController < ApplicationController
     end
 
     def whitelisted_attr
-      [:company_id, :active, :sort, :direction, :title]
+      [:company_id, :active,
+       :sort, :direction, :title,
+       :company_name]
     end
 
     def job_application_params
@@ -91,5 +96,10 @@ class JobApplicationsController < ApplicationController
       # the array from the #whitelisted_attr method.
       sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
       whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'updated_at'
+    end
+
+    def set_company_id
+      Company.get_record_val_by(:name,
+                                params[:job_application][:company_name])
     end
 end

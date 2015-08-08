@@ -5,18 +5,24 @@ class SearchSuggestion
 
   # namespaced-parent keys
   @company_names_key = "#{APP_PREFIX}#{DLMTR}company_names"
+  @contact_names_key = "#{APP_PREFIX}#{DLMTR}contact_names"
 
   # class methods
 
-  def self.seed_company_names
-    seed(Company, :name, @company_names_key)
+  # Refresh redis keys for Contact names.
+  #   Deletes all existing redis keys for contact names.
+  #   Then repopulates with the latest information.
+  def self.refresh_contact_names
+    delete_by(@contact_names_key)
+    seed(Contact, :name, @contact_names_key)
   end
 
-  # Delete all existing redis keys for company names.
-  # Then repopulate with the latest information.
-  def self.reseed_company_names
+  # Refresh redis keys for Company names.
+  #   Deletes all existing redis keys for company names.
+  #   Then repopulates with the latest information.
+  def self.refresh_company_names
     delete_by(@company_names_key)
-    seed_company_names
+    seed(Company, :name, @company_names_key)
   end
 
   # search for a term return the top x search results.
@@ -24,8 +30,8 @@ class SearchSuggestion
   # @param query [String], the term to search for
   # @param options [Hash], options for your search
   def self.terms_for(query, options = {})
-    options[:min] ||= 0 # zero-indexed results
-    options[:max] ||= 9 # zero-indexed results
+    options[:min] ||= 0
+    options[:max] ||= 9
     options[:parent_set] ||= @company_names_key
 
     set_key_name = make_sub_set_key(options[:parent_set], query.downcase)
@@ -38,7 +44,7 @@ class SearchSuggestion
   # @param namespace_key [String], the key of the parent Redis sorted-set
   def self.seed(model, attribute, namespace_key)
     model.find_each do |record|
-      record_val = record.read_attribute(attribute).to_s
+      record_val = record.public_send(attribute).to_s
       processed_record_val = record_val.downcase.strip
 
       ( 1..(processed_record_val.length) ).each do |ind|

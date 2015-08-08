@@ -51,7 +51,7 @@ module Filterable
       model       = options[:model] || self
       return_attr = options[:return_attr] || :id
 
-      record = model.public_send("find_by_#{attribute.to_s}", value)
+      record = model.public_send("find_by_#{attribute.to_s}", value).first
       record.read_attribute(return_attr) unless record.nil?
     end
 
