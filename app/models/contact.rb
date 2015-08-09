@@ -26,7 +26,7 @@ class Contact < ActiveRecord::Base
     first_name = name_as_arr.first
     # just in case the last name is more than 1 word long...
     last_name = name_as_arr[1...name_as_arr.length].join(' ')
-    where(first_name: first_name, last_name: last_name)
+    find_by_first_name_and_last_name(first_name, last_name)
   end
 
   # instance methods

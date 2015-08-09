@@ -38,21 +38,30 @@ module Filterable
     end
 
     # Return a record's attribute by searching for some other attribute first.
-    # Can work with attributes on other models. Those attributes must be actual
-    # database columns. This won't work on virtual attributes.
+    # Works with attributes on other models. Also works w/ virtual attributes.
+    # If searching by a virtual attribute, model must offer a corresponding
+    # class method in the naming pattern: '.find_by_*'.
+    # If that class method returns an ActiveRecord::Relation, then it may
+    # require further processing.
     # Will return the first match only.
     # TODO: Find a way to return several matches
-    # @param search_attr [String, Symbol], the column name to search by
-    #   (no virtual attributes)
+    # @param search_attr [String, Symbol], attribute to search by (virtual OK)
     # @param value [String], the value to search for within the search_attribute
     # @param options [Hash], set of named parameter options
     # @return, the first matching record's id or nil
     def get_record_val_by(attribute, value, options = {})
       model       = options[:model] || self
       return_attr = options[:return_attr] || :id
+      record = model.public_send("find_by_#{attribute.to_s}", value)
+      check_relation_class(record).read_attribute(return_attr) unless record.nil?
+    end
 
-      record = model.public_send("find_by_#{attribute.to_s}", value).first
-      record.read_attribute(return_attr) unless record.nil?
+    # If something descends from ActiveRecord::Relation, return first in list
+    # Otherwise, return the object
+    def check_relation_class(object_or_relation)
+      object_or_relation.class.ancestors.include?(ActiveRecord::Relation) ?
+        object_or_relation.first :
+        object_or_relation
     end
 
   end
