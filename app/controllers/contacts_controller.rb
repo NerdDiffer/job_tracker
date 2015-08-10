@@ -8,7 +8,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.all
+    @contacts = Contact.sorted
     if params[:sort]
       @contacts = Contact.sort_by_attribute(@contacts,
                                             params[:sort],

@@ -8,7 +8,7 @@ class JobApplicationsController < ApplicationController
   # GET /job_applications
   # GET /job_applications.json
   def index
-    @job_applications = JobApplication.filter(params.slice(:active))
+    @job_applications = JobApplication.filter(params.slice(:active)).sorted
     if params[:sort]
       @job_applications = JobApplication.sort_by_attribute(@job_applications,
                                                            params[:sort],
@@ -102,4 +102,5 @@ class JobApplicationsController < ApplicationController
       Company.get_record_val_by(:name,
                                 params[:job_application][:company_name])
     end
+
 end
