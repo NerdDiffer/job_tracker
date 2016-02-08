@@ -1,6 +1,7 @@
 class ContactsController < ApplicationController
+  include SortingHelper
 
-  helper_method :sort_column
+  helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
@@ -9,11 +10,7 @@ class ContactsController < ApplicationController
   # GET /contacts.json
   def index
     @contacts = Contact.sorted
-    if params[:sort]
-      @contacts = Contact.sort_by_attribute(@contacts,
-                                            params[:sort],
-                                            params[:direction])
-    end
+    @contacts = custom_index_sort if params[:sort]
   end
 
   # GET /contacts/1
@@ -23,7 +20,8 @@ class ContactsController < ApplicationController
 
   # GET /contacts/new
   def new
-    opts = { company_id: params[:company_id] }
+    company_id = params[:company_id]
+    opts = { company_id: company_id }
     @contact = Contact.new(opts)
   end
 
@@ -34,9 +32,7 @@ class ContactsController < ApplicationController
   # POST /contacts
   # POST /contacts.json
   def create
-    # NOTE: company_id is set by a private method
-    @contact = Contact.new(contact_params.merge(company_id: set_company_id))
-
+    @contact = Contact.new(contact_params_with_company_id)
     respond_to do |format|
       if @contact.save
         format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
@@ -52,8 +48,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1.json
   def update
     respond_to do |format|
-      # NOTE: company_id is set by a private method
-      if @contact.update(contact_params.merge(company_id: set_company_id))
+      if @contact.update(contact_params_with_company_id)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
         format.json { render :show, status: :ok, location: @contact }
       else
@@ -74,27 +69,39 @@ class ContactsController < ApplicationController
   end
 
   private
-    def set_contact
-      @contact = Contact.find(params[:id])
-    end
 
-    def whitelisted_attr
-      [:first_name, :last_name, :title, :email, :company_id,
-       :phone_office, :phone_mobile, :sort, :direction, :name, :company_name]
-    end
+  def set_contact
+    id = params[:id]
+    @contact = Contact.find(id)
+  end
 
-    def contact_params
-      params.require(:contact).permit(whitelisted_attr)
-    end
+  def whitelisted_attr
+    [:first_name, :last_name, :title, :email, :company_id,
+     :phone_office, :phone_mobile, :sort, :direction, :name, :company_name]
+  end
 
-    def sort_column
-      sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
-      whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'name'
-    end
+  def contact_params
+    params.require(:contact).permit(whitelisted_attr)
+  end
 
-    def set_company_id
-      Contact.get_record_val_by(:name,
-                                params[:contact][:company_name],
-                                model: Company)
-    end
+  def contact_params_with_company_id
+    contact_params.merge(company_id: set_company_id)
+  end
+
+  def set_company_id
+    company_name = params[:contact][:company_name]
+    Contact.get_record_val_by(:name, company_name, model: Company)
+  end
+
+  def model
+    Contact
+  end
+
+  def collection
+    @contacts
+  end
+
+  def column_to_sort_by
+    'name'
+  end
 end

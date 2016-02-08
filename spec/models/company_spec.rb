@@ -1,5 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Company, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:company) { build(:company) }
+
+  describe '#permalink' do
+    it 'calls parameterize on the name' do
+      allow(company).to receive(:name).and_return('FOO BAR')
+      expect(company.name).to receive(:parameterize)
+      company.permalink
+    end
+  end
 end

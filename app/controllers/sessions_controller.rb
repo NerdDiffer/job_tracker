@@ -1,25 +1,14 @@
 class SessionsController < ApplicationController
   def new
-    unless logged_in?
-      # display login page
-    else
-      # if already logged in, then go to user profile
-      redirect_to(current_user)
-    end
+    return redirect_to(current_user) if logged_in?
+    # otherwise, display login page
   end
 
   def create
-    if params[:session][:email].present? && params[:session][:password].present?
-      user = User.find_by(email: params[:session][:email].downcase)
-    end
+    user = find_user_by_email if email_and_password?
 
-    if user && user.authenticate(params[:session][:password])
-      log_in(user)
-      flash[:success] = "You are now logged in"
-      params[:session][:remember_me] == '1' ?
-        remember(user) :
-        forget(user)
-      redirect_back_or(user)
+    if authenticated?(user)
+      login_authenticated_user(user)
     else
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
@@ -28,7 +17,39 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out if logged_in?
-    flash[:notice] = "You have logged out"
+    flash[:notice] = 'You have logged out'
     redirect_to(root_url)
+  end
+
+  private
+
+  def email_and_password?
+    email? && password?
+  end
+
+  def email?
+    params[:session][:email].present?
+  end
+
+  def password?
+    params[:session][:password].present?
+  end
+
+  def find_user_by_email
+    email = params[:session][:email].downcase
+    User.find_by(email: email)
+  end
+
+  def authenticated?(user)
+    password = params[:session][:password]
+    user && user.authenticate(password)
+  end
+
+  def login_authenticated_user(user)
+    log_in(user)
+    flash[:success] = 'You are now logged in'
+    remember_me = params[:session][:remember_me]
+    remember_me == '1' ? remember(user) : forget(user)
+    redirect_back_or(user)
   end
 end

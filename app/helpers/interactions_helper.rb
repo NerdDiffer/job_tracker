@@ -6,7 +6,7 @@ module InteractionsHelper
     # Writing the block parameters as `|new_media, key|` will return an array.
     # This could also work, if you assign `key` as the value to
     # `key[0].humanize`. But this is unintuitive to me.
-    Interaction.media.inject({}) do |new_media, (key, val)|
+    Interaction.media.each_with_object({}) do |(key), new_media|
       new_media[key.humanize] = key
       new_media
     end

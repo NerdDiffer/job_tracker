@@ -8,17 +8,14 @@ class Contact < ActiveRecord::Base
 
   belongs_to :company
   has_many :interactions
-  has_many :cover_letters, :through => :interactions
+  has_many :cover_letters, through: :interactions
 
-  validates :first_name,
-    presence: true
-  validates :last_name,
-    presence: true
-  validates :permalink,
-    uniqueness: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :permalink, uniqueness: true
 
   # scopes
-  scope :sorted, lambda { order(:first_name => :asc) }
+  scope :sorted, -> { order(first_name: :asc) }
 
   # class methods
   def self.find_by_name(name)
@@ -31,12 +28,14 @@ class Contact < ActiveRecord::Base
 
   # instance methods
   def name
-    "#{self.first_name} #{self.last_name}"
+    "#{first_name} #{last_name}"
   end
+
   def permalink
     self.permalink = name.parameterize
   end
+
   def company_name
-    self.company.name if self.company
+    company.name if company
   end
 end

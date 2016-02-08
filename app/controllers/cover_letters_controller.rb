@@ -1,6 +1,7 @@
 class CoverLettersController < ApplicationController
+  include SortingHelper
 
-  helper_method :sort_column
+  helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
   before_action :set_cover_letter, only: [:show, :edit, :update, :destroy]
@@ -9,12 +10,7 @@ class CoverLettersController < ApplicationController
   # GET /cover_letters.json
   def index
     @cover_letters = CoverLetter.sorted
-    if params[:sort]
-      @cover_letters = CoverLetter.sort_by_attribute(@cover_letters,
-                                                     params[:sort],
-                                                     params[:direction])
-
-    end
+    @cover_letters = custom_index_sort if params[:sort]
   end
 
   # GET /cover_letters/1
@@ -24,10 +20,13 @@ class CoverLettersController < ApplicationController
 
   # GET /cover_letters/new
   def new
+    job_application_id = params[:job_application_id]
+
     opts = {
-      job_application_id: params[:job_application_id],
+      job_application_id: job_application_id,
       sent_date: Time.now
     }
+
     @cover_letter = CoverLetter.new(opts)
   end
 
@@ -76,21 +75,29 @@ class CoverLettersController < ApplicationController
   end
 
   private
-    def set_cover_letter
-      @cover_letter = CoverLetter.find(params[:id])
-    end
 
-    def whitelisted_attr
-      [:job_application_id, :sent_date, :content,
-       :job_application_title]
-    end
+  def set_cover_letter
+    id = params[:id]
+    @cover_letter = CoverLetter.find(id)
+  end
 
-    def cover_letter_params
-      params.require(:cover_letter).permit(whitelisted_attr)
-    end
+  def whitelisted_attr
+    [:job_application_id, :sent_date, :content, :job_application_title]
+  end
 
-    def sort_column
-      sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
-      whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'sent_date'
-    end
+  def cover_letter_params
+    params.require(:cover_letter).permit(whitelisted_attr)
+  end
+
+  def model
+    CoverLetter
+  end
+
+  def collection
+    @cover_letters
+  end
+
+  def column_to_sort_by
+    'sent_date'
+  end
 end

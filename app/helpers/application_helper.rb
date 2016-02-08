@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def interpolate_link url
+  def interpolate_link(url)
     "http://#{url}"
   end
 
@@ -12,15 +12,15 @@ module ApplicationHelper
     options[:false_text] ||= 'No'
 
     if boolean_val
-      content_tag(:span, options[:true_text], :class => 'status true')
+      content_tag(:span, options[:true_text], class: 'status true')
     else
-      content_tag(:span, options[:false_text], :class => 'status false')
+      content_tag(:span, options[:false_text], class: 'status false')
     end
   end
 
   def error_messages_for(object)
-    render(:partial => 'shared/error_messages',
-           :locals  => { :curr_object => object })
+    locals = { curr_object: object }
+    render(partial: 'shared/error_messages', locals: locals)
   end
 
   # Generate an HTML link for use in sorting for #index views
@@ -28,24 +28,21 @@ module ApplicationHelper
   # @param title [String], the name you want to display
   # @return [String], a generated HTML link
   def sortable(attribute, title = nil)
-    attribute = attribute.to_s unless attribute.class == String
+    attribute = attribute.to_s
     title ||= attribute.titleize
 
-    css_class = attribute == sort_column ? "current #{sort_direction}" : nil
+    attr_eql_to_sort_col = attribute == sort_column
+    sort_asc = sort_direction == 'asc'
 
-    direction = (attribute == sort_column && sort_direction == 'asc') ?
-      'desc' :
-      'asc'
+    direction = attr_eql_to_sort_col && sort_asc ? 'desc' : 'asc'
+    params.merge!(sort: attribute, direction: direction)
+    css_class = attr_eql_to_sort_col ? "current #{sort_direction}" : nil
 
-    link_to(title,
-            params.merge(:sort => attribute, :direction => direction),
-            {:class => css_class})
+    link_to(title, params, class: css_class)
   end
 
   def markdown(text)
-    renderer_options = {
-      with_toc_data: true
-    }
+    renderer_options = { with_toc_data: true }
 
     md_extensions = {
       no_intra_emphasis: true,
@@ -58,5 +55,4 @@ module ApplicationHelper
 
     md.render(text).html_safe
   end
-
 end

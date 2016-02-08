@@ -7,15 +7,12 @@ class Company < ActiveRecord::Base
   has_many :contacts
   has_many :job_applications
 
-  validates :name,
-    uniqueness: true,
-    presence: true
-  validates :permalink,
-    uniqueness: true
+  validates :name, uniqueness: true, presence: true
+  validates :permalink, uniqueness: true
 
   # scopes
-  scope :sorted, lambda { order(:name) }
-  scope :by_name, lambda { |q| where("name ILIKE ?", "%#{q}%") }
+  scope :sorted, -> { order(:name) }
+  scope :by_name, -> (q) { where('name ILIKE ?', "%#{q}%") }
 
   # other class methods
   def self.search(search)
@@ -24,6 +21,6 @@ class Company < ActiveRecord::Base
 
   # instance methods
   def permalink
-    self.permalink = self.name.parameterize
+    self.permalink = name.parameterize
   end
 end

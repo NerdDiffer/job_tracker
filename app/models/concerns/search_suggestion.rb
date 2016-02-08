@@ -1,7 +1,6 @@
 class SearchSuggestion
-
-  APP_PREFIX = "job_tracker"
-  DLMTR  = ":"
+  APP_PREFIX = 'job_tracker'.freeze
+  DLMTR = ':'.freeze
 
   # namespaced-parent keys
   @company_names_key = "#{APP_PREFIX}#{DLMTR}company_names"
@@ -46,24 +45,24 @@ class SearchSuggestion
     model.find_each do |record|
       record_val = record.public_send(attribute).to_s
       processed_record_val = record_val.downcase.strip
+      record_length = processed_record_val.length
+      range = (1..record_length)
 
-      ( 1..(processed_record_val.length) ).each do |ind|
+      range.each do |ind|
         prefix = processed_record_val[0...ind]
         set_key_name = make_sub_set_key(namespace_key, prefix)
         $redis.zadd(set_key_name, 0, record_val)
       end
     end
-
   end
 
   # Delete all Redis keys within a particular namespace. Useful for refreshing.
   # @param namespace_key [String], the namespaced-parent key you wish to delete
   def self.delete_by(namespace_key)
-    $redis.keys("#{namespace_key}#{DLMTR}*").each{ |key| $redis.del(key) }
+    $redis.keys("#{namespace_key}#{DLMTR}*").each { |key| $redis.del(key) }
   end
 
   def self.make_sub_set_key(key_of_parent_set, term)
     "#{key_of_parent_set}#{DLMTR}#{term}"
   end
-
 end

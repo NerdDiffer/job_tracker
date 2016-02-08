@@ -1,20 +1,16 @@
 class Interaction < ActiveRecord::Base
   include Filterable
 
-  attr_accessor :contact_name
-
   belongs_to :contact
 
-  # enum
-  # in case you want to call the class method, this is pluralized as 'media'
-  # `Interaction.media`
-  enum medium: [ :in_person, :phone, :email, :other ]
+  # Enum, pluralized as 'media' `Interaction.media`
+  enum medium: [:in_person, :phone, :email, :other]
 
   # scopes
-  scope :sorted, lambda { order(:approx_date => :desc) }
+  scope :sorted, -> { order(approx_date: :desc) }
 
   # instance methods
   def contact_name
-    self.contact.name if self.contact
+    contact.name if contact
   end
 end

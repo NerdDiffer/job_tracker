@@ -1,15 +1,20 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the HomeHelper. For example:
-#
-# describe HomeHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe HomeHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#main_links' do
+    it 'each key in the hash object is :name or :path' do
+      links = helper.main_links
+      links.each do |link_hash|
+        keys = link_hash.keys
+        expect(keys).to eq %I(name path)
+      end
+    end
+    it 'each value in the hash object is a String' do
+      links = helper.main_links
+      links.each do |link_hash|
+        vals = link_hash.values
+        expect(vals).to all be_a String
+      end
+    end
+  end
 end

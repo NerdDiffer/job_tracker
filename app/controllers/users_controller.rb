@@ -48,14 +48,17 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def user_params
-      params.require(:user).permit(:first_name, :last_name,
-                                   :email, :password, :password_confirmation)
-    end
+  def set_user
+    id = params[:id]
+    @user = User.find(id)
+  end
+
+  def user_params
+    params.require(:user).permit(whitelisted_attr)
+  end
+
+  def whitelisted_attr
+    [:first_name, :last_name, :email, :password, :password_confirmation]
+  end
 end

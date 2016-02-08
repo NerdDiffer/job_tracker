@@ -1,6 +1,7 @@
 class InteractionsController < ApplicationController
+  include SortingHelper
 
-  helper_method :sort_column
+  helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
   before_action :set_interaction, only: [:show, :edit, :update, :destroy]
@@ -9,11 +10,7 @@ class InteractionsController < ApplicationController
   # GET /interactions.json
   def index
     @interactions = Interaction.sorted
-    if params[:sort]
-      @interactions = Interaction.sort_by_attribute(@interactions,
-                                                    params[:sort],
-                                                    params[:direction])
-    end
+    @interactions = custom_index_sort if params[:sort]
   end
 
   # GET /interactions/1
@@ -23,7 +20,8 @@ class InteractionsController < ApplicationController
 
   # GET /interactions/new
   def new
-    opts = { contact_id: params[:contact_id], approx_date: Time.now }
+    contact_id = params[:contact_id]
+    opts = { contact_id: contact_id, approx_date: Time.now }
     @interaction = Interaction.new(opts)
   end
 
@@ -34,8 +32,7 @@ class InteractionsController < ApplicationController
   # POST /interactions
   # POST /interactions.json
   def create
-    int_params = interaction_params.merge(contact_id: set_contact_id)
-    @interaction = Interaction.new(int_params)
+    @interaction = Interaction.new(interaction_params_with_contact_id)
 
     respond_to do |format|
       if @interaction.save
@@ -52,8 +49,7 @@ class InteractionsController < ApplicationController
   # PATCH/PUT /interactions/1.json
   def update
     respond_to do |format|
-      int_params = interaction_params.merge(contact_id: set_contact_id)
-      if @interaction.update(int_params)
+      if @interaction.update(interaction_params_with_contact_id)
         format.html { redirect_to @interaction, notice: 'Interaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @interaction }
       else
@@ -74,25 +70,38 @@ class InteractionsController < ApplicationController
   end
 
   private
-    def set_interaction
-      @interaction = Interaction.find(params[:id])
-    end
 
-    def whitelisted_attr
-      [:contact_id, :notes, :approx_date, :medium, :contact_name]
-    end
+  def set_interaction
+    id = params[:id]
+    @interaction = Interaction.find(id)
+  end
 
-    def interaction_params
-      params.require(:interaction).permit(whitelisted_attr)
-    end
+  def whitelisted_attr
+    [:contact_id, :notes, :approx_date, :medium, :contact_name]
+  end
 
-    def sort_column
-      sort_to_sym = params[:sort].to_sym unless params[:sort].nil?
-      whitelisted_attr.include?(sort_to_sym) ? params[:sort] : 'approx_date'
-    end
+  def interaction_params
+    params.require(:interaction).permit(whitelisted_attr)
+  end
 
-    def set_contact_id
-      Contact.get_record_val_by(:name,
-                                params[:interaction][:contact_name])
-    end
+  def interaction_params_with_contact_id
+    interaction_params.merge(contact_id: set_contact_id)
+  end
+
+  def set_contact_id
+    contact_name = params[:interaction][:contact_name]
+    Contact.get_record_val_by(:name, contact_name)
+  end
+
+  def model
+    Interaction
+  end
+
+  def collection
+    @interactions
+  end
+
+  def column_to_sort_by
+    'approx_date'
+  end
 end

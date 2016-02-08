@@ -1,18 +1,13 @@
 class JobApplication < ActiveRecord::Base
-
   include Filterable
 
-  attr_accessor :company_name
-
   belongs_to :company
-  belongs_to :applicant,
-    :class_name => 'User',
-    :foreign_key => 'user_id'
+  belongs_to :applicant, class_name: 'User', foreign_key: 'user_id'
   has_one :posting
   has_one :cover_letter
 
   # scopes
-  scope :sorted, lambda { order(:updated_at => :desc) }
+  scope :sorted, -> { order(updated_at: :desc) }
 
   # class methods
 
@@ -20,7 +15,7 @@ class JobApplication < ActiveRecord::Base
   # @param show_active [Boolean], show active or inactive records
   # @return list of job applications
   def self.active(show_active = true)
-    where(:active => show_active)
+    where(active: show_active)
   end
 
   # Return a list of job applications that match a title
@@ -33,19 +28,20 @@ class JobApplication < ActiveRecord::Base
     title_as_arr = title.split(' - ')
     company_name = title_as_arr.first
     job_title = title_as_arr.second
+
     # find some matches
-    joins(:company, :posting).
-      where(companies: { name: company_name }).
-      where(postings: { job_title: job_title })
+    joins(:company, :posting)
+      .where(companies: { name: company_name })
+      .where(postings: { job_title: job_title })
   end
 
   # instance methods
   def title
-    title = ''
-
-    self.company.present? ?
-      title += self.company.name :
-      title += Time.now.strftime("%Y%m%d%H%M%S")
+    title = if company.present?
+              company.name
+            else
+              Time.now.strftime('%Y%m%d%H%M%S')
+            end
 
     title += " - #{posting.job_title}" if posting.present?
 
@@ -53,6 +49,6 @@ class JobApplication < ActiveRecord::Base
   end
 
   def company_name
-    self.company.name if self.company.present?
+    company.name if company.present?
   end
 end

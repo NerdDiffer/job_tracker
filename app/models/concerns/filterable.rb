@@ -8,8 +8,8 @@ module Filterable
   # with their associated values. Most useful for calling named scopes from
   # URL params. Make sure to whitelist params.
   module ClassMethods
-    def filter filtering_params
-      results = self.where(nil)
+    def filter(filtering_params)
+      results = where(nil)
       filtering_params.each do |key, val|
         results = results.public_send(key, val) if val.present?
       end
@@ -46,23 +46,26 @@ module Filterable
     # Will return the first match only.
     # TODO: Find a way to return several matches
     # @param search_attr [String, Symbol], attribute to search by (virtual OK)
-    # @param value [String], the value to search for within the search_attribute
+    # @param value [String], value to search for within search_attribute
     # @param options [Hash], set of named parameter options
     # @return, the first matching record's id or nil
     def get_record_val_by(attribute, value, options = {})
       model       = options[:model] || self
       return_attr = options[:return_attr] || :id
-      record = model.public_send("find_by_#{attribute.to_s}", value)
-      check_relation_class(record).read_attribute(return_attr) unless record.nil?
+      record = model.public_send("find_by_#{attribute}", value)
+
+      unless record.nil?
+        class_of_relation = check_relation_class(record)
+        class_of_relation.read_attribute(return_attr)
+      end
     end
 
     # If something descends from ActiveRecord::Relation, return first in list
     # Otherwise, return the object
     def check_relation_class(object_or_relation)
-      object_or_relation.class.ancestors.include?(ActiveRecord::Relation) ?
-        object_or_relation.first :
-        object_or_relation
+      ancestors   = object_or_relation.class.ancestors
+      ar_included = ancestors.include?(ActiveRecord::Relation)
+      ar_included ? object_or_relation.first : object_or_relation
     end
-
   end
 end

@@ -1,6 +1,7 @@
 class CompaniesController < ApplicationController
+  include SortingHelper
 
-  helper_method :sort_column
+  helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
   before_action :set_company, only: [:show, :edit, :update, :destroy]
@@ -8,8 +9,7 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.json
   def index
-    @companies = Company.search(params[:search]).order(sort_column + " " +
-                                                       sort_direction)
+    @companies = search_and_sort_index
   end
 
   # GET /companies/1
@@ -67,18 +67,31 @@ class CompaniesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_company
-      @company = Company.find(params[:id])
-    end
 
-    def company_params
-      params.require(:company).permit(:name, :website, :category,
-                                      :sort, :direction, :search)
-    end
+  def set_company
+    @company = Company.find(params[:id])
+  end
 
-    def sort_column
-      # only allow column names from this model
-      Company.column_names.include?(params[:sort]) ? params[:sort] : 'name'
-    end
+  def company_params
+    params.require(:company).permit(:name, :website, :category,
+                                    :sort, :direction, :search)
+  end
+
+  def model
+    Company
+  end
+
+  def collection
+    @companies
+  end
+
+  def column_to_sort_by
+    'name'
+  end
+
+  def search_and_sort_index
+    search = params[:search]
+    col_and_dir = sort_column + ' ' + sort_direction
+    Company.search(search).order(col_and_dir)
+  end
 end
