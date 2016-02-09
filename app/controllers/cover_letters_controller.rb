@@ -97,7 +97,7 @@ class CoverLettersController < ApplicationController
     @cover_letters
   end
 
-  def column_to_sort_by
+  def default_sorting_column
     'sent_date'
   end
 end

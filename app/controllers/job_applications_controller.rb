@@ -101,7 +101,7 @@ class JobApplicationsController < ApplicationController
     @job_applications
   end
 
-  def column_to_sort_by
+  def default_sorting_column
     'updated_at'
   end
 end

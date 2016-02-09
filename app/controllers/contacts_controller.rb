@@ -101,7 +101,7 @@ class ContactsController < ApplicationController
     @contacts
   end
 
-  def column_to_sort_by
+  def default_sorting_column
     'name'
   end
 end

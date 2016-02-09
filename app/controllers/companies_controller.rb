@@ -73,8 +73,11 @@ class CompaniesController < ApplicationController
   end
 
   def company_params
-    params.require(:company).permit(:name, :website, :category,
-                                    :sort, :direction, :search)
+    params.require(:company).permit(whitelisted_attr)
+  end
+
+  def whitelisted_attr
+    [:name, :website, :category, :sort, :direction, :search]
   end
 
   def model
@@ -85,7 +88,7 @@ class CompaniesController < ApplicationController
     @companies
   end
 
-  def column_to_sort_by
+  def default_sorting_column
     'name'
   end
 

@@ -77,7 +77,7 @@ class InteractionsController < ApplicationController
   end
 
   def whitelisted_attr
-    [:contact_id, :notes, :approx_date, :medium]
+    [:contact_id, :notes, :approx_date, :medium, :contact_name]
   end
 
   def interaction_params
@@ -102,7 +102,7 @@ class InteractionsController < ApplicationController
     @interactions
   end
 
-  def column_to_sort_by
+  def default_sorting_column
     'approx_date'
   end
 end

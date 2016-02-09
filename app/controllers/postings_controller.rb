@@ -94,7 +94,7 @@ class PostingsController < ApplicationController
     @postings
   end
 
-  def column_to_sort_by
+  def default_sorting_column
     'posting_date'
   end
 end
