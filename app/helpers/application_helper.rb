@@ -23,24 +23,6 @@ module ApplicationHelper
     render(partial: 'shared/error_messages', locals: locals)
   end
 
-  # Generate an HTML link for use in sorting for #index views
-  # @param attribute [String], the name of the attribute to sort by
-  # @param title [String], the name you want to display
-  # @return [String], a generated HTML link
-  def sortable(attribute, title = nil)
-    attribute = attribute.to_s
-    title ||= attribute.titleize
-
-    attr_eql_to_sort_col = attribute == sort_column
-    sort_asc = sort_direction == 'asc'
-
-    direction = attr_eql_to_sort_col && sort_asc ? 'desc' : 'asc'
-    params.merge!(sort: attribute, direction: direction)
-    css_class = attr_eql_to_sort_col ? "current #{sort_direction}" : nil
-
-    link_to(title, params, class: css_class)
-  end
-
   def markdown(text)
     renderer_options = { with_toc_data: true }
 
