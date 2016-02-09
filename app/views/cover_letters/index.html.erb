@@ -9,8 +9,8 @@
 <table class='table table-striped table-hover'>
   <thead>
     <tr>
-      <th><%= sortable 'job_application_title', 'Job application' %></th>
-      <th><%= sortable 'sent_date', 'Sent date' %></th>
+      <th><%= generate_sortable_link('job_application_title', 'Job application') %></th>
+      <th><%= generate_sortable_link('sent_date', 'Sent date') %></th>
       <th>Content</th>
       <th class='actions' colspan="2">Actions</th>
     </tr>
