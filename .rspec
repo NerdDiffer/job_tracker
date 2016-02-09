@@ -1,2 +1,4 @@
---color
 --require spec_helper
+--no-fail-fast
+--color
+--order=random
