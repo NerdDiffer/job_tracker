@@ -7,8 +7,9 @@
     <%= f.date_field :approx_date %>
   </div>
   <div class="field">
-    <%= f.label :contact_name %><br>
-    <%= f.text_field :contact_name %>
+    <%= label_tag :contact_name %><br>
+    <% contact_name = @interaction.contact.try(:name) %>
+    <%= text_field_tag(:contact_name, contact_name) %>
   </div>
   <div class="field">
     <% media_opts = options_for_select(

@@ -32,7 +32,7 @@ class JobApplicationsController < ApplicationController
   # POST /job_applications
   # POST /job_applications.json
   def create
-    @job_application = JobApplication.new(job_application_params_with_company_id)
+    @job_application = JobApplication.new(job_application_params_with_company_id!)
 
     respond_to do |format|
       if @job_application.save
@@ -49,7 +49,7 @@ class JobApplicationsController < ApplicationController
   # PATCH/PUT /job_applications/1.json
   def update
     respond_to do |format|
-      if @job_application.update(job_application_params_with_company_id)
+      if @job_application.update(job_application_params_with_company_id!)
         format.html { redirect_to @job_application, notice: 'Job application was successfully updated.' }
         format.json { render :show, status: :ok, location: @job_application }
       else
@@ -76,19 +76,20 @@ class JobApplicationsController < ApplicationController
   end
 
   def whitelisted_attr
-    [:company_id, :active, :sort, :direction, :title, :company_name]
+    [:company_id, :active, :sort, :direction, :title]
   end
 
   def job_application_params
     params.require(:job_application).permit(whitelisted_attr)
   end
 
-  def job_application_params_with_company_id
-    job_application_params.merge(company_id: set_company_id)
+  def job_application_params_with_company_id!
+    company_id = set_company_id
+    job_application_params.merge!(company_id: company_id)
   end
 
   def set_company_id
-    company_name = params[:job_application][:company_name]
+    company_name = params[:company_name]
     Company.get_record_val_by(:name, company_name)
   end
 

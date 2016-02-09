@@ -32,7 +32,7 @@ class InteractionsController < ApplicationController
   # POST /interactions
   # POST /interactions.json
   def create
-    @interaction = Interaction.new(interaction_params_with_contact_id)
+    @interaction = Interaction.new(interaction_params_with_contact_id!)
 
     respond_to do |format|
       if @interaction.save
@@ -49,7 +49,7 @@ class InteractionsController < ApplicationController
   # PATCH/PUT /interactions/1.json
   def update
     respond_to do |format|
-      if @interaction.update(interaction_params_with_contact_id)
+      if @interaction.update(interaction_params_with_contact_id!)
         format.html { redirect_to @interaction, notice: 'Interaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @interaction }
       else
@@ -77,19 +77,20 @@ class InteractionsController < ApplicationController
   end
 
   def whitelisted_attr
-    [:contact_id, :notes, :approx_date, :medium, :contact_name]
+    [:contact_id, :notes, :approx_date, :medium]
   end
 
   def interaction_params
     params.require(:interaction).permit(whitelisted_attr)
   end
 
-  def interaction_params_with_contact_id
-    interaction_params.merge(contact_id: set_contact_id)
+  def interaction_params_with_contact_id!
+    contact_id = set_contact_id
+    interaction_params.merge!(contact_id: contact_id)
   end
 
   def set_contact_id
-    contact_name = params[:interaction][:contact_name]
+    contact_name = params[:contact_name]
     Contact.get_record_val_by(:name, contact_name)
   end
 

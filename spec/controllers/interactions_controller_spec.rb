@@ -75,13 +75,14 @@ RSpec.describe InteractionsController, type: :controller do
   describe 'POST #create' do
     let(:attr_for_create) do
       {
-        notes: '', medium: 0, approx_date: Time.now, contact_name: 'foo'
+        notes: '', medium: 0, approx_date: Time.now
       }
     end
 
     before(:each) do
       allow(Contact).to receive(:find).and_return(contact)
       allow(Interaction).to receive(:new).and_return(interaction)
+      allow(@controller).to receive(:set_contact_id).and_return(1)
     end
 
     context 'with valid params' do
@@ -118,12 +119,14 @@ RSpec.describe InteractionsController, type: :controller do
     let(:attr_for_update) do
       {
         id: 1,
-        interaction: { notes: 'bar', contact_name: 'foo' }
+        interaction: { notes: 'bar', },
+        contact_name: 'arnold'
       }
     end
 
     before(:each) do
       allow(Interaction).to receive(:find).and_return(interaction)
+      allow(@controller).to receive(:set_contact_id).and_return(1)
     end
 
     context 'with valid params' do
@@ -176,6 +179,43 @@ RSpec.describe InteractionsController, type: :controller do
     it 'redirects to the interactions list' do
       delete(:destroy, id: 1)
       expect(response).to redirect_to(interactions_url)
+    end
+  end
+
+  describe '#set_contact' do
+    mock_params = { contact_name: 'foo bar' }
+
+    before(:each) do
+      allow(contact).to receive(:id).and_return(1)
+      allow(Contact).to receive(:get_record_val_by).and_return(contact.id)
+      allow(@controller).to receive(:params).and_return(mock_params)
+    end
+
+    it 'calls Contact.get_record_val_by' do
+      expect(Contact).to receive(:get_record_val_by).with(:name, 'foo bar')
+      @controller.send(:set_contact_id)
+    end
+    it 'returns the id of the contact object' do
+      actual = @controller.send(:set_contact_id)
+      expect(actual).to eq 1
+    end
+  end
+
+  describe '#interaction_params_with_company_id!' do
+    params = ActionController::Parameters.new({
+      interaction: { active: true }
+    })
+
+    before(:each) do
+      allow(@controller).to receive(:set_contact_id).and_return(1)
+      allow(@controller).to receive(:interaction_params).and_return(params)
+    end
+
+    it 'merges with this hash' do
+      expect(@controller.send(:interaction_params))
+        .to receive(:merge!)
+        .with(contact_id: 1)
+      @controller.send(:interaction_params_with_contact_id!)
     end
   end
 end

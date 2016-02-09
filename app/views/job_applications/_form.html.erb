@@ -3,8 +3,9 @@
   <%= error_messages_for @job_application %>
 
   <div class="field">
-    <%= f.label :company_name %><br>
-    <%= f.text_field :company_name %>
+    <%= label_tag :company_name %><br>
+    <% company_name = @job_application.company.try(:name)  %>
+    <%= text_field_tag(:company_name, company_name) %>
   </div>
 
   <div class="field">

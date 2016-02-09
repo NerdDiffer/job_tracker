@@ -85,9 +85,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 
   describe 'POST #create' do
     let(:attr_for_create) do
-      {
-        content: '', source: 'foo', company_id: 1
-      }
+      { job_application: { active: true } }
     end
 
     before(:each) do
@@ -129,12 +127,14 @@ RSpec.describe JobApplicationsController, type: :controller do
     let(:attr_for_update) do
       {
         id: 1,
-        job_application: { company_id: 2, notes: 'foo bar' }
+        job_application: { active: 'true' },
+        company_name: 'example'
       }
     end
 
     before(:each) do
       allow(JobApplication).to receive(:find).and_return(job_application)
+      allow(@controller).to receive(:set_company_id).and_return(1)
     end
 
     context 'with valid params' do
@@ -187,6 +187,43 @@ RSpec.describe JobApplicationsController, type: :controller do
     it 'redirects to the job_applications list' do
       delete(:destroy, id: 1)
       expect(response).to redirect_to(job_applications_url)
+    end
+  end
+
+  describe '#set_company_id' do
+    mock_params = { company_name: 'foo bar' }
+
+    before(:each) do
+      allow(company).to receive(:id).and_return(1)
+      allow(Company).to receive(:get_record_val_by).and_return(company.id)
+      allow(@controller).to receive(:params).and_return(mock_params)
+    end
+
+    it 'calls Company.get_record_val_by' do
+      expect(Company).to receive(:get_record_val_by).with(:name, 'foo bar')
+      @controller.send(:set_company_id)
+    end
+    it 'returns the id of the company object' do
+      actual = @controller.send(:set_company_id)
+      expect(actual).to eq 1
+    end
+  end
+
+  describe '#job_application_params_with_company_id!' do
+    params = ActionController::Parameters.new({
+      job_application: { active: true }
+    })
+
+    before(:each) do
+      allow(@controller).to receive(:set_company_id).and_return(1)
+      allow(@controller).to receive(:job_application_params).and_return(params)
+    end
+
+    it 'merges with this hash' do
+      expect(@controller.send(:job_application_params))
+        .to receive(:merge!)
+        .with(company_id: 1)
+      @controller.send(:job_application_params_with_company_id!)
     end
   end
 end
