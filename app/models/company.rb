@@ -10,6 +10,8 @@ class Company < ActiveRecord::Base
   validates :name, uniqueness: true, presence: true
   validates :permalink, uniqueness: true
 
+  after_save :refresh_search_suggestions
+
   # scopes
   scope :sorted, -> { order(:name) }
   scope :by_name, -> (q) { where('name ILIKE ?', "%#{q}%") }
@@ -22,5 +24,11 @@ class Company < ActiveRecord::Base
   # instance methods
   def permalink
     self.permalink = name.parameterize
+  end
+
+  private
+
+  def refresh_search_suggestions
+    SearchSuggestion.refresh_company_names
   end
 end

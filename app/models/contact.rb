@@ -14,6 +14,8 @@ class Contact < ActiveRecord::Base
   validates :last_name, presence: true
   validates :permalink, uniqueness: true
 
+  after_save :refresh_search_suggestions
+
   # scopes
   scope :sorted, -> { order(first_name: :asc) }
 
@@ -37,5 +39,11 @@ class Contact < ActiveRecord::Base
 
   def company_name
     company.name if company
+  end
+
+  private
+
+  def refresh_search_suggestions
+    SearchSuggestion.refresh_contact_names
   end
 end
