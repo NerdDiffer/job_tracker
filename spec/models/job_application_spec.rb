@@ -1,26 +1,16 @@
 require 'rails_helper'
 
 describe JobApplication, type: :model do
-  let(:ja) { JobApplication.all }
-  let(:company) { build(:company) }
+  let(:company) { build(:company, id: 1) }
   let(:posting) { build(:posting) }
 
-  describe 'test subjects list' do
-    it 'has 30 items' do
-      expect(ja.count).to eq 30
-    end
-    it 'is a JobApplication::ActiveRecord_Relation' do
-      expect(ja).to be_an ActiveRecord::Relation
-    end
-    it 'is composed entirely of JobApplication objects' do
-      expect(ja).to all be_a JobApplication
-    end
-  end
-
   describe '.sort_by_attribute' do
-    context 'sorting by a virtual attribute' do
-      let(:sorted_titles) { ja.map(&:title).sort }
+    let(:job_applications) do
+      build_list(:job_application, 30, company_id: company.id)
+    end
+    let(:sorted_titles) { job_applications.map(&:title).sort }
 
+    context 'sorting by a virtual attribute' do
       shared_examples_for 'sorting by a virtual attribute' do
         it 'can sort by a virtual attribute' do
           actual = JobApplication
@@ -31,11 +21,11 @@ describe JobApplication, type: :model do
       end
 
       context 'when passing in ActiveRecord::Relation' do
-        subject { ja }
+        subject { job_applications }
         it_behaves_like 'sorting by a virtual attribute'
       end
       context 'when passing in Array' do
-        subject { ja.to_a }
+        subject { job_applications.to_a }
         it_behaves_like 'sorting by a virtual attribute'
       end
     end

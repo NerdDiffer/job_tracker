@@ -15,6 +15,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'GET #show' do
     it 'assigns the requested user as @user' do
+      allow(User).to receive(:find).and_return(user)
       get(:show, id: user.id)
       expect(assigns(:user)).to eq(user)
     end
