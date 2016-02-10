@@ -11,3 +11,6 @@ dump.rdb
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore code coverage reports
+coverage/

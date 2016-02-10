@@ -1,3 +1,9 @@
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
+SimpleCov.start do
+  add_filter '/config'
+end
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
@@ -7,7 +13,4 @@ RSpec.configure do |config|
 
   # Allow more verbose output when running an individual spec file.
   config.default_formatter = 'doc' if config.files_to_run.one?
-
-  # Print the 10 slowest examples and example groups at end of spec run
-  config.profile_examples = 10
 end

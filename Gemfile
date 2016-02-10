@@ -28,7 +28,7 @@ gem 'redis', '~> 3.2.1'
 gem 'hiredis', '~> 0.6.0'
 
 group :development, :test do
-  gem 'byebug', '~> 5.0.0'
+  gem 'byebug', '~> 8.2.2', require: false
   gem 'web-console', '~> 2.0'
   gem 'spring', '~> 1.3.6'
   gem 'rspec-rails', '~>3.0'
@@ -36,6 +36,9 @@ group :development, :test do
 
   # seed data
   gem 'faker', '~> 1.4.3'
+
+  # code climate
+  gem 'codeclimate-test-reporter', '~> 0.4.8', require: nil
 end
 
 group :production do
@@ -47,4 +50,4 @@ group :production do
   gem 'puma', '~> 2.12.2'
 end
 
-ruby "2.2.3"
+ruby '2.2.3'
