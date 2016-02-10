@@ -11,7 +11,8 @@ module SortingHelper
     options = { sort: attribute, direction: direction }
     html_options = { class: css_class }
 
-    options.merge!(active: params[:active]) if params[:active]
+    active = params[:active]
+    options[:active] = active if active
 
     # NOTE: previously, the 2nd argument was `params.merge....`, which was put
     # in at commit # 95ba8cc1 to work with the Filterable module. This broke
@@ -25,7 +26,7 @@ module SortingHelper
 
   def sort_column
     sorting_attr = params[:sort]
-    col_sortable?(sorting_attr) ? sorting_attr : default_sorting_column
+    col_allowed?(sorting_attr) ? sorting_attr : default_sorting_column
   end
 
   private
@@ -42,7 +43,12 @@ module SortingHelper
 
   def css_class(attr)
     eql = attr_eql_to_sort_col?(attr)
-    eql ? "current #{sort_direction}" : 'foo'
+    eql ? "current #{sort_direction}" : nil
+  end
+
+  def col_allowed?(column)
+    columns = map_to_s(whitelisted_attr)
+    columns.include?(column)
   end
 
   def direction_allowed?(direction)
@@ -54,20 +60,19 @@ module SortingHelper
     direction_allowed?(dir) ? dir : 'asc'
   end
 
-  def col_sortable?(column)
-    columns = whitelisted_attr.map { |col| col.to_s }
-    columns.include?(column)
-  end
-
   def whitelisted?(attr = nil)
     attr = attr.to_sym unless attr.nil?
     whitelisted_attr.include?(attr)
   end
 
+  def map_to_s(list)
+    list.map(&:to_s)
+  end
+
   def custom_index_sort
     sorting_attr = params[:sort]
-    dir  = params[:direction]
-    model.sort_by_attribute(collection, sorting_attr, dir)
+    direction    = params[:direction]
+    model.sort_by_attribute(collection, sorting_attr, direction)
   end
 
   def whitelisted_attr
