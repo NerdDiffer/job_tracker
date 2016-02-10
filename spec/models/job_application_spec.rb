@@ -4,33 +4,6 @@ describe JobApplication, type: :model do
   let(:company) { build(:company, id: 1) }
   let(:posting) { build(:posting) }
 
-  describe '.sort_by_attribute' do
-    let(:job_applications) do
-      build_list(:job_application, 30, company_id: company.id)
-    end
-    let(:sorted_titles) { job_applications.map(&:title).sort }
-
-    context 'sorting by a virtual attribute' do
-      shared_examples_for 'sorting by a virtual attribute' do
-        it 'can sort by a virtual attribute' do
-          actual = JobApplication
-                   .sort_by_attribute(subject, :title)
-                   .map(&:title)
-          expect(actual).to eq sorted_titles
-        end
-      end
-
-      context 'when passing in ActiveRecord::Relation' do
-        subject { job_applications }
-        it_behaves_like 'sorting by a virtual attribute'
-      end
-      context 'when passing in Array' do
-        subject { job_applications.to_a }
-        it_behaves_like 'sorting by a virtual attribute'
-      end
-    end
-  end
-
   describe '.get_record_val_by' do
     subject do
       build(:job_application, company: company, posting: posting, id: 2)
