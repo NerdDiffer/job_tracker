@@ -1,6 +1,3 @@
-# Any controller that includes this module must define these methods:
-#   model, collection, column_to_sort_by
-
 module SortingHelper
   # Generate an HTML link for use in sorting #index views
   # @param attribute [String] the name of the attribute to sort by
@@ -13,6 +10,8 @@ module SortingHelper
     title ||= attribute.titleize
     options = { sort: attribute, direction: direction }
     html_options = { class: css_class }
+
+    options.merge!(active: params[:active]) if params[:active]
 
     # NOTE: previously, the 2nd argument was `params.merge....`, which was put
     # in at commit # 95ba8cc1 to work with the Filterable module. This broke
