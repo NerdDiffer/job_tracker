@@ -6,21 +6,7 @@ describe JobApplication, type: :model do
 
   describe '.get_record_val_by' do
     subject do
-      build(:job_application, company: company, posting: posting, id: 2)
-    end
-
-    context 'the subject' do
-      it 'has these attributes & values' do
-        expect(subject).to have_attributes(
-          active: true,
-          title: 'Example Company - Chief Hot Pocket',
-          id: 2
-        )
-      end
-
-      it 'has these attributes & values from its Company association' do
-        expect(subject.company).to have_attributes(name: 'Example Company')
-      end
+      build(:job_application, company: company, posting: posting, id: 1)
     end
 
     context 'retrieving real attributes from associated models' do
@@ -31,14 +17,14 @@ describe JobApplication, type: :model do
           .and_return(company)
       end
 
-      it 'without using this method, confirms you can find the company' do
-        expect(Company.find_by_name(subject.company.name)).to eq company
-      end
       it 'returns company name' do
         attribute = :name
         value = subject.company.name
-        name = { return_attr: 'name' }
-        actual = Company.get_record_val_by(attribute, value, name)
+        options = {
+          return_attr: 'name',
+          model: Company
+        }
+        actual = described_class.get_record_val_by(attribute, value, options)
         expect(actual).to eq 'Example Company'
       end
     end
@@ -50,8 +36,9 @@ describe JobApplication, type: :model do
           .with(subject.title)
           .and_return subject
       end
-      it 'returns the id of the JobApplication' do
-        expect(JobApplication.get_record_val_by(:title, subject.title)).to eq 2
+      it 'returns the id of a JobApplication record' do
+        actual = described_class.get_record_val_by(:title, subject.title)
+        expect(actual).to eq 1
       end
     end
   end
