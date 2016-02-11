@@ -15,10 +15,21 @@ module Queryable
       # Other variations (such as sort!, sort_by, sort_by!) will not work.
       # Whereas '#sort' will work with an Array or ActiveRecord::Relation
       records.sort do |a, b|
-        if direction == 'desc'
-          b.public_send(attribute) <=> a.public_send(attribute)
+        val_of_a = a.public_send(attribute).to_s
+        val_of_b = b.public_send(attribute).to_s
+
+        if val_of_a.nil? && val_of_b.nil?
+          0
+        elsif val_of_a.nil?
+          1
+        elsif val_of_b.nil?
+          -1
         else
-          a.public_send(attribute) <=> b.public_send(attribute)
+          if direction == 'desc'
+            val_of_b <=> val_of_a
+          else
+            val_of_a <=> val_of_b
+          end
         end
       end
     end
