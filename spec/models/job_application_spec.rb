@@ -20,11 +20,8 @@ describe JobApplication, type: :model do
       it 'returns company name' do
         attribute = :name
         value = subject.company.name
-        options = {
-          return_attr: 'name',
-          model: Company
-        }
-        actual = described_class.get_record_val_by(attribute, value, options)
+        return_attr = 'name'
+        actual = Company.get_record_val_by(attribute, value, return_attr)
         expect(actual).to eq 'Example Company'
       end
     end

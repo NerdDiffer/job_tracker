@@ -30,9 +30,8 @@ describe Interaction, type: :model do
       it 'returns id of contact' do
         attribute = :first_name
         value = subject.contact.first_name
-        options = { model: Contact }
 
-        actual = Interaction.get_record_val_by(attribute, value, options)
+        actual = Contact.get_record_val_by(attribute, value)
         expect(actual).to eq 2
       end
     end
@@ -48,9 +47,8 @@ describe Interaction, type: :model do
       it 'returns id of contact' do
         attribute = :name
         value = subject.contact.name
-        options = { model: Contact }
 
-        actual = Interaction.get_record_val_by(attribute, value, options)
+        actual = Contact.get_record_val_by(attribute, value)
         expect(actual).to eq 2
       end
     end
