@@ -14,22 +14,14 @@ module Queryable
       # Though sort_by is in the name, this method calls 'Array#sort'.
       # Other variations (such as sort!, sort_by, sort_by!) will not work.
       # Whereas '#sort' will work with an Array or ActiveRecord::Relation
-      records.sort do |a, b|
-        val_of_a = a.public_send(attribute).to_s
-        val_of_b = b.public_send(attribute).to_s
+      records.sort do |record_a, record_b|
+        a = record_a.public_send(attribute)
+        b = record_b.public_send(attribute)
 
-        if val_of_a.nil? && val_of_b.nil?
-          0
-        elsif val_of_a.nil?
-          1
-        elsif val_of_b.nil?
-          -1
+        if any_nil?(a, b)
+          handle_nil(a, b)
         else
-          if direction == 'desc'
-            val_of_b <=> val_of_a
-          else
-            val_of_a <=> val_of_b
-          end
+          compare(a, b, direction)
         end
       end
     end
@@ -57,12 +49,36 @@ module Queryable
       end
     end
 
+    private
+
     # If something descends from ActiveRecord::Relation, return first in list
     # Otherwise, return the object
     def check_relation_class(object_or_relation)
       ancestors   = object_or_relation.class.ancestors
       ar_included = ancestors.include?(ActiveRecord::Relation)
       ar_included ? object_or_relation.first : object_or_relation
+    end
+
+    def any_nil?(a, b)
+      a.nil? || b.nil?
+    end
+
+    def handle_nil(a, b)
+      if a.nil? && b.nil?
+        0
+      elsif a.nil?
+        1
+      elsif b.nil?
+        -1
+      end
+    end
+
+    def compare(a, b, dir)
+      if dir == 'desc'
+        b <=> a
+      else
+        a <=> b
+      end
     end
   end
 end
