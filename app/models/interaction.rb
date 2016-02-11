@@ -1,5 +1,5 @@
 class Interaction < ActiveRecord::Base
-  include Filterable
+  include Queryable
 
   belongs_to :contact
 

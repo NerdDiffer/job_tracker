@@ -1,4 +1,4 @@
-module Filterable
+module Queryable
   extend ActiveSupport::Concern
 
   module ClassMethods

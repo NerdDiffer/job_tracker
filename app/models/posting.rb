@@ -1,5 +1,5 @@
 class Posting < ActiveRecord::Base
-  include Filterable
+  include Queryable
 
   belongs_to :job_application
 

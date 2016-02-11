@@ -1,6 +1,6 @@
 class Contact < ActiveRecord::Base
   extend FriendlyId
-  include Filterable
+  include Queryable
 
   attr_accessor :company_name
 

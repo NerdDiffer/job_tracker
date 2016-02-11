@@ -1,5 +1,5 @@
 class JobApplication < ActiveRecord::Base
-  include Filterable
+  include Queryable
 
   belongs_to :company
   belongs_to :applicant, class_name: 'User', foreign_key: 'user_id'

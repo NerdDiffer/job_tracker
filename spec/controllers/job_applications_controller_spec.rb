@@ -14,7 +14,7 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     before(:each) do
       allow(JobApplication)
-        .to receive(:filter)
+        .to receive(:active)
         .and_return(relation)
       allow(JobApplication)
         .to receive(:sorted)

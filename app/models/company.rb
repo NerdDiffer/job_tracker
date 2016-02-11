@@ -1,6 +1,6 @@
 class Company < ActiveRecord::Base
   extend FriendlyId
-  include Filterable
+  include Queryable
 
   friendly_id :name
 
