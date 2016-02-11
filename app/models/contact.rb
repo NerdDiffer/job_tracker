@@ -28,6 +28,15 @@ class Contact < ActiveRecord::Base
     find_by_first_name_and_last_name(first_name, last_name)
   end
 
+  def self.find_by_company_name(name_of_company)
+    company_name_matches = {
+      companies: {
+        name: name_of_company
+      }
+    }
+    joins(:company).where(company_name_matches)
+  end
+
   # instance methods
   def name
     "#{first_name} #{last_name}"
