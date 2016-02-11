@@ -1,21 +1,7 @@
-# call named scopes directly from URL params:
-#   `@products = Product.filter(params.slice(:status, :location, :starts_with))`
-
 module Filterable
   extend ActiveSupport::Concern
 
-  # Call class method with same name as keys in `filtering_params`
-  # with their associated values. Most useful for calling named scopes from
-  # URL params. Make sure to whitelist params.
   module ClassMethods
-    def filter(filtering_params)
-      results = where(nil)
-      filtering_params.each do |key, val|
-        results = results.public_send(key, val) if val.present?
-      end
-      results
-    end
-
     # Sort by an attribute, including virtual attributes.
     # Notable limitation: it returns an array. So it should be called last if
     # you are using planning to use it in a chain of scopes.

@@ -14,8 +14,12 @@ class JobApplication < ActiveRecord::Base
   # A named scope for selecting active or inactive job applications
   # @param show_active [Boolean], show active or inactive records
   # @return list of job applications
-  def self.active(show_active = true)
-    where(active: show_active)
+  def self.active(active = nil)
+    if active
+      where(active: active)
+    else
+      where(nil)
+    end
   end
 
   # Return a list of job applications that match a title

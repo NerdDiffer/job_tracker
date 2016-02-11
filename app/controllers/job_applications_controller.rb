@@ -9,8 +9,8 @@ class JobApplicationsController < ApplicationController
   # GET /job_applications
   # GET /job_applications.json
   def index
-    active = params.slice(:active)
-    @job_applications = JobApplication.filter(active).sorted
+    active = params[:active]
+    @job_applications = JobApplication.active(active).sorted
     @job_applications = custom_index_sort if params[:sort]
   end
 
