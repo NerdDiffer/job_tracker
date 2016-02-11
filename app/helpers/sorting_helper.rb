@@ -52,7 +52,7 @@ module SortingHelper
   end
 
   def direction_allowed?(direction)
-    %w(asc desc).include?(direction)
+    directions.include?(direction)
   end
 
   def sort_direction
@@ -73,6 +73,10 @@ module SortingHelper
     sorting_attr = params[:sort]
     direction    = params[:direction]
     model.sort_by_attribute(collection, sorting_attr, direction)
+  end
+
+  def directions
+    %w(asc desc)
   end
 
   def whitelisted_attr
