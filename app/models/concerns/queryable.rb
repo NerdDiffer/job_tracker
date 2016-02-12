@@ -15,14 +15,7 @@ module Queryable
       # Other variations (such as sort!, sort_by, sort_by!) will not work.
       # Whereas '#sort' will work with an Array or ActiveRecord::Relation
       records.sort do |record_a, record_b|
-        a = record_a.public_send(attribute)
-        b = record_b.public_send(attribute)
-
-        if any_nil?(a, b)
-          handle_nil(a, b)
-        else
-          compare(a, b, direction)
-        end
+        safe_compare(record_a, record_b, attribute, direction)
       end
     end
 
@@ -40,16 +33,31 @@ module Queryable
     # @param return_attr [String, Symbol], name of attribute to return
     # @return, the first matching record's id or nil
     def get_record_val_by(attribute, value, return_attr = :id)
-      result = self.public_send("find_by_#{attribute}", value)
+      result = public_send("find_by_#{attribute}", value)
 
       unless result.nil?
-        # TODO: Find a cleaner way to handle several matches
-        record = result.is_a?(ActiveRecord::Relation) ? result.first : result
+        # TODO: Find a way to handle several matches
+        record = check_result(result)
         record.read_attribute(return_attr)
       end
     end
 
     private
+
+    def check_result(result)
+      result.is_a?(ActiveRecord::Relation) ? result.first : result
+    end
+
+    def safe_compare(record_a, record_b, attribute, direction = 'asc')
+      a = record_a.public_send(attribute)
+      b = record_b.public_send(attribute)
+
+      if any_nil?(a, b)
+        handle_nil(a, b)
+      else
+        compare(a, b, direction)
+      end
+    end
 
     def any_nil?(a, b)
       a.nil? || b.nil?
