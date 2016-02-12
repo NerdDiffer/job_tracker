@@ -35,11 +35,11 @@ module Queryable
     def get_record_val_by(attribute, value, return_attr = :id)
       result = public_send("find_by_#{attribute}", value)
 
-      unless result.nil?
-        # TODO: Find a way to handle several matches
-        record = check_result(result)
-        record.read_attribute(return_attr)
-      end
+      return nil if result.nil?
+
+      # TODO: Find a way to handle several matches
+      record = check_result(result)
+      record.read_attribute(return_attr)
     end
 
     private

@@ -60,7 +60,7 @@ describe JobApplication, type: :model do
         expect(subject.posting.job_title).not_to be_nil
       end
       it "combines a timestamp with the posting's job_title" do
-        time = Time.now.strftime('%Y%m%d%H%M%S')
+        time = Time.now.utc.strftime('%Y%m%d%H%M%S')
         title = subject.posting.job_title
         expected = "#{time} - #{title}"
         expect(subject.title).to eq expected
@@ -94,7 +94,8 @@ describe JobApplication, type: :model do
         expect(subject.posting).to be_nil
       end
       it 'just returns a timestamp' do
-        expect(subject.title).to eq Time.now.strftime('%Y%m%d%H%M%S').to_s
+        expected = Time.now.utc.strftime('%Y%m%d%H%M%S').to_s
+        expect(subject.title).to eq expected
       end
     end
   end

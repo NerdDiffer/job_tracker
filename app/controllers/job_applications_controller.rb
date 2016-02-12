@@ -1,5 +1,6 @@
 class JobApplicationsController < ApplicationController
   include SortingHelper
+  include ScaffoldedActions
 
   helper_method :sort_column, :sort_direction
 
@@ -33,16 +34,7 @@ class JobApplicationsController < ApplicationController
   # POST /job_applications.json
   def create
     @job_application = JobApplication.new(job_application_params_with_company_id!)
-
-    respond_to do |format|
-      if @job_application.save
-        format.html { redirect_to @job_application, notice: 'Job application was successfully created.' }
-        format.json { render :show, status: :created, location: @job_application }
-      else
-        format.html { render :new }
-        format.json { render json: @job_application.errors, status: :unprocessable_entity }
-      end
-    end
+    save_and_respond(@job_application)
   end
 
   # PATCH/PUT /job_applications/1
@@ -50,11 +42,9 @@ class JobApplicationsController < ApplicationController
   def update
     respond_to do |format|
       if @job_application.update(job_application_params_with_company_id!)
-        format.html { redirect_to @job_application, notice: 'Job application was successfully updated.' }
-        format.json { render :show, status: :ok, location: @job_application }
+        successful_update(format, @job_application)
       else
-        format.html { render :edit }
-        format.json { render json: @job_application.errors, status: :unprocessable_entity }
+        failed_update(format, @job_application)
       end
     end
   end
@@ -64,8 +54,7 @@ class JobApplicationsController < ApplicationController
   def destroy
     @job_application.destroy
     respond_to do |format|
-      format.html { redirect_to job_applications_url, notice: 'Job application was successfully destroyed.' }
-      format.json { head :no_content }
+      destruction(format, job_applications_url)
     end
   end
 

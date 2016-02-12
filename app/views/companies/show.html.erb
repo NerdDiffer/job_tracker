@@ -6,9 +6,10 @@
 
 <p>
   <strong>Website:</strong>
+  <% website = @company.website %>
   <%= link_to(
-    @company.website,
-    interpolate_link(@company.website),
+    website,
+    interpolate_link(website),
     target: '_blank'
   ) %>
 </p>

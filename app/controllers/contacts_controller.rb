@@ -1,5 +1,6 @@
 class ContactsController < ApplicationController
   include SortingHelper
+  include ScaffoldedActions
 
   helper_method :sort_column, :sort_direction
 
@@ -33,15 +34,7 @@ class ContactsController < ApplicationController
   # POST /contacts.json
   def create
     @contact = Contact.new(contact_params_with_company_id)
-    respond_to do |format|
-      if @contact.save
-        format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
-        format.json { render :show, status: :created, location: @contact }
-      else
-        format.html { render :new }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
-      end
-    end
+    save_and_respond(@contact)
   end
 
   # PATCH/PUT /contacts/1
@@ -49,11 +42,9 @@ class ContactsController < ApplicationController
   def update
     respond_to do |format|
       if @contact.update(contact_params_with_company_id)
-        format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
-        format.json { render :show, status: :ok, location: @contact }
+        successful_update(format, @contact)
       else
-        format.html { render :edit }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
+        failed_update(format, @contact)
       end
     end
   end
@@ -63,8 +54,7 @@ class ContactsController < ApplicationController
   def destroy
     @contact.destroy
     respond_to do |format|
-      format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
-      format.json { head :no_content }
+      destruction(format, contacts_url)
     end
   end
 

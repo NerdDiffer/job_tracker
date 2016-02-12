@@ -62,12 +62,12 @@ module SessionsHelper
 
   # confirm a logged-in user
   def logged_in_user
-    unless logged_in?
-      store_location
-      flash[:danger] = 'Please log in'
-      redirect_to(login_url)
-      false # halt the before filter
-    end
+    return if logged_in?
+
+    store_location
+    flash[:danger] = 'Please log in'
+    redirect_to(login_url)
+    false # halt the before filter
   end
 
   def find_user_with_session

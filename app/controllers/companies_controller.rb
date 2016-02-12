@@ -1,5 +1,6 @@
 class CompaniesController < ApplicationController
   include SortingHelper
+  include ScaffoldedActions
 
   helper_method :sort_column, :sort_direction
 
@@ -30,16 +31,7 @@ class CompaniesController < ApplicationController
   # POST /companies.json
   def create
     @company = Company.new(company_params)
-
-    respond_to do |format|
-      if @company.save
-        format.html { redirect_to @company, notice: 'Company was successfully created.' }
-        format.json { render :show, status: :created, location: @company }
-      else
-        format.html { render :new }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
-      end
-    end
+    save_and_respond(@company)
   end
 
   # PATCH/PUT /companies/1
@@ -47,11 +39,9 @@ class CompaniesController < ApplicationController
   def update
     respond_to do |format|
       if @company.update(company_params)
-        format.html { redirect_to @company, notice: 'Company was successfully updated.' }
-        format.json { render :show, status: :ok, location: @company }
+        successful_update(format, @company)
       else
-        format.html { render :edit }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
+        failed_update(format, @company)
       end
     end
   end
@@ -61,8 +51,7 @@ class CompaniesController < ApplicationController
   def destroy
     @company.destroy
     respond_to do |format|
-      format.html { redirect_to companies_url, notice: 'Company was successfully destroyed.' }
-      format.json { head :no_content }
+      destruction(format, companies_url)
     end
   end
 

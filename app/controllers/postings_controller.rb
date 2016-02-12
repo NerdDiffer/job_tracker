@@ -1,5 +1,6 @@
 class PostingsController < ApplicationController
   include SortingHelper
+  include ScaffoldedActions
 
   helper_method :sort_column, :sort_direction
 
@@ -22,7 +23,7 @@ class PostingsController < ApplicationController
   def new
     opts = {
       job_application_id: params[:job_application_id],
-      posting_date: Time.now
+      posting_date: Time.now.utc
     }
     @posting = Posting.new(opts)
   end
@@ -35,16 +36,7 @@ class PostingsController < ApplicationController
   # POST /postings.json
   def create
     @posting = Posting.new(posting_params)
-
-    respond_to do |format|
-      if @posting.save
-        format.html { redirect_to @posting, notice: 'Posting was successfully created.' }
-        format.json { render :show, status: :created, location: @posting }
-      else
-        format.html { render :new }
-        format.json { render json: @posting.errors, status: :unprocessable_entity }
-      end
-    end
+    save_and_respond(@posting)
   end
 
   # PATCH/PUT /postings/1
@@ -52,11 +44,9 @@ class PostingsController < ApplicationController
   def update
     respond_to do |format|
       if @posting.update(posting_params)
-        format.html { redirect_to @posting, notice: 'Posting was successfully updated.' }
-        format.json { render :show, status: :ok, location: @posting }
+        successful_update(format, @posting)
       else
-        format.html { render :edit }
-        format.json { render json: @posting.errors, status: :unprocessable_entity }
+        failed_update(format, @posting)
       end
     end
   end
@@ -66,8 +56,7 @@ class PostingsController < ApplicationController
   def destroy
     @posting.destroy
     respond_to do |format|
-      format.html { redirect_to postings_url, notice: 'Posting was successfully destroyed.' }
-      format.json { head :no_content }
+      destruction(format, postings_url)
     end
   end
 

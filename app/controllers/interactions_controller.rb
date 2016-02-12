@@ -1,5 +1,6 @@
 class InteractionsController < ApplicationController
   include SortingHelper
+  include ScaffoldedActions
 
   helper_method :sort_column, :sort_direction
 
@@ -21,7 +22,7 @@ class InteractionsController < ApplicationController
   # GET /interactions/new
   def new
     contact_id = params[:contact_id]
-    opts = { contact_id: contact_id, approx_date: Time.now }
+    opts = { contact_id: contact_id, approx_date: Time.now.utc }
     @interaction = Interaction.new(opts)
   end
 
@@ -33,16 +34,7 @@ class InteractionsController < ApplicationController
   # POST /interactions.json
   def create
     @interaction = Interaction.new(interaction_params_with_contact_id!)
-
-    respond_to do |format|
-      if @interaction.save
-        format.html { redirect_to @interaction, notice: 'Interaction was successfully created.' }
-        format.json { render :show, status: :created, location: @interaction }
-      else
-        format.html { render :new }
-        format.json { render json: @interaction.errors, status: :unprocessable_entity }
-      end
-    end
+    save_and_respond(@interaction)
   end
 
   # PATCH/PUT /interactions/1
@@ -50,11 +42,9 @@ class InteractionsController < ApplicationController
   def update
     respond_to do |format|
       if @interaction.update(interaction_params_with_contact_id!)
-        format.html { redirect_to @interaction, notice: 'Interaction was successfully updated.' }
-        format.json { render :show, status: :ok, location: @interaction }
+        successful_update(format, @interaction)
       else
-        format.html { render :edit }
-        format.json { render json: @interaction.errors, status: :unprocessable_entity }
+        failed_update(format, @interaction)
       end
     end
   end
@@ -64,8 +54,7 @@ class InteractionsController < ApplicationController
   def destroy
     @interaction.destroy
     respond_to do |format|
-      format.html { redirect_to interactions_url, notice: 'Interaction was successfully destroyed.' }
-      format.json { head :no_content }
+      destruction(format, interactions_url)
     end
   end
 

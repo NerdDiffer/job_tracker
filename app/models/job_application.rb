@@ -44,7 +44,7 @@ class JobApplication < ActiveRecord::Base
     title = if company.present?
               company.name
             else
-              Time.now.strftime('%Y%m%d%H%M%S')
+              Time.now.utc.strftime('%Y%m%d%H%M%S')
             end
 
     title += " - #{posting.job_title}" if posting.present?

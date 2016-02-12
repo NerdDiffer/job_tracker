@@ -1,5 +1,6 @@
 class CoverLettersController < ApplicationController
   include SortingHelper
+  include ScaffoldedActions
 
   helper_method :sort_column, :sort_direction
 
@@ -24,7 +25,7 @@ class CoverLettersController < ApplicationController
 
     opts = {
       job_application_id: job_application_id,
-      sent_date: Time.now
+      sent_date: Time.now.utc
     }
 
     @cover_letter = CoverLetter.new(opts)
@@ -38,16 +39,7 @@ class CoverLettersController < ApplicationController
   # POST /cover_letters.json
   def create
     @cover_letter = CoverLetter.new(cover_letter_params)
-
-    respond_to do |format|
-      if @cover_letter.save
-        format.html { redirect_to @cover_letter, notice: 'Cover letter was successfully created.' }
-        format.json { render :show, status: :created, location: @cover_letter }
-      else
-        format.html { render :new }
-        format.json { render json: @cover_letter.errors, status: :unprocessable_entity }
-      end
-    end
+    save_and_respond(@cover_letter)
   end
 
   # PATCH/PUT /cover_letters/1
@@ -55,11 +47,9 @@ class CoverLettersController < ApplicationController
   def update
     respond_to do |format|
       if @cover_letter.update(cover_letter_params)
-        format.html { redirect_to @cover_letter, notice: 'Cover letter was successfully updated.' }
-        format.json { render :show, status: :ok, location: @cover_letter }
+        successful_update(format, @cover_letter)
       else
-        format.html { render :edit }
-        format.json { render json: @cover_letter.errors, status: :unprocessable_entity }
+        failed_update(format, @cover_letter)
       end
     end
   end
@@ -69,8 +59,7 @@ class CoverLettersController < ApplicationController
   def destroy
     @cover_letter.destroy
     respond_to do |format|
-      format.html { redirect_to cover_letters_url, notice: 'Cover letter was successfully destroyed.' }
-      format.json { head :no_content }
+      destruction(format, cover_letters_url)
     end
   end
 
