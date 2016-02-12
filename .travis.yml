@@ -4,4 +4,6 @@ rvm:
 services:
   - redis-server
 before_script:
-  - rake db:test:prepare
+  - bundle exec rake db:test:prepare
+script:
+  - bundle exec rake
