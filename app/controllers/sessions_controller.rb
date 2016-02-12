@@ -48,8 +48,18 @@ class SessionsController < ApplicationController
   def login_authenticated_user(user)
     log_in(user)
     flash[:success] = 'You are now logged in'
-    remember_me = params[:session][:remember_me]
-    remember_me == '1' ? remember(user) : forget(user)
+
+    if remember_me?
+      remember(user)
+    else
+      forget(user)
+    end
+
     redirect_back_or(user)
+  end
+
+  def remember_me?
+    remember_me = params[:session][:remember_me]
+    remember_me == '1'
   end
 end
