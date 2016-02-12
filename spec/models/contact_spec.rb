@@ -1,8 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Contact, type: :model do
-  let(:contact) { build(:contact) }
+  let(:contact) { build(:contact, id: 1) }
   let(:company) { build(:company) }
+
+  describe '.get_record_val_by' do
+    context 'searching by real attributes' do
+      before(:each) do
+        allow(described_class)
+          .to receive(:find_by_first_name)
+          .with(instance_of(String))
+          .and_return contact
+      end
+
+      it 'returns id of contact' do
+        actual = described_class.get_record_val_by(:first_name, 'foo')
+        expect(actual).to eq 1
+      end
+    end
+
+    context 'searching by virtual attribute' do
+      before(:each) do
+        allow(described_class)
+          .to receive(:find_by_name)
+          .with(instance_of(String))
+          .and_return(contact)
+      end
+
+      it 'returns id of contact' do
+        actual = described_class.get_record_val_by(:name, 'foo')
+        expect(actual).to eq 1
+      end
+    end
+  end
 
   describe '#name' do
     it 'returns first & last name' do

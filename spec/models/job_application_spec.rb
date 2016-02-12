@@ -1,40 +1,22 @@
 require 'rails_helper'
 
 describe JobApplication, type: :model do
-  let(:company) { build(:company, id: 1) }
+  let(:company) { build(:company) }
   let(:posting) { build(:posting) }
+  let(:job_application) do
+    build(:job_application, id: 1, company: company, posting: posting)
+  end
 
   describe '.get_record_val_by' do
-    subject do
-      build(:job_application, company: company, posting: posting, id: 1)
-    end
-
-    context 'retrieving real attributes from associated models' do
-      before(:each) do
-        allow(Company)
-          .to receive(:find_by_name)
-          .with(subject.company.name)
-          .and_return(company)
-      end
-
-      it 'returns company name' do
-        attribute = :name
-        value = subject.company.name
-        return_attr = 'name'
-        actual = Company.get_record_val_by(attribute, value, return_attr)
-        expect(actual).to eq 'Example Company'
-      end
-    end
-
     context 'retrieving real attributes while searching by virtual attribute' do
       before(:each) do
-        allow(JobApplication)
+        allow(described_class)
           .to receive(:find_by_title)
-          .with(subject.title)
-          .and_return subject
+          .with(instance_of(String))
+          .and_return job_application
       end
       it 'returns the id of a JobApplication record' do
-        actual = described_class.get_record_val_by(:title, subject.title)
+        actual = described_class.get_record_val_by(:title, 'foo')
         expect(actual).to eq 1
       end
     end
@@ -51,11 +33,7 @@ describe JobApplication, type: :model do
     end
 
     context 'the most common case' do
-      subject do
-        company = build(:company)
-        posting = build(:posting)
-        build(:job_application, company: company, posting: posting)
-      end
+      subject { job_application }
 
       it 'confirms the subject has an associated company with a name' do
         expect(subject.company.name).not_to be_nil
