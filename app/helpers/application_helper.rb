@@ -8,33 +8,46 @@ module ApplicationHelper
   # @param boolean_val, the value whose output to customize
   # @param options, optional customizations
   def status_tag(boolean_val, options = {})
-    options[:true_text]  ||= 'Yes'
-    options[:false_text] ||= 'No'
-
     if boolean_val
-      content_tag(:span, options[:true_text], class: 'status true')
+      content = options[:true_text] || 'Yes'
+      additional_options = { class: 'status true' }
     else
-      content_tag(:span, options[:false_text], class: 'status false')
+      content = options[:false_text] || 'No'
+      additional_options = { class: 'status false' }
     end
+    content_tag(:span, content, additional_options)
   end
 
   def error_messages_for(object)
     locals = { curr_object: object }
-    render(partial: 'shared/error_messages', locals: locals)
+    render(partial: error_messages_partial, locals: locals)
   end
 
   def markdown(text)
-    renderer_options = { with_toc_data: true }
+    renderer = Redcarpet::Render::HTML.new(renderer_options)
+    md = Redcarpet::Markdown.new(renderer, md_extensions)
+    html_safe(md.render(text))
+  end
 
-    md_extensions = {
+  private
+
+  def error_messages_partial
+    'shared/error_messages'
+  end
+
+  def renderer_options
+    { with_toc_data: true }
+  end
+
+  def md_extensions
+    {
       no_intra_emphasis: true,
       fenced_code_blocks: true,
       disable_indented_code_blocks: true
     }
+  end
 
-    renderer = Redcarpet::Render::HTML.new(renderer_options)
-    md = Redcarpet::Markdown.new(renderer, md_extensions)
-
-    md.render(text).html_safe
+  def html_safe(input)
+    input.html_safe
   end
 end

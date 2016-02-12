@@ -51,7 +51,19 @@ RSpec.describe SortingHelper, type: :helper do
     end
   end
 
-  xdescribe '#attr_eql_to_sort_col?' do
+  describe '#attr_eql_to_sort_col?' do
+    before(:each) do
+      allow(helper).to receive(:sort_column).and_return('foo')
+    end
+
+    it 'is true when attribute is equal to sort column' do
+      actual = helper.send(:attr_eql_to_sort_col?, 'foo')
+      expect(actual).to be_truthy
+    end
+    it 'is is otherwise false' do
+      actual = helper.send(:attr_eql_to_sort_col?, 'bar')
+      expect(actual).to be_falsey
+    end
   end
 
   describe '#toggle_direction' do
@@ -108,6 +120,12 @@ RSpec.describe SortingHelper, type: :helper do
   end
 
   describe '#direction_allowed?' do
+    it 'calls include? on #directions' do
+      allow(helper).to receive(:directions).and_return(%w(foo bar))
+      directions = helper.send(:directions)
+      expect(directions).to receive(:include?)
+      helper.send(:direction_allowed?, 'foo')
+    end
   end
 
   describe '#sort_direction' do
@@ -145,6 +163,15 @@ RSpec.describe SortingHelper, type: :helper do
     end
   end
 
+  describe '#map_to_s' do
+    # TODO: It would be nice to also verify that :to_s is called on each entry
+    it 'calls map on the input' do
+      input = [:foo, :bar]
+      expect(input).to receive(:map)
+      helper.send(:map_to_s, input)
+    end
+  end
+
   describe '#custom_index_sort' do
     params = { sort: 'column_name', direction: 'asc'  }
 
@@ -164,6 +191,13 @@ RSpec.describe SortingHelper, type: :helper do
         .to receive(:sort_by_attribute)
         .with(collection, sort, direction)
       helper.send(:custom_index_sort)
+    end
+  end
+
+  describe '#directions' do
+    it 'returns this array' do
+      actual = helper.send(:directions)
+      expect(actual).to eq %w(asc desc)
     end
   end
 end
