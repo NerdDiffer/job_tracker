@@ -51,7 +51,7 @@ RSpec.describe SearchSuggestion, type: :model do
     terms_for_attr = { max: 5, parent_set: 'foo' }
 
     before(:each) do
-      allow($redis).to receive(:zrevrange).and_return(true)
+      allow(REDIS).to receive(:zrevrange).and_return(true)
     end
 
     it 'calls .key_name' do
@@ -61,7 +61,7 @@ RSpec.describe SearchSuggestion, type: :model do
 
     it 'calls #zrevrange on the redis object' do
       allow(described_class).to receive(:key_name).and_return('bar')
-      expect($redis).to receive(:zrevrange)
+      expect(REDIS).to receive(:zrevrange)
       described_class.terms_for('quux', terms_for_attr)
     end
   end
@@ -106,8 +106,8 @@ RSpec.describe SearchSuggestion, type: :model do
   describe '.delete_by' do
     before(:each) do
       allow(described_class).to receive(:key_name).and_return('foo:*')
-      allow($redis).to receive(:keys).and_return([:foo, :bar])
-      allow($redis).to receive(:del).and_return(true)
+      allow(REDIS).to receive(:keys).and_return([:foo, :bar])
+      allow(REDIS).to receive(:del).and_return(true)
     end
     after(:each) do
       described_class.send(:delete_by, 'foo')
@@ -117,10 +117,10 @@ RSpec.describe SearchSuggestion, type: :model do
       expect(described_class).to receive(:key_name)
     end
     it 'calls #keys on redis object' do
-      expect($redis).to receive(:keys).with('foo:*')
+      expect(REDIS).to receive(:keys).with('foo:*')
     end
     it 'calls #del on redis object' do
-      expect($redis).to receive(:del)
+      expect(REDIS).to receive(:del)
     end
   end
 

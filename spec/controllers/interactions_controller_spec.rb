@@ -119,7 +119,7 @@ RSpec.describe InteractionsController, type: :controller do
     let(:attr_for_update) do
       {
         id: 1,
-        interaction: { notes: 'bar', },
+        interaction: { notes: 'bar' },
         contact_name: 'arnold'
       }
     end
@@ -202,9 +202,7 @@ RSpec.describe InteractionsController, type: :controller do
   end
 
   describe '#interaction_params_with_company_id!' do
-    params = ActionController::Parameters.new({
-      interaction: { active: true }
-    })
+    params = ActionController::Parameters.new(interaction: { active: true })
 
     before(:each) do
       allow(@controller).to receive(:set_contact_id).and_return(1)

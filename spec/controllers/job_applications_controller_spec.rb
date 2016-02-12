@@ -210,9 +210,7 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe '#job_application_params_with_company_id!' do
-    params = ActionController::Parameters.new({
-      job_application: { active: true }
-    })
+    params = ActionController::Parameters.new(job_application: { active: true })
 
     before(:each) do
       allow(@controller).to receive(:set_company_id).and_return(1)

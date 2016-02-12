@@ -13,11 +13,7 @@ elsif REDIS_CONFIG[env]
   config  = default.merge(REDIS_CONFIG[env].symbolize_keys)
 end
 
-$redis = Redis.new(config)
+REDIS = Redis.new(config)
 
 # Clear out db before each test
-$redis.flushdb if env == :test
-
-# old setup starts here:
-#uri = ENV['REDISTOGO_URL'] || "redis://localhost:6379"
-#$redis = Redis.new(:url => uri, :driver => :hiredis)
+REDIS.flushdb if env == :test

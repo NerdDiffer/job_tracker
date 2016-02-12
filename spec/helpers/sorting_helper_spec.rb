@@ -72,7 +72,7 @@ RSpec.describe SortingHelper, type: :helper do
     end
 
     it 'returns desc if current direction is asc' do
-      allow(helper).to receive(:params).and_return({ direction: 'asc' })
+      allow(helper).to receive(:params).and_return(direction: 'asc')
       actual = helper.send(:toggle_direction, '')
       expect(actual).to eq 'desc'
     end
@@ -112,7 +112,7 @@ RSpec.describe SortingHelper, type: :helper do
       helper.send(:col_allowed?, 'foo')
     end
     it 'calls #include? on whitelisted_attr' do
-      whitelisted_attr = ['foo', 'bar']
+      whitelisted_attr = %w(foo bar)
       allow(helper).to receive(:map_to_s).and_return(whitelisted_attr)
       expect(whitelisted_attr).to receive(:include?)
       helper.send(:col_allowed?, 'bar')
@@ -173,7 +173,7 @@ RSpec.describe SortingHelper, type: :helper do
   end
 
   describe '#custom_index_sort' do
-    params = { sort: 'column_name', direction: 'asc'  }
+    params = { sort: 'column_name', direction: 'asc' }
 
     before(:each) do
       allow(helper).to receive(:model).and_return(Contact)

@@ -8,10 +8,7 @@ end
 
 RSpec.describe Queryable, type: :model do
   let(:model) { Dummy }
-  let(:records) do
-    names = %w(alpha bravo charlie delta epsilon)
-    names.map { |name| Dummy.new }
-  end
+  let(:records) { (1..5).map { Dummy.new } }
   let(:attribute) { 'name' }
   let(:n) { records.length }
 

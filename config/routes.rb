@@ -13,10 +13,7 @@ Rails.application.routes.draw do
   resources :postings
   resources :contacts
 
-  # Search Suggestions
-  match '/search_suggestions',
-    to: 'search_suggestions#index',
-    via: :get
+  match '/search_suggestions', to: 'search_suggestions#index', via: :get
 
   root 'home#index'
 end

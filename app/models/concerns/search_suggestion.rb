@@ -36,7 +36,7 @@ module SearchSuggestion
     parent_set = options[:parent_set] || company_names_key
 
     set_key_name = key_name(parent_set, query.downcase)
-    $redis.zrevrange(set_key_name, min, max)
+    REDIS.zrevrange(set_key_name, min, max)
   end
 
   #
@@ -66,7 +66,7 @@ module SearchSuggestion
       set_key_name = key_name_for_generating_set(namespace_key, val, ind)
       score = 0
       member = val
-      $redis.zadd(set_key_name, score, member)
+      REDIS.zadd(set_key_name, score, member)
     end
   end
 
@@ -80,8 +80,8 @@ module SearchSuggestion
   # @param namespace_key [String], the namespaced-parent key you wish to delete
   def self.delete_by(namespace_key)
     glob = key_name(namespace_key, '*')
-    keys = $redis.keys(glob)
-    keys.each { |key| $redis.del(key) }
+    keys = REDIS.keys(glob)
+    keys.each { |key| REDIS.del(key) }
   end
 
   def self.key_name(parent_set_key, term)
