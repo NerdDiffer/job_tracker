@@ -8,10 +8,10 @@ jQuery ->
   # The scope is probably very big.
   # TODO: refactor string interpolation so memory footprints are smaller
   base_path = '/search_suggestions'
-  company_names_key = 'job_tracker:company_names'
-  contact_names_key = 'job_tracker:contact_names'
+  company_names = 'company_names'
+  contact_names = 'contact_names'
 
   $('#contact_company_name, #job_application_company_name').autocomplete
-    source: "#{base_path}?parent_set=#{company_names_key}"
+    source: "#{base_path}?base_key=#{company_names}"
   $('#interaction_contact_name').autocomplete
-    source: "#{base_path}?parent_set=#{contact_names_key}"
+    source: "#{base_path}?base_key=#{contact_names}"

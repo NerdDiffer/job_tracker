@@ -3,8 +3,8 @@ class SearchSuggestionsController < ApplicationController
 
   def index
     term = params[:term] # set by jQueryUI/autocomplete
-    parent_set = params[:parent_set] # set by coffeescript
-    suggestions = SearchSuggestion.terms_for(term, parent_set: parent_set)
+    base_key = params[:base_key] # set by coffeescript
+    suggestions = SearchSuggestion.terms_for(term, base_key: base_key)
     render(json: suggestions)
   end
 end

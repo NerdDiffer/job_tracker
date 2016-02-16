@@ -1,6 +1,6 @@
 config_file_path = Rails.root.join('config', 'redis.yml')
 config_file = File.open(config_file_path)
-REDIS_CONFIG = YAML.load(config_file).symbolize_keys
+redis_config = YAML.load(config_file).symbolize_keys
 env = Rails.env.to_sym
 
 if env == :production
@@ -8,12 +8,12 @@ if env == :production
     url: ENV['REDISTOGO_URL'],
     driver: :hiredis
   }
-elsif REDIS_CONFIG[env]
-  default = REDIS_CONFIG[:default].symbolize_keys
-  config  = default.merge(REDIS_CONFIG[env].symbolize_keys)
+elsif redis_config[env]
+  default = redis_config[:default].symbolize_keys
+  config  = default.merge(redis_config[env].symbolize_keys)
 end
 
-REDIS = Redis.new(config)
+REDIS_CLIENT = Redis.new(config)
 
 # Clear out db before each test
-REDIS.flushdb if env == :test
+REDIS_CLIENT.flushdb if env == :test

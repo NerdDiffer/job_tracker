@@ -1,133 +1,102 @@
 require 'rails_helper'
 
-RSpec.describe SearchSuggestion, type: :model do
-  describe '.refresh_contact_names' do
+describe SearchSuggestion do
+  shared_examples_for 'refreshing a Dictionary object' do
     before(:each) do
-      allow(described_class)
-        .to receive(:contact_names_key)
-        .and_return('foo_bar:contact_names')
-      expect(described_class).to receive(:contact_names_key)
+      allow(SearchSuggestion::Dictionary)
+        .to receive(:new)
+        .and_return(SearchSuggestion::Dictionary.new(base_key, model))
+      allow_any_instance_of(SearchSuggestion::Dictionary).to receive(:refresh)
     end
 
-    it 'calls .delete_by' do
-      expect(described_class)
-        .to receive(:delete_by)
-        .with('foo_bar:contact_names')
-      described_class.refresh_contact_names
+    it 'creates a Dictionary instance' do
+      expect(SearchSuggestion::Dictionary).to receive(:new)
     end
-    it 'calls .seed' do
-      allow(described_class).to receive(:delete_by).and_return(true)
-      expect(described_class)
-        .to receive(:seed)
-        .with(Contact, :name, 'foo_bar:contact_names')
-      described_class.refresh_contact_names
+    it 'calls refresh on the dictionary' do
+      expect_any_instance_of(SearchSuggestion::Dictionary).to receive(:refresh)
+    end
+  end
+
+  describe '.refresh_contact_names' do
+    it_behaves_like 'refreshing a Dictionary object' do
+      let(:base_key) { 'contact_names' }
+      let(:model)    { Contact }
+
+      after(:each) do
+        described_class.refresh_contact_names
+      end
+
+      it 'passes this value for base_key' do
+        expect(base_key).to eq 'contact_names'
+      end
+
+      it 'passes this value for model' do
+        expect(model).to eq Contact
+      end
     end
   end
 
   describe '.refresh_company_names' do
-    before(:each) do
-      allow(described_class)
-        .to receive(:company_names_key)
-        .and_return('foo_bar:company_names')
-      expect(described_class).to receive(:company_names_key)
-    end
+    it_behaves_like 'refreshing a Dictionary object' do
+      let(:base_key) { 'company_names' }
+      let(:model)    { Company }
 
-    it 'calls .delete_by' do
-      expect(described_class)
-        .to receive(:delete_by)
-        .with('foo_bar:company_names')
-      described_class.refresh_company_names
-    end
-    it 'calls .seed' do
-      allow(described_class).to receive(:delete_by).and_return(true)
-      expect(described_class)
-        .to receive(:seed)
-        .with(Company, :name, 'foo_bar:company_names')
-      described_class.refresh_company_names
+      after(:each) do
+        described_class.refresh_company_names
+      end
+
+      it 'passes this value for base_key' do
+        expect(base_key).to eq 'company_names'
+      end
+
+      it 'passes this value for model' do
+        expect(model).to eq Company
+      end
     end
   end
 
   describe '.terms_for' do
-    terms_for_attr = { max: 5, parent_set: 'foo' }
+    let(:dummy_class) { Class.new }
+    let(:dictionary)  { SearchSuggestion::Dictionary.new('bar', dummy_class) }
 
     before(:each) do
-      allow(REDIS).to receive(:zrevrange).and_return(true)
-    end
-
-    it 'calls .key_name' do
-      expect(described_class).to receive(:key_name)
-      described_class.terms_for('quux', terms_for_attr)
-    end
-
-    it 'calls #zrevrange on the redis object' do
-      allow(described_class).to receive(:key_name).and_return('bar')
-      expect(REDIS).to receive(:zrevrange)
-      described_class.terms_for('quux', terms_for_attr)
-    end
-  end
-
-  describe '.seed' do
-    let(:contact) { build(:contact) }
-
-    it 'calls .find_each on the model' do
-      allow(Contact).to receive(:find_each).and_return(nil)
-      expect(Contact).to receive(:find_each)
-      described_class.send(:seed, Contact, :attribute, :namespace_key)
-    end
-
-    context 'iterating on each record' do
-      namespace_key = described_class.contact_names_key
-
-      before(:each) do
-        allow(Contact).to receive(:find_each).and_yield(contact)
-      end
-      after(:each) do
-        described_class.send(:seed, Contact, :name, namespace_key)
-      end
-
-      it 'gets attribute value with .public_send' do
-        expect(contact).to receive(:public_send).with(:name)
-        allow(described_class).to receive(:downcase_strip).and_return('foo')
-        allow(described_class).to receive(:generate_sets)
-      end
-      it 'calls .downcase_strip' do
-        allow(contact).to receive(:name).and_return('foo')
-        expect(described_class).to receive(:downcase_strip).and_return('foo')
-        allow(described_class).to receive(:generate_sets)
-      end
-      it 'calls .generate_sets' do
-        allow(contact).to receive(:name).and_return('foo')
-        allow(described_class).to receive(:downcase_strip).and_return('foo')
-        expect(described_class).to receive(:generate_sets)
-      end
-    end
-  end
-
-  describe '.delete_by' do
-    before(:each) do
-      allow(described_class).to receive(:key_name).and_return('foo:*')
-      allow(REDIS).to receive(:keys).and_return([:foo, :bar])
-      allow(REDIS).to receive(:del).and_return(true)
+      allow(described_class)
+        .to receive(:select_dictionary)
+        .and_return(dictionary)
+      allow(dictionary).to receive(:search)
     end
     after(:each) do
-      described_class.send(:delete_by, 'foo')
+      described_class.terms_for('foo', base_key: 'bar')
     end
 
-    it 'calls key_name' do
-      expect(described_class).to receive(:key_name)
+    it 'calls .select_dictionary with a hash with the key :base_key' do
+      expect(described_class)
+        .to receive(:select_dictionary)
+        .with('bar')
     end
-    it 'calls #keys on redis object' do
-      expect(REDIS).to receive(:keys).with('foo:*')
-    end
-    it 'calls #del on redis object' do
-      expect(REDIS).to receive(:del)
+    it 'calls .search with the query' do
+      expect(dictionary)
+        .to receive(:search)
+        .with('foo')
     end
   end
 
-  describe '.key_name' do
-    it 'returns a string in the format `arg1:arg2`' do
-      actual = described_class.send(:key_name, 'foo', 'bar')
-      expect(actual).to match(/.*:.*/)
+  describe '.select_dictionary' do
+    context 'when base_key is "contact_names"' do
+      it 'calls Dictionary.new with these arguments' do
+        expect(SearchSuggestion::Dictionary)
+          .to receive(:new)
+          .with('contact_names', Contact)
+        described_class.send(:select_dictionary, 'contact_names')
+      end
+    end
+    context 'when base_key is NOT "contact_names"' do
+      it 'calls Dictionary.new with these arguments' do
+        expect(SearchSuggestion::Dictionary)
+          .to receive(:new)
+          .with('company_names', Company)
+        described_class.send(:select_dictionary, 'company_names')
+      end
     end
   end
 end
