@@ -191,7 +191,7 @@ RSpec.describe JobApplicationsController, type: :controller do
   end
 
   describe '#set_company_id' do
-    mock_params = { company_name: 'foo bar' }
+    mock_params = { job_application: { company_name: 'foo bar' } }
 
     before(:each) do
       allow(company).to receive(:id).and_return(1)
@@ -209,7 +209,7 @@ RSpec.describe JobApplicationsController, type: :controller do
     end
   end
 
-  describe '#job_application_params_with_company_id!' do
+  describe '#job_application_params_with_company_id' do
     params = ActionController::Parameters.new(job_application: { active: true })
 
     before(:each) do
@@ -219,9 +219,9 @@ RSpec.describe JobApplicationsController, type: :controller do
 
     it 'merges with this hash' do
       expect(@controller.send(:job_application_params))
-        .to receive(:merge!)
+        .to receive(:merge)
         .with(company_id: 1)
-      @controller.send(:job_application_params_with_company_id!)
+      @controller.send(:job_application_params_with_company_id)
     end
   end
 end

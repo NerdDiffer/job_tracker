@@ -75,7 +75,8 @@ class ContactsController < ApplicationController
   end
 
   def contact_params_with_company_id
-    contact_params.merge(company_id: set_company_id)
+    company_id = set_company_id
+    contact_params.merge(company_id: company_id)
   end
 
   def set_company_id

@@ -15,7 +15,8 @@ module SearchSuggestion
     def terms_for(query, options = {})
       base_key = options[:base_key]
       dictionary = select_dictionary(base_key)
-      dictionary.search(query)
+      search = dictionary.search(query)
+      search.results
     end
 
     private

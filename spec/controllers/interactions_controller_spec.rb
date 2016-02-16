@@ -183,7 +183,7 @@ RSpec.describe InteractionsController, type: :controller do
   end
 
   describe '#set_contact' do
-    mock_params = { contact_name: 'foo bar' }
+    mock_params = { interaction: { contact_name: 'foo bar' } }
 
     before(:each) do
       allow(contact).to receive(:id).and_return(1)
@@ -201,7 +201,7 @@ RSpec.describe InteractionsController, type: :controller do
     end
   end
 
-  describe '#interaction_params_with_company_id!' do
+  describe '#interaction_params_with_company_id' do
     params = ActionController::Parameters.new(interaction: { active: true })
 
     before(:each) do
@@ -211,9 +211,9 @@ RSpec.describe InteractionsController, type: :controller do
 
     it 'merges with this hash' do
       expect(@controller.send(:interaction_params))
-        .to receive(:merge!)
+        .to receive(:merge)
         .with(contact_id: 1)
-      @controller.send(:interaction_params_with_contact_id!)
+      @controller.send(:interaction_params_with_contact_id)
     end
   end
 end

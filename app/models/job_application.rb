@@ -1,6 +1,8 @@
 class JobApplication < ActiveRecord::Base
   include Queryable
 
+  attr_accessor :company_name
+
   belongs_to :company
   belongs_to :applicant, class_name: 'User', foreign_key: 'user_id'
   has_one :posting

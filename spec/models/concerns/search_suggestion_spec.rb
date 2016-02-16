@@ -58,12 +58,14 @@ describe SearchSuggestion do
   describe '.terms_for' do
     let(:dummy_class) { Class.new }
     let(:dictionary)  { SearchSuggestion::Dictionary.new('bar', dummy_class) }
+    let(:search)      { SearchSuggestion::Search.new('foo', 'bar') }
 
     before(:each) do
       allow(described_class)
         .to receive(:select_dictionary)
         .and_return(dictionary)
-      allow(dictionary).to receive(:search)
+      allow(dictionary).to receive(:search).and_return(search)
+      allow(search).to receive(:results).and_return([])
     end
     after(:each) do
       described_class.terms_for('foo', base_key: 'bar')

@@ -1,6 +1,8 @@
 class Interaction < ActiveRecord::Base
   include Queryable
 
+  attr_accessor :contact_name
+
   belongs_to :contact
 
   # Enum, pluralized as 'media' `Interaction.media`
