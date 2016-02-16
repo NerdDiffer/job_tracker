@@ -11,13 +11,10 @@
     <nav class='nav navbar-inverse'>
       <%= render partial: 'shared/navigation' %>
     </nav>
-
     <div class='container content'>
       <%= yield %>
     </div>
-
   </div>
-
   <%= console if Rails.env.development? %>
   <%= javascript_include_tag 'application' %>
 </body>

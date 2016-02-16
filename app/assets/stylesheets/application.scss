@@ -4,10 +4,8 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-// and the rest of the applications customizations
+// customized stuff
 @import "variables";
 @import "mixins";
 @import "main";
-
-// glob the rest of the directory, including all resource-specific files
 @import "./*"
