@@ -1,18 +1,31 @@
 module Seed
+  @initial_users_count   = 5
+  @initial_records_count = 30
+  @default_password = 'password'
+
   class << self
-    # @param num [Integer], how many fake companies do you want to create?
-    def companies_contacts_and_interactions(num)
-      num.times do
+    # number of users (including yourself) to start out
+    attr_accessor :initial_users_count
+    # number of companies, contacts & interactions to start out
+    attr_accessor :initial_records_count
+    attr_accessor :default_password
+
+    def users
+      User.create!(first_name: 'Rafael', last_name: 'Espinoza',
+                   email: 'rafael@example.com',
+                   password: default_password,
+                   password_confirmation: default_password)
+
+      other_user_count = initial_users_count - 1
+      other_user_count.times { create_user }
+    end
+
+    def companies_contacts_and_interactions
+      initial_records_count.times do
         company = create_company
         contact = create_contact(company.id)
         create_interaction(contact.id)
       end
-    end
-
-    def user
-      User.create!(first_name: 'Rafael', last_name: 'Espinoza',
-                   email: 'rafael@example.com',
-                   password: 'asdfasdf', password_confirmation: 'asdfasdf')
     end
 
     def job_applications_postings_and_cover_letters
@@ -24,6 +37,18 @@ module Seed
     end
 
     private
+
+    def create_user
+      first_name = Faker::Name.first_name
+      last_name  = Faker::Name.last_name
+      email      = Faker::Internet.safe_email(first_name)
+      password   = default_password
+      password_confirmation = default_password
+      User.create!(first_name: first_name, last_name: last_name,
+                   email: email,
+                   password: password,
+                   password_confirmation: password_confirmation)
+    end
 
     def create_company
       name = Faker::Company.name
@@ -53,7 +78,9 @@ module Seed
     end
 
     def create_job_application(company_id)
-      JobApplication.create!(company_id: company_id, active: true, user_id: 1)
+      JobApplication.create!(company_id: company_id,
+                             active: true,
+                             user_id: random_user_id)
     end
 
     def create_posting(job_application_id)
@@ -65,20 +92,22 @@ module Seed
     end
 
     def create_cover_letter(job_application_id, posting_date)
+      content = Faker::Lorem.paragraph
+      sent_date = Faker::Date.between(posting_date, Date.today)
       CoverLetter.create!(job_application_id: job_application_id,
-                          content: Faker::Lorem.paragraph,
-                          sent_date: Faker::Date.between(posting_date, Date.today))
+                          content: content,
+                          sent_date: sent_date)
+    end
+
+    def random_user_id
+      @user_ids ||= User.all.map(&:id)
+      @user_ids.sample
     end
   end
 end
 
 if Rails.env == 'development'
-  # Feel free to comment out seeding methods you don't need.
-  # By default, create 30 records for:
-  #   Company, Contacts, Interaction, JobApplication, Posting, CoverLetter
-  # Only 1 User is needed.
-  num_to_seed = 30
-  Seed.companies_contacts_and_interactions(num_to_seed)
-  Seed.user
+  Seed.users
+  Seed.companies_contacts_and_interactions
   Seed.job_applications_postings_and_cover_letters
 end
