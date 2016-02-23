@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160221215038) do
+ActiveRecord::Schema.define(version: 20160223054236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,9 +36,11 @@ ActiveRecord::Schema.define(version: 20160221215038) do
     t.datetime "updated_at",   null: false
     t.string   "last_name"
     t.string   "permalink"
+    t.integer  "user_id"
   end
 
   add_index "contacts", ["company_id"], name: "index_contacts_on_company_id", using: :btree
+  add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "cover_letters", force: :cascade do |t|
     t.integer  "job_application_id"
@@ -83,6 +85,7 @@ ActiveRecord::Schema.define(version: 20160221215038) do
   end
 
   add_index "job_applications", ["company_id"], name: "index_job_applications_on_company_id", using: :btree
+  add_index "job_applications", ["user_id"], name: "index_job_applications_on_user_id", using: :btree
 
   create_table "postings", force: :cascade do |t|
     t.integer  "job_application_id"
@@ -106,11 +109,11 @@ ActiveRecord::Schema.define(version: 20160221215038) do
     t.string   "remember_digest"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-
   add_foreign_key "contacts", "companies"
+  add_foreign_key "contacts", "users"
   add_foreign_key "cover_letters", "job_applications"
   add_foreign_key "interactions", "contacts"
   add_foreign_key "job_applications", "companies"
+  add_foreign_key "job_applications", "users"
   add_foreign_key "postings", "job_applications"
 end
