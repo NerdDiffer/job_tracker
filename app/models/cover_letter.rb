@@ -1,7 +1,7 @@
 class CoverLetter < ActiveRecord::Base
   include Queryable
 
-  belongs_to :job_application
+  belongs_to :job_application, inverse_of: :cover_letter
   has_one :contact, through: :interactions
 
   # scopes

@@ -6,6 +6,7 @@ class Contact < ActiveRecord::Base
 
   friendly_id :name
 
+  belongs_to :user
   belongs_to :company
   has_many :interactions
   has_many :cover_letters, through: :interactions

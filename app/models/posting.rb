@@ -1,7 +1,7 @@
 class Posting < ActiveRecord::Base
   include Queryable
 
-  belongs_to :job_application
+  belongs_to :job_application, inverse_of: :cover_letter
 
   # scopes
   scope :sorted, -> { order(posting_date: :desc, job_title: :asc) }

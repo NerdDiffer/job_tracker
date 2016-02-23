@@ -5,8 +5,8 @@ class JobApplication < ActiveRecord::Base
 
   belongs_to :company
   belongs_to :applicant, class_name: 'User', foreign_key: 'user_id'
-  has_one :posting
-  has_one :cover_letter
+  has_one :posting, inverse_of: :job_application
+  has_one :cover_letter, inverse_of: :job_application
 
   # scopes
   scope :sorted, -> { order(updated_at: :desc) }
