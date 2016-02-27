@@ -13,5 +13,5 @@ jQuery ->
 
   $('#contact_company_name, #job_application_company_name').autocomplete
     source: "#{base_path}?base_key=#{company_names}"
-  $('#interaction_contact_name').autocomplete
+  $('#note_contact_name').autocomplete
     source: "#{base_path}?base_key=#{contact_names}"

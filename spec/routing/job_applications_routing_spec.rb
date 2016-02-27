@@ -33,5 +33,50 @@ RSpec.describe JobApplicationsController, type: :routing do
     it 'routes to #destroy' do
       expect(delete: '/job_applications/1').to route_to('job_applications#destroy', id: '1')
     end
+
+    context 'nested resources' do
+      describe NotesController do
+        it 'routes to notes#index' do
+          expected = { controller: 'notes', action: 'index',
+                       job_application_id: '1' }
+          expect(get: '/job_applications/1/notes').to route_to(expected)
+        end
+        it 'routes to notes#new' do
+          expected = { controller: 'notes', action: 'new',
+                       job_application_id: '1' }
+          expect(get: '/job_applications/1/notes/new').to route_to(expected)
+        end
+        it 'routes to notes#show' do
+          expected = { controller: 'notes', action: 'show',
+                       job_application_id: '1', id: '1' }
+          expect(get: '/job_applications/1/notes/1').to route_to(expected)
+        end
+        it 'routes to notes#edit' do
+          expected = { controller: 'notes', action: 'edit',
+                       job_application_id: '1', id: '1' }
+          expect(get: '/job_applications/1/notes/1/edit').to route_to(expected)
+        end
+        it 'routes to notes#create' do
+          expected = { controller: 'notes', action: 'create',
+                       job_application_id: '1' }
+          expect(post: '/job_applications/1/notes').to route_to(expected)
+        end
+        it 'routes to notes#update via PUT' do
+          expected = { controller: 'notes', action: 'update',
+                       job_application_id: '1', id: '1' }
+          expect(put: '/job_applications/1/notes/1').to route_to(expected)
+        end
+        it 'routes to notes#update via PATCH' do
+          expected = { controller: 'notes', action: 'update',
+                       job_application_id: '1', id: '1' }
+          expect(patch: '/job_applications/1/notes/1').to route_to(expected)
+        end
+        it 'routes to notes#destroy' do
+          expected = { controller: 'notes', action: 'destroy',
+                       job_application_id: '1', id: '1' }
+          expect(delete: '/job_applications/1/notes/1').to route_to(expected)
+        end
+      end
+    end
   end
 end

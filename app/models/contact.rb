@@ -8,8 +8,7 @@ class Contact < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :company
-  has_many :interactions
-  has_many :cover_letters, through: :interactions
+  has_many :notes, as: :notable, dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name, presence: true

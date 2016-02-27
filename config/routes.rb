@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  match '/search_suggestions', to: 'search_suggestions#index', via: :get
+
   # Accounts & Sessions
   get    'signup' => 'users#new'
   get    'login'  => 'sessions#new'
@@ -6,14 +8,15 @@ Rails.application.routes.draw do
   delete 'logout' => 'sessions#destroy'
 
   resources :users
-  resources :job_applications
+  resources :job_applications do
+    resources :notes
+  end
+  resources :contacts do
+    resources :notes
+  end
   resources :companies
-  resources :interactions
   resources :cover_letters
   resources :postings
-  resources :contacts
-
-  match '/search_suggestions', to: 'search_suggestions#index', via: :get
 
   root 'home#index'
 end

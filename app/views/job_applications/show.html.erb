@@ -21,6 +21,11 @@
 <%= link_to 'Edit', edit_job_application_path(@job_application) %> |
 <%= link_to 'Back', job_applications_path %>
 
+
+<div class='attached_records notes'>
+  <%= render 'notes/notable_notes' %>
+</div>
+
 <div class='attached_records'>
   <h2>Posting</h2>
   <% if @job_application.posting.present? %>

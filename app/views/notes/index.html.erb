@@ -1,0 +1,29 @@
+<% @page_title = "Notes" %>
+
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Notes</h1>
+
+<p><%= link_to('New Note', [:new, @notable, :note]) %></p>
+
+<table class='table table-striped table-hover'>
+  <thead>
+    <tr>
+      <th><%= generate_sortable_link('updated_at', 'Updated at') %></th>
+      <th>Contents</th>
+      <th class='actions' colspan="2">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @notes.each do |note| %>
+      <tr>
+        <% updated_at = note.updated_at.to_s('month date year')%>
+        <td><%= link_to updated_at, note %></td>
+        <td><%= link_to(truncate(note.contents), note) %></td>
+        <td><%= link_to 'Edit', edit_note_path(note) %></td>
+        <td><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

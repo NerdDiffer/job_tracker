@@ -51,6 +51,19 @@ RSpec.describe JobApplicationsController, type: :controller do
     it 'renders show' do
       expect(response).to render_template(:show)
     end
+
+    context '@notable, @notes, @note' do
+      it 'assigns @contact to @notable' do
+        expect(assigns(:notable)).to eq(assigns(:job_application))
+      end
+      it 'assigns @notes to @notable.notes' do
+        expected = Note::ActiveRecord_Associations_CollectionProxy
+        expect(assigns(:notes)).to be_instance_of(expected)
+      end
+      it 'assigns @note to a new instance of Note' do
+        expect(assigns(:note)).to be_a_new Note
+      end
+    end
   end
 
   describe 'GET #new' do

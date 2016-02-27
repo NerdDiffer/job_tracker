@@ -6,7 +6,7 @@ module Seed
   class << self
     # number of users (including yourself) to start out
     attr_accessor :initial_users_count
-    # number of companies, contacts & interactions to start out
+    # number of companies, contacts & notes to start out
     attr_accessor :initial_records_count
     attr_accessor :default_password
 
@@ -20,19 +20,34 @@ module Seed
       other_user_count.times { create_user }
     end
 
-    def companies_contacts_and_interactions
-      initial_records_count.times do
-        company = create_company
-        contact = create_contact(company.id)
-        create_interaction(contact.id)
-      end
+    def companies
+      initial_records_count.times { create_company }
     end
 
     def job_applications_postings_and_cover_letters
-      Company.all.each do |company|
-        job_application = create_job_application(company.id)
+      initial_records_count.times do
+        company_id = random_company_id
+        user_id = random_user_id
+        job_application = create_job_application(company_id, user_id)
         posting = create_posting(job_application.id)
         create_cover_letter(job_application.id, posting.posting_date)
+      end
+    end
+
+    def contacts
+      initial_records_count.times do
+        company_id = random_company_id
+        user_id = random_user_id
+        create_contact(company_id, user_id)
+      end
+    end
+
+    def notes
+      initial_records_count.times do
+        model = random_model
+        notable_id = random_id(model)
+        user_id = random_user_id
+        create_note(model, notable_id, user_id)
       end
     end
 
@@ -57,30 +72,29 @@ module Seed
       Company.create!(name: name, website: website, category: category)
     end
 
-    def create_contact(company_id)
+    def create_contact(company_id, user_id)
       first_name = Faker::Name.first_name
       last_name  = Faker::Name.last_name
-      phone1 = Faker::PhoneNumber.phone_number
-      phone2 = Faker::PhoneNumber.phone_number
+      phone_1 = Faker::PhoneNumber.phone_number
+      phone_2 = Faker::PhoneNumber.phone_number
       email = Faker::Internet.safe_email(first_name)
       title = Faker::Name.title
-      Contact.create!(first_name: first_name, last_name: last_name,
-                      phone_office: phone1, phone_mobile: phone2,
-                      email: email, title: title,
-                      company_id: company_id)
+      Contact.create!(company_id: company_id, user_id: user_id,
+                      first_name: first_name, last_name: last_name,
+                      phone_office: phone_1, phone_mobile: phone_2,
+                      email: email, title: title)
     end
 
-    def create_interaction(contact_id)
-      Interaction.create!(contact_id: contact_id,
-                          notes: Faker::Lorem.sentence,
-                          approx_date: Faker::Date.backward(30),
-                          medium: Faker::Number.between(0, 3).to_i)
+    def create_note(model, notable_id, user_id)
+      Note.create!(contents: Faker::Lorem.sentence,
+                   notable_type: model, notable_id: notable_id,
+                   user_id: user_id)
     end
 
-    def create_job_application(company_id)
-      JobApplication.create!(company_id: company_id,
-                             active: true,
-                             user_id: random_user_id)
+    def create_job_application(company_id, user_id)
+      JobApplication.create!(active: true,
+                             company_id: company_id,
+                             user_id: user_id)
     end
 
     def create_posting(job_application_id)
@@ -103,11 +117,41 @@ module Seed
       @user_ids ||= User.all.map(&:id)
       @user_ids.sample
     end
+
+    def random_company_id
+      @company_ids ||= Company.all.map(&:id)
+      @company_ids.sample
+    end
+
+    def random_contact_id
+      @contact_ids ||= Contact.all.map(&:id)
+      @contact_ids.sample
+    end
+
+    def random_job_application_id
+      @job_application_ids ||= JobApplication.all.map(&:id)
+      @job_application_ids.sample
+    end
+
+    def random_model
+      [Contact, JobApplication].sample
+    end
+
+    def random_id(model)
+      model = model.to_s
+      case model
+      when 'Contact'; then random_contact_id
+      when 'JobApplication'; random_job_application_id
+      else; fail 'pass in a valid model constant'
+      end
+    end
   end
 end
 
 if Rails.env == 'development'
   Seed.users
-  Seed.companies_contacts_and_interactions
+  Seed.companies
   Seed.job_applications_postings_and_cover_letters
+  Seed.contacts
+  Seed.notes
 end

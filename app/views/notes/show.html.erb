@@ -1,0 +1,22 @@
+<% @page_title = "Note ~ #{@note.updated_at}" %>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <%= link_to 'Edit', [:edit, @notable, @note] %>
+</p>
+
+<p>
+  <strong>Updated:</strong>
+  <%= @note.updated_at.to_s('month day year') %>
+</p>
+
+<p>
+  <strong><%= @notable.class %>:</strong>
+  <%= link_to(@note.notable_name, @notable)  %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= markdown(@note.contents) %>
+</p>

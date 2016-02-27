@@ -5,6 +5,7 @@ class JobApplication < ActiveRecord::Base
 
   belongs_to :company
   belongs_to :applicant, class_name: 'User', foreign_key: 'user_id'
+  has_many :notes, as: :notable, dependent: :destroy
   has_one :posting, inverse_of: :job_application
   has_one :cover_letter, inverse_of: :job_application
 

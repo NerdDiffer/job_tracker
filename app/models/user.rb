@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   has_many :contacts
+  has_many :notes, dependent: :destroy, inverse_of: :user
   has_many :job_applications
   has_many :companies, through: :job_applications
   has_many :cover_letters, through: :job_applications

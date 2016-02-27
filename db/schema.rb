@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223054236) do
+ActiveRecord::Schema.define(version: 20160224192109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,17 +65,6 @@ ActiveRecord::Schema.define(version: 20160223054236) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
-  create_table "interactions", force: :cascade do |t|
-    t.integer  "contact_id"
-    t.string   "notes"
-    t.date     "approx_date"
-    t.integer  "medium"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "interactions", ["contact_id"], name: "index_interactions_on_contact_id", using: :btree
-
   create_table "job_applications", force: :cascade do |t|
     t.integer  "company_id"
     t.datetime "created_at",                null: false
@@ -86,6 +75,18 @@ ActiveRecord::Schema.define(version: 20160223054236) do
 
   add_index "job_applications", ["company_id"], name: "index_job_applications_on_company_id", using: :btree
   add_index "job_applications", ["user_id"], name: "index_job_applications_on_user_id", using: :btree
+
+  create_table "notes", force: :cascade do |t|
+    t.integer  "notable_id",   null: false
+    t.string   "notable_type", null: false
+    t.text     "contents"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "user_id",      null: false
+  end
+
+  add_index "notes", ["notable_id"], name: "index_notes_on_notable_id", using: :btree
+  add_index "notes", ["user_id"], name: "index_notes_on_user_id", using: :btree
 
   create_table "postings", force: :cascade do |t|
     t.integer  "job_application_id"
@@ -112,8 +113,8 @@ ActiveRecord::Schema.define(version: 20160223054236) do
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "users"
   add_foreign_key "cover_letters", "job_applications"
-  add_foreign_key "interactions", "contacts"
   add_foreign_key "job_applications", "companies"
   add_foreign_key "job_applications", "users"
+  add_foreign_key "notes", "users"
   add_foreign_key "postings", "job_applications"
 end

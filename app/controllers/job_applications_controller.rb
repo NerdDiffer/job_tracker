@@ -18,6 +18,9 @@ class JobApplicationsController < ApplicationController
   # GET /job_applications/1
   # GET /job_applications/1.json
   def show
+    @notable = @job_application
+    @notes = @notable.notes
+    @note = Note.new
   end
 
   # GET /job_applications/new

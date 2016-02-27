@@ -32,13 +32,6 @@
 <%= link_to 'Edit', edit_contact_path(@contact) %> |
 <%= link_to 'Back', contacts_path %>
 
-<div class='attached_records'>
-  <h2>Interactions</h2>
-  <%= link_to(
-    'Add new interaction',
-    new_interaction_path({contact_id: @contact.id})
-  ) %>
-  <% @contact.interactions.each do |interaction| %>
-    <li><%= link_to interaction.approx_date, interaction %></li>
-  <% end %>
+<div class='attached_records notes'>
+  <%= render 'notes/notable_notes' %>
 </div>
