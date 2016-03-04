@@ -16,12 +16,19 @@
 
   <tbody>
     <% @cover_letters.each do |cover_letter| %>
+      <% job_application = cover_letter.job_application %>
+      <% content = truncate(cover_letter.content) %>
+      <% default_link_dest = job_application_cover_letter_path(job_application) %>
+      <% destroy_link_opts = {
+        method: :delete, data: { confirm: 'Are you sure?' }
+      } %>
+
       <tr>
-        <td><%= link_to cover_letter.job_application.title, cover_letter.job_application %></td>
+        <td><%= link_to job_application.title, job_application %></td>
         <td><%= cover_letter.sent_date %></td>
-        <td><%= link_to(truncate(cover_letter.content), cover_letter) %></td>
-        <td><%= link_to 'Edit', edit_cover_letter_path(cover_letter) %></td>
-        <td><%= link_to 'Destroy', cover_letter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to(content, default_link_dest) %></td>
+        <td><%= link_to 'Edit', edit_job_application_cover_letter_path(job_application) %></td>
+        <td><%= link_to 'Destroy', default_link_dest, destroy_link_opts %></td>
       </tr>
     <% end %>
   </tbody>

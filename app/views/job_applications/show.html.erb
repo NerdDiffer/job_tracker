@@ -1,57 +1,53 @@
 <% @page_title = "Application for #{@job_application.title}" %>
 
-<p id="notice"><%= notice %></p>
+<div class='job_applications'>
+  <p id="notice"><%= notice %></p>
 
-<h1><%= @job_application.title %></h1>
-<p>
-  <strong>Active:</strong>
-  <%= status_tag @job_application.active %>
-</p>
+  <h1><%= @job_application.title %></h1>
+  <p>
+    <strong>Active:</strong>
+    <%= status_tag @job_application.active %>
+  </p>
 
-<p>
-  <strong>Last updated:</strong>
-  <%= @job_application.updated_at %>
-</p>
+  <p>
+    <strong>Last updated:</strong>
+    <%= @job_application.updated_at %>
+  </p>
 
-<p>
-  <strong>Company:</strong>
-  <%= link_to @job_application.company.name, @job_application.company %>
-</p>
+  <p>
+    <strong>Company:</strong>
+    <%= link_to @job_application.company.name, @job_application.company %>
+  </p>
 
-<%= link_to 'Edit', edit_job_application_path(@job_application) %> |
-<%= link_to 'Back', job_applications_path %>
+  <%= link_to 'Edit', edit_job_application_path(@job_application) %> |
+  <%= link_to 'Back', job_applications_path %>
 
 
-<div class='attached_records notes'>
-  <%= render 'notes/notable_notes' %>
-</div>
+  <div class='attached_records notes'>
+    <%= render 'notes/notable_notes' %>
+  </div>
 
-<div class='attached_records'>
-  <h2>Posting</h2>
-  <% if @job_application.posting.present? %>
-    <li><%= link_to(
-      @job_application.posting.job_title,
-      @job_application.posting
-    ) %></li>
-  <% else %>
-    <%= link_to(
-      'Add Posting',
-      new_posting_path({ job_application_id: @job_application.id })
-    ) %>
-  <% end %>
-</div>
+  <div class='attached_records postings'>
+    <h2>Posting</h2>
+    <% if @job_application.posting.present? %>
+      <%= render 'posting', locals: { object: @job_application } %>
+    <% else %>
+      <%= link_to(
+        'Add Posting',
+        new_job_application_posting_path({ job_application_id: @job_application.id })
+      ) %>
+    <% end %>
+  </div>
 
-<div class='attached_records'>
-  <h2>Cover Letter</h2>
-  <% if @job_application.cover_letter.present? %>
-    <li><%= link_to(
-      @job_application.cover_letter.sent_date,
-      @job_application.cover_letter
-    ) %></li>
-  <% else %>
-    <%= link_to(
-      'Add Cover Letter',
-      new_cover_letter_path({ job_application_id: @job_application.id })
-    ) %>
-  <% end %>
+  <div class='attached_records cover_letters'>
+    <h2>Cover Letter</h2>
+    <% if @job_application.cover_letter.present? %>
+      <%= render 'cover_letter', locals: { object: @job_application } %>
+    <% else %>
+      <%= link_to(
+        'Add Cover Letter',
+        new_job_application_cover_letter_path({ job_application_id: @job_application.id })
+      ) %>
+    <% end %>
+  </div>
 </div>

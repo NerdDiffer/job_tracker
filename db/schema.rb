@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160228184302) do
+ActiveRecord::Schema.define(version: 20160304174042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20160228184302) do
   end
 
   add_index "cover_letters", ["job_application_id"], name: "index_cover_letters_on_job_application_id", using: :btree
+  add_index "cover_letters", ["job_application_id"], name: "uniq_job_application_id_on_cover_letters", unique: true, using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -99,6 +100,7 @@ ActiveRecord::Schema.define(version: 20160228184302) do
   end
 
   add_index "postings", ["job_application_id"], name: "index_postings_on_job_application_id", using: :btree
+  add_index "postings", ["job_application_id"], name: "uniq_job_application_id_on_postings", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"

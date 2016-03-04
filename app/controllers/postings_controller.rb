@@ -40,8 +40,15 @@ class PostingsController < ApplicationController
   # POST /postings
   # POST /postings.json
   def create
-    @posting = Posting.new(posting_params)
-    save_and_respond(posting)
+    @posting = Posting.new(posting_params_with_associated_ids)
+
+    respond_to do |format|
+      if posting.save
+        successful_creation(format, posting.job_application)
+      else
+        failed_creation(format, posting)
+      end
+    end
   end
 
   # PATCH/PUT /postings/1
@@ -49,7 +56,7 @@ class PostingsController < ApplicationController
   def update
     respond_to do |format|
       if posting.update(posting_params)
-        successful_update(format, posting)
+        successful_update(format, posting.job_application)
       else
         failed_update(format, posting)
       end
@@ -61,14 +68,15 @@ class PostingsController < ApplicationController
   def destroy
     @posting.destroy
     respond_to do |format|
-      destruction(format, postings_url)
+      destruction(format, posting.job_application)
     end
   end
 
   private
 
   def set_posting
-    @posting = Posting.find(params[:id])
+    id = params[:job_application_id]
+    @posting = Posting.find_by_job_application_id(id)
   end
 
   def whitelisted_attr
@@ -78,6 +86,11 @@ class PostingsController < ApplicationController
 
   def posting_params
     params.require(:posting).permit(whitelisted_attr)
+  end
+
+  def posting_params_with_associated_ids
+    job_application_id = params[:job_application_id]
+    posting_params.merge(job_application_id: job_application_id)
   end
 
   def model

@@ -43,8 +43,15 @@ class CoverLettersController < ApplicationController
   # POST /cover_letters
   # POST /cover_letters.json
   def create
-    @cover_letter = CoverLetter.new(cover_letter_params)
-    save_and_respond(cover_letter)
+    @cover_letter = CoverLetter.new(cover_letter_params_with_associated_ids)
+
+    respond_to do |format|
+      if cover_letter.save
+        successful_creation(format, cover_letter.job_application)
+      else
+        failed_creation(format, cover_letter)
+      end
+    end
   end
 
   # PATCH/PUT /cover_letters/1
@@ -52,7 +59,7 @@ class CoverLettersController < ApplicationController
   def update
     respond_to do |format|
       if cover_letter.update(cover_letter_params)
-        successful_update(format, cover_letter)
+        successful_update(format, cover_letter.job_application)
       else
         failed_update(format, cover_letter)
       end
@@ -64,15 +71,15 @@ class CoverLettersController < ApplicationController
   def destroy
     @cover_letter.destroy
     respond_to do |format|
-      destruction(format, cover_letters_url)
+      destruction(format, cover_letter.job_application)
     end
   end
 
   private
 
   def set_cover_letter
-    id = params[:id]
-    @cover_letter = CoverLetter.find(id)
+    id = params[:job_application_id]
+    @cover_letter = CoverLetter.find_by_job_application_id(id)
   end
 
   def whitelisted_attr
@@ -81,6 +88,11 @@ class CoverLettersController < ApplicationController
 
   def cover_letter_params
     params.require(:cover_letter).permit(whitelisted_attr)
+  end
+
+  def cover_letter_params_with_associated_ids
+    job_application_id = params[:job_application_id]
+    cover_letter_params.merge(job_application_id: job_application_id)
   end
 
   def model

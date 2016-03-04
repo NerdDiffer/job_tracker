@@ -1,0 +1,6 @@
+@mixin table-3-cols {
+  th {
+    &:nth-of-type(1) { width: 15%; }
+    &:nth-last-of-type(1) { width: 15%; }
+  }
+}

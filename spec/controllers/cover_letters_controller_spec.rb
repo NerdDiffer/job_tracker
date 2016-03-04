@@ -58,7 +58,7 @@ RSpec.describe CoverLettersController, type: :controller do
   describe 'GET #show' do
     before(:each) do
       stub_before_actions
-      get(:show, id: 1)
+      get(:show, job_application_id: 1)
     end
 
     it 'returns a 200' do
@@ -88,7 +88,7 @@ RSpec.describe CoverLettersController, type: :controller do
   describe 'GET #edit' do
     before(:each) do
       stub_before_actions
-      get(:edit, id: 1)
+      get(:edit, job_application_id: 1)
     end
 
     it 'returns a 200' do
@@ -109,32 +109,29 @@ RSpec.describe CoverLettersController, type: :controller do
           first_name: 'Foo',
           last_name: 'Bar',
           title: '_title',
-          job_application_id: 1
-        }
+        },
+        job_application_id: 1
       }
     end
 
     before(:each) do
       allow(controller)
-        .to receive(:cover_letter_params)
+        .to receive(:cover_letter_params_with_associated_ids)
         .and_return(attr_for_create)
-      allow(CoverLetter).to receive(:new).and_return(cover_letter)
     end
 
     context 'expected method calls' do
       before(:each) do
-        allow(controller).to receive(:save_and_respond)
+        allow(controller).to receive(:respond_to).and_return(true)
         allow(controller).to receive(:render).and_return(true)
+        allow(CoverLetter).to receive(:new).and_return(cover_letter)
       end
       after(:each) do
         post(:create, attr_for_create)
       end
 
-      it 'calls #save_and_respond' do
-        expect(controller).to receive(:save_and_respond)
-      end
-      it 'calls #cover_letter_params' do
-        expect(controller).to receive(:cover_letter_params)
+      it 'calls #cover_letter_params_with_associated_ids' do
+        expect(controller).to receive(:cover_letter_params_with_associated_ids)
       end
       it 'calls .new on CoverLetter' do
         expect(CoverLetter).to receive(:new).with(attr_for_create)
@@ -143,7 +140,10 @@ RSpec.describe CoverLettersController, type: :controller do
 
     context 'with valid params' do
       before(:each) do
+        allow(cover_letter).to receive(:job_application).and_return(job_application)
         allow(cover_letter).to receive(:save).and_return(true)
+        allow(controller).to receive(:render).and_return(true)
+        allow(CoverLetter).to receive(:new).and_return(cover_letter)
         post(:create, attr_for_create)
       end
 
@@ -151,13 +151,14 @@ RSpec.describe CoverLettersController, type: :controller do
         expect(assigns(:cover_letter)).to be_a_new(CoverLetter)
       end
       it 'redirects to the created cover_letter' do
-        expect(response).to redirect_to(cover_letter)
+        expect(response).to redirect_to(cover_letter.job_application)
       end
     end
 
     context 'with invalid params' do
       before(:each) do
         allow(cover_letter).to receive(:save).and_return(false)
+        allow(CoverLetter).to receive(:new).and_return(cover_letter)
         post(:create, attr_for_create)
       end
 
@@ -174,8 +175,8 @@ RSpec.describe CoverLettersController, type: :controller do
   describe 'PUT #update' do
     let(:attr_for_update) do
       {
-        id: 'foo-bar',
-        cover_letter: { job_application_id: 2 }
+        cover_letter: { content: '' },
+        job_application_id: 2
       }
     end
 
@@ -186,6 +187,9 @@ RSpec.describe CoverLettersController, type: :controller do
     context 'with valid params' do
       before(:each) do
         allow(cover_letter).to receive(:update).and_return(true)
+        allow(cover_letter).to receive(:job_application).and_return(job_application)
+        allow(cover_letter).to receive(:update).and_return(true)
+        allow(controller).to receive(:render).and_return(true)
       end
 
       it 'assigns the requested cover_letter as @cover_letter' do
@@ -198,7 +202,7 @@ RSpec.describe CoverLettersController, type: :controller do
       end
       it 'redirects to the cover_letter' do
         put(:update, attr_for_update)
-        expect(response).to redirect_to(cover_letter)
+        expect(response).to redirect_to(cover_letter.job_application)
       end
     end
 
@@ -219,17 +223,42 @@ RSpec.describe CoverLettersController, type: :controller do
 
   describe 'DELETE #destroy' do
     before(:each) do
+      allow(cover_letter).to receive(:job_application).and_return(job_application)
+      allow(cover_letter).to receive(:destroy).and_return(true)
       stub_before_actions
     end
 
     it 'calls destroy on the requested cover_letter' do
       expect(cover_letter).to receive(:destroy)
-      delete(:destroy, id: 1)
+      delete(:destroy, job_application_id: 1)
     end
 
     it 'redirects to the cover_letters list' do
-      delete(:destroy, id: 1)
-      expect(response).to redirect_to(cover_letters_url)
+      delete(:destroy, job_application_id: 1)
+      expect(response).to redirect_to(cover_letter.job_application)
+    end
+  end
+
+  describe '#cover_letter_params_with_associated_ids' do
+    let(:params) { { job_application_id: 1 } }
+
+    before(:each) do
+      allow(controller).to receive(:params).and_return(params)
+      allow(controller)
+        .to receive(:cover_letter_params)
+        .and_return({})
+    end
+    after(:each) do
+      controller.send(:cover_letter_params_with_associated_ids)
+    end
+
+    it 'calls #cover_letter_params' do
+      expect(controller).to receive(:cover_letter_params)
+    end
+    it 'calls #merge on contact_params' do
+      cover_letter_params = controller.send(:cover_letter_params)
+      expected_args = { job_application_id: 1 }
+      expect(cover_letter_params).to receive(:merge).with(expected_args)
     end
   end
 

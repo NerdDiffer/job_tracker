@@ -4,9 +4,6 @@
 
 .notes {
   &.attached_records {
-    th {
-      &.updated_at { width: 15%; }
-      &.actions    { width: 15%; }
-    }
+    @include table-3-cols;
   }
 }

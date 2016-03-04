@@ -5,33 +5,40 @@ RSpec.describe PostingsController, type: :routing do
     it 'routes to #index' do
       expect(get: '/postings').to route_to('postings#index')
     end
-
     it 'routes to #new' do
-      expect(get: '/postings/new').to route_to('postings#new')
+      expected = { controller: 'postings', action: 'new',
+                   job_application_id: '1' }
+      expect(get: '/job_applications/1/posting/new').to route_to(expected)
     end
-
     it 'routes to #show' do
-      expect(get: '/postings/1').to route_to('postings#show', id: '1')
+      expected = { controller: 'postings', action: 'show',
+                   job_application_id: '1' }
+      expect(get: '/job_applications/1/posting').to route_to(expected)
     end
-
     it 'routes to #edit' do
-      expect(get: '/postings/1/edit').to route_to('postings#edit', id: '1')
+      expected = { controller: 'postings', action: 'edit',
+                   job_application_id: '1' }
+      expect(get: '/job_applications/1/posting/edit').to route_to(expected)
     end
-
     it 'routes to #create' do
-      expect(post: '/postings').to route_to('postings#create')
+      expected = { controller: 'postings', action: 'create',
+                   job_application_id: '1' }
+      expect(post: '/job_applications/1/posting').to route_to(expected)
     end
-
     it 'routes to #update via PUT' do
-      expect(put: '/postings/1').to route_to('postings#update', id: '1')
+      expected = { controller: 'postings', action: 'update',
+                   job_application_id: '1' }
+      expect(put: '/job_applications/1/posting').to route_to(expected)
     end
-
     it 'routes to #update via PATCH' do
-      expect(patch: '/postings/1').to route_to('postings#update', id: '1')
+      expected = { controller: 'postings', action: 'update',
+                   job_application_id: '1' }
+      expect(patch: '/job_applications/1/posting').to route_to(expected)
     end
-
     it 'routes to #destroy' do
-      expect(delete: '/postings/1').to route_to('postings#destroy', id: '1')
+      expected = { controller: 'postings', action: 'destroy',
+                   job_application_id: '1' }
+      expect(delete: '/job_applications/1/posting').to route_to(expected)
     end
   end
 end

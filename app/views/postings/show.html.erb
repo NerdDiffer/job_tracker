@@ -2,8 +2,15 @@
 
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_posting_path(@posting) %> |
-<%= link_to 'Back', postings_path %>
+<% default_link_dest = job_application_posting_path(@posting.job_application) %>
+<% destroy_link_html_opts = {
+  data: { confirm: 'Are you sure?' },
+  method: :delete
+} %>
+
+<%= link_to 'Edit', edit_job_application_posting_path(@posting.job_application) %> |
+<%= link_to 'Destroy', default_link_dest, destroy_link_html_opts %> |
+<%= link_to 'Back', :back %>
 
 <p>
   <strong>Job application:</strong>
