@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224192109) do
+ActiveRecord::Schema.define(version: 20160228184302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,14 +36,14 @@ ActiveRecord::Schema.define(version: 20160224192109) do
     t.datetime "updated_at",   null: false
     t.string   "last_name"
     t.string   "permalink"
-    t.integer  "user_id"
+    t.integer  "user_id",      null: false
   end
 
   add_index "contacts", ["company_id"], name: "index_contacts_on_company_id", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "cover_letters", force: :cascade do |t|
-    t.integer  "job_application_id"
+    t.integer  "job_application_id", null: false
     t.string   "content"
     t.date     "sent_date"
     t.datetime "created_at",         null: false
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20160224192109) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.boolean  "active",     default: true
-    t.integer  "user_id"
+    t.integer  "user_id",                   null: false
   end
 
   add_index "job_applications", ["company_id"], name: "index_job_applications_on_company_id", using: :btree
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 20160224192109) do
   add_index "notes", ["user_id"], name: "index_notes_on_user_id", using: :btree
 
   create_table "postings", force: :cascade do |t|
-    t.integer  "job_application_id"
+    t.integer  "job_application_id", null: false
     t.string   "content"
     t.date     "posting_date"
     t.string   "source"

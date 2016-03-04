@@ -10,6 +10,7 @@ class Note < ActiveRecord::Base
   validates :notable, presence: true
 
   # scopes
+  scope :belonging_to_user, -> (user_id) { where(user_id: user_id) }
   scope :sorted, -> { order(updated_at: :desc) }
 
   # instance methods

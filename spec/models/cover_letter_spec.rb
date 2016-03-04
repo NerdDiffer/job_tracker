@@ -4,16 +4,21 @@ RSpec.describe CoverLetter, type: :model do
   let(:cover_letter) { build(:cover_letter) }
   let(:job_application) { build(:job_application) }
 
-  describe '#job_application_title' do
-    after(:each) { cover_letter.job_application = nil }
+  before(:each) do
+    allow(cover_letter).to receive(:job_application).and_return(job_application)
+  end
 
-    it 'returns title of job application' do
-      cover_letter.job_application = job_application
+  describe '#job_application_title' do
+    it 'calls #title on job_application' do
       expect(job_application).to receive(:title)
       cover_letter.job_application_title
     end
-    it 'returns nil when cover_letter does not belong to a job_application' do
-      expect(cover_letter.job_application_title).to be_nil
+  end
+
+  describe '#user' do
+    it 'calls #user on job_application' do
+      expect(job_application).to receive(:user)
+      cover_letter.user
     end
   end
 end

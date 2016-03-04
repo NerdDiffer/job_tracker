@@ -36,11 +36,6 @@ RSpec.describe JobApplicationsController, type: :routing do
 
     context 'nested resources' do
       describe NotesController do
-        it 'routes to notes#index' do
-          expected = { controller: 'notes', action: 'index',
-                       job_application_id: '1' }
-          expect(get: '/job_applications/1/notes').to route_to(expected)
-        end
         it 'routes to notes#new' do
           expected = { controller: 'notes', action: 'new',
                        job_application_id: '1' }

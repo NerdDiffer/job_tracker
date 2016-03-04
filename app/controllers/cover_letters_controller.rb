@@ -1,16 +1,21 @@
 class CoverLettersController < ApplicationController
   include SortingHelper
   include ScaffoldedActions
+  include OwnResources
+
+  attr_reader :cover_letter
 
   helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
   before_action :set_cover_letter, only: [:show, :edit, :update, :destroy]
+  before_action :check_user,       only: [:show, :edit, :update, :destroy]
 
   # GET /cover_letters
   # GET /cover_letters.json
   def index
-    @cover_letters = CoverLetter.sorted
+    @cover_letters = collection_belonging_to_user
+    @cover_letters = @cover_letters.sorted
     @cover_letters = custom_index_sort if params[:sort]
   end
 
@@ -39,17 +44,17 @@ class CoverLettersController < ApplicationController
   # POST /cover_letters.json
   def create
     @cover_letter = CoverLetter.new(cover_letter_params)
-    save_and_respond(@cover_letter)
+    save_and_respond(cover_letter)
   end
 
   # PATCH/PUT /cover_letters/1
   # PATCH/PUT /cover_letters/1.json
   def update
     respond_to do |format|
-      if @cover_letter.update(cover_letter_params)
-        successful_update(format, @cover_letter)
+      if cover_letter.update(cover_letter_params)
+        successful_update(format, cover_letter)
       else
-        failed_update(format, @cover_letter)
+        failed_update(format, cover_letter)
       end
     end
   end
@@ -84,6 +89,10 @@ class CoverLettersController < ApplicationController
 
   def collection
     @cover_letters
+  end
+
+  def member
+    @cover_letter
   end
 
   def default_sorting_column

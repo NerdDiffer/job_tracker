@@ -1,19 +1,21 @@
 class NotesController < ApplicationController
-  # TODO: is this needed anymore?
   include SortingHelper
   include ScaffoldedActions
+  include OwnResources
+
+  attr_reader :note
 
   helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
-  before_action :load_notable
-  before_action :set_note, only: [:show, :edit, :update, :destroy]
+  before_action :load_notable,  except: :index
+  before_action :set_note,      only: [:show, :edit, :update, :destroy]
+  before_action :check_user,    only: [:show, :edit, :update, :destroy]
 
   # GET /notes
   # GET /notes.json
   def index
-    # TODO: Is this action needed anymore?
-    @notes = @notable.notes.sorted
+    @notes = collection_belonging_to_user
     @notes = custom_index_sort if params[:sort]
   end
 
@@ -24,7 +26,7 @@ class NotesController < ApplicationController
 
   # GET /notes/new
   def new
-    @note = @notable.notes.new
+    @note = build_note
   end
 
   # GET /notes/1/edit
@@ -37,13 +39,13 @@ class NotesController < ApplicationController
     @note = build_note
 
     respond_to do |format|
-      if @note.save
+      if note.save
         message = "Note created for #{@notable.class}"
         format.html { redirect_to @notable, notice: message }
         format.json { render :show, status: :created, location: @notable }
       else
         format.html { render :new }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
+        format.json { render json: note.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,13 +54,13 @@ class NotesController < ApplicationController
   # PATCH/PUT /notes/1.json
   def update
     respond_to do |format|
-      if @note.update(note_params)
+      if note.update(note_params)
         message = "Successfully updated Note for #{@notable.class}"
         format.html { redirect_to @notable, notice: message }
         format.json { render :show, status: :ok, location: @notable }
       else
         format.html { render :edit }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
+        format.json { render json: note.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -80,7 +82,7 @@ class NotesController < ApplicationController
   end
 
   def build_note
-    contents = params[:note][:contents]
+    contents = params[:note][:contents] if params.key?(:note)
     user_id = current_user.id
     build_opts = { contents: contents, user_id: user_id }
     @notable.notes.build(build_opts)
@@ -128,6 +130,10 @@ class NotesController < ApplicationController
 
   def collection
     @notes
+  end
+
+  def member
+    @note
   end
 
   def default_sorting_column

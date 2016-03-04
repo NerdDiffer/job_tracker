@@ -4,12 +4,15 @@ class JobApplication < ActiveRecord::Base
   attr_accessor :company_name
 
   belongs_to :company
-  belongs_to :applicant, class_name: 'User', foreign_key: 'user_id'
+  belongs_to :user
   has_many :notes, as: :notable, dependent: :destroy
-  has_one :posting, inverse_of: :job_application
-  has_one :cover_letter, inverse_of: :job_application
+  has_one :posting, inverse_of: :job_application, dependent: :destroy
+  has_one :cover_letter, inverse_of: :job_application, dependent: :destroy
+
+  validates :user, presence: true
 
   # scopes
+  scope :belonging_to_user, -> (user_id) { where(user_id: user_id) }
   scope :sorted, -> { order(updated_at: :desc) }
 
   # class methods

@@ -24,10 +24,9 @@
         <th><%= generate_sortable_link('name', 'Name') %></th>
         <th>Website</th>
         <th><%= generate_sortable_link('category', 'Category') %></th>
-        <th class='actions' colspan="2">Actions</th>
       </tr>
     </thead>
-  
+
     <tbody>
       <% @companies.each do |company| %>
         <tr>
@@ -40,8 +39,6 @@
             ) %>
           </td>
           <td><%= company.category %></td>
-          <td><%= link_to 'Edit', edit_company_path(company) %></td>
-          <td><%= link_to 'Destroy', company, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
     </tbody>

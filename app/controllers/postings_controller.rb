@@ -1,16 +1,21 @@
 class PostingsController < ApplicationController
   include SortingHelper
   include ScaffoldedActions
+  include OwnResources
+
+  attr_reader :posting
 
   helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
   before_action :set_posting, only: [:show, :edit, :update, :destroy]
+  before_action :check_user,  only: [:show, :edit, :update, :destroy]
 
   # GET /postings
   # GET /postings.json
   def index
-    @postings = Posting.sorted
+    @postings = collection_belonging_to_user
+    @postings = @postings.sorted
     @postings = custom_index_sort if params[:sort]
   end
 
@@ -36,17 +41,17 @@ class PostingsController < ApplicationController
   # POST /postings.json
   def create
     @posting = Posting.new(posting_params)
-    save_and_respond(@posting)
+    save_and_respond(posting)
   end
 
   # PATCH/PUT /postings/1
   # PATCH/PUT /postings/1.json
   def update
     respond_to do |format|
-      if @posting.update(posting_params)
-        successful_update(format, @posting)
+      if posting.update(posting_params)
+        successful_update(format, posting)
       else
-        failed_update(format, @posting)
+        failed_update(format, posting)
       end
     end
   end
@@ -81,6 +86,10 @@ class PostingsController < ApplicationController
 
   def collection
     @postings
+  end
+
+  def member
+    @posting
   end
 
   def default_sorting_column

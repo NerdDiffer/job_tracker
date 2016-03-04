@@ -4,16 +4,21 @@ RSpec.describe Posting, type: :model do
   let(:posting) { build(:posting) }
   let(:job_application) { build(:job_application) }
 
-  describe '#job_application_title' do
-    after(:each) { posting.job_application = nil }
+  before(:each) do
+    allow(posting).to receive(:job_application).and_return(job_application)
+  end
 
-    it 'returns title of job application' do
-      posting.job_application = job_application
+  describe '#job_application_title' do
+    it 'calls #title on job_application' do
       expect(job_application).to receive(:title)
       posting.job_application_title
     end
-    it 'returns nil when posting does not belong to a job_application' do
-      expect(posting.job_application_title).to be_nil
+  end
+
+  describe '#user' do
+    it 'calls #user on job_application' do
+      expect(job_application).to receive(:user)
+      posting.user
     end
   end
 end

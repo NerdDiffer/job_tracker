@@ -7,16 +7,17 @@ Rails.application.routes.draw do
   post   'login'  => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
-  resources :users
   resources :job_applications do
-    resources :notes
+    resources :notes, except: :index
   end
   resources :contacts do
-    resources :notes
+    resources :notes, except: :index
   end
-  resources :companies
+  resources :notes,     only: :index
+  resources :companies, only: [:index, :show, :new, :create]
   resources :cover_letters
   resources :postings
+  resources :users,     except: :index
 
   root 'home#index'
 end
