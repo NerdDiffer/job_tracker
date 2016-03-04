@@ -22,7 +22,7 @@
       <tr>
         <td><%= link_to updated_at, default_link_dest %></td>
         <td><%= link_to note.notable_name, notable_link_dest %></td>
-        <td><%= link_to(truncate(note.contents), default_link_dest) %></td>
+        <td><%= link_to(truncate(note.content), default_link_dest) %></td>
         <td><%= link_to 'Edit', [:edit, note.notable, note] %></td>
         <td><%= link_to 'Destroy', default_link_dest, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

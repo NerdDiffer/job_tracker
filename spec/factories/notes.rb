@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :note do
-    contents 'Lorem ipsum'
+    content 'Lorem ipsum'
   end
 end

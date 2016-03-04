@@ -86,7 +86,7 @@ module Seed
     end
 
     def create_note(model, notable_id, user_id)
-      Note.create!(contents: Faker::Lorem.sentence,
+      Note.create!(content: Faker::Lorem.sentence,
                    notable_type: model, notable_id: notable_id,
                    user_id: user_id)
     end

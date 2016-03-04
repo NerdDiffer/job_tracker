@@ -203,7 +203,7 @@ RSpec.describe NotesController, type: :controller do
         let(:notable) { contact }
         let(:post_attr) do
           {
-            note: { contents: '' },
+            note: { content: '' },
             contact_id: 1
           }
         end
@@ -219,7 +219,7 @@ RSpec.describe NotesController, type: :controller do
         let(:notable) { job_application }
         let(:post_attr) do
           {
-            note: { contents: '' },
+            note: { content: '' },
             job_application_id: 1
           }
         end
@@ -278,7 +278,7 @@ RSpec.describe NotesController, type: :controller do
         let(:notable) { contact }
         let(:update_attr) do
           {
-            note: { contents: '' },
+            note: { content: '' },
             contact_id: 1,
             id: 1
           }
@@ -291,7 +291,7 @@ RSpec.describe NotesController, type: :controller do
         let(:notable) { job_application }
         let(:update_attr) do
           {
-            note: { contents: '' },
+            note: { content: '' },
             job_application_id: 1,
             id: 1
           }
@@ -353,7 +353,7 @@ RSpec.describe NotesController, type: :controller do
 
   describe '#build_note' do
     let(:params) do
-      { note: { contents: 'foo' } }
+      { note: { content: 'foo' } }
     end
     let(:notes) { double('notes', build: true) }
     let(:notable) { double('notable', notes: true) }
@@ -373,7 +373,7 @@ RSpec.describe NotesController, type: :controller do
       expect(assigns(:notable)).to receive(:notes)
     end
     it 'calls #build upon @notable.notes' do
-      expected_args = { contents: 'foo', user_id: 1 }
+      expected_args = { content: 'foo', user_id: 1 }
       expect(notes).to receive(:build).with(expected_args)
     end
   end

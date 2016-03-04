@@ -174,7 +174,7 @@ RSpec.describe PostingsController, type: :controller do
   describe 'PUT #update' do
     let(:attr_for_update) do
       {
-        posting: { contents: '' },
+        posting: { content: '' },
         job_application_id: 2
       }
     end

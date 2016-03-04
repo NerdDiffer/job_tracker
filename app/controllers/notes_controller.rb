@@ -82,14 +82,14 @@ class NotesController < ApplicationController
   end
 
   def build_note
-    contents = params[:note][:contents] if params.key?(:note)
+    content = params[:note][:content] if params.key?(:note)
     user_id = current_user.id
-    build_opts = { contents: contents, user_id: user_id }
+    build_opts = { content: content, user_id: user_id }
     @notable.notes.build(build_opts)
   end
 
   def whitelisted_attr
-    [:contents]
+    [:content]
   end
 
   def note_params

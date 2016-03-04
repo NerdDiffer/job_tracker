@@ -6,7 +6,7 @@
   <thead>
     <tr>
       <th class='updated_at'>Updated at</th>
-      <th class='contents'>Contents</th>
+      <th class='content'>Contents</th>
       <th class='actions' colspan="2">Actions</th>
     </tr>
   </thead>
@@ -14,7 +14,7 @@
   <tbody>
     <% @notes.each do |note| %>
       <% updated_at = note.updated_at.to_s('month date year')%>
-      <% truncated_contents = truncate(note.contents) %>
+      <% truncated_content = truncate(note.content) %>
       <% default_link_dest = [@notable, note] %>
       <% edit_link_dest = [:edit, @notable, note] %>
       <% destroy_link_html_opts = {
@@ -23,7 +23,7 @@
       } %>
       <tr>
         <td><%= link_to(updated_at, default_link_dest) %></td>
-        <td><%= link_to(truncated_contents, default_link_dest) %></td>
+        <td><%= link_to(truncated_content, default_link_dest) %></td>
         <td><%= link_to 'Edit', edit_link_dest %></td>
         <td><%= link_to 'Destroy', default_link_dest, destroy_link_html_opts %></td>
       </tr>
