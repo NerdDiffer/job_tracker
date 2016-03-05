@@ -80,7 +80,7 @@ class PostingsController < ApplicationController
   end
 
   def whitelisted_attr
-    [:job_application_id, :posting_date, :source, :job_title, :content,
+    [:job_application_id, :posting_date, :source_id, :job_title, :content,
      :job_application_title]
   end
 

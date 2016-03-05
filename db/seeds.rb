@@ -2,6 +2,8 @@ module Seed
   @initial_users_count   = 5
   @initial_records_count = 30
   @default_password = 'password'
+  @initial_sources = %w(Other LinkedIn Glassdoor StackOverflow GitHub Dice
+    Indeed AngelList Craigslist Hired SimplyHired Beyond HackerNews)
 
   class << self
     # number of users (including yourself) to start out
@@ -9,6 +11,7 @@ module Seed
     # number of companies, contacts & notes to start out
     attr_accessor :initial_records_count
     attr_accessor :default_password
+    attr_accessor :initial_sources
 
     def users
       User.create!(first_name: 'Rafael', last_name: 'Espinoza',
@@ -24,12 +27,18 @@ module Seed
       initial_records_count.times { create_company }
     end
 
+    def sources
+      initial_sources.each { |name| create_source(name) }
+    end
+
     def job_applications_postings_and_cover_letters
       initial_records_count.times do
         company_id = random_company_id
-        user_id = random_user_id
+        user_id    = random_user_id
+        source_id  = random_source_id
+
         job_application = create_job_application(company_id, user_id)
-        posting = create_posting(job_application.id)
+        posting = create_posting(job_application.id, source_id)
         create_cover_letter(job_application.id, posting.posting_date)
       end
     end
@@ -72,6 +81,10 @@ module Seed
       Company.create!(name: name, website: website, category: category)
     end
 
+    def create_source(name)
+      Source.create!(name: name)
+    end
+
     def create_contact(company_id, user_id)
       first_name = Faker::Name.first_name
       last_name  = Faker::Name.last_name
@@ -97,11 +110,11 @@ module Seed
                              user_id: user_id)
     end
 
-    def create_posting(job_application_id)
+    def create_posting(job_application_id, source_id)
       Posting.create!(job_application_id: job_application_id,
                       content: Faker::Lorem.paragraph,
                       posting_date: Faker::Date.backward(30),
-                      source: Faker::Lorem.word,
+                      source_id: source_id,
                       job_title: Faker::Name.title)
     end
 
@@ -121,6 +134,11 @@ module Seed
     def random_company_id
       @company_ids ||= Company.all.map(&:id)
       @company_ids.sample
+    end
+
+    def random_source_id
+      @source_ids ||= Source.all.map(&:id)
+      @source_ids.sample
     end
 
     def random_contact_id(user_id = nil)
@@ -163,6 +181,7 @@ end
 if Rails.env == 'development'
   Seed.users
   Seed.companies
+  Seed.sources
   Seed.job_applications_postings_and_cover_letters
   Seed.contacts
   Seed.notes

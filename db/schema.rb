@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304202109) do
+ActiveRecord::Schema.define(version: 20160304210102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,14 +93,23 @@ ActiveRecord::Schema.define(version: 20160304202109) do
     t.integer  "job_application_id", null: false
     t.string   "content"
     t.date     "posting_date"
-    t.string   "source"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.string   "job_title"
+    t.integer  "source_id"
   end
 
   add_index "postings", ["job_application_id"], name: "index_postings_on_job_application_id", using: :btree
   add_index "postings", ["job_application_id"], name: "uniq_job_application_id_on_postings", unique: true, using: :btree
+  add_index "postings", ["source_id"], name: "index_postings_on_source_id", using: :btree
+
+  create_table "sources", force: :cascade do |t|
+    t.string   "name",       default: "other", null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "sources", ["name"], name: "index_sources_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -119,4 +128,5 @@ ActiveRecord::Schema.define(version: 20160304202109) do
   add_foreign_key "job_applications", "users"
   add_foreign_key "notes", "users"
   add_foreign_key "postings", "job_applications"
+  add_foreign_key "postings", "sources"
 end

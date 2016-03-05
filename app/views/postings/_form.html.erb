@@ -11,8 +11,12 @@
     <%= f.date_field :posting_date %>
   </div>
   <div class="field">
-    <%= f.label :source %><br>
-    <%= f.text_field :source %>
+    <% source_opts = options_for_select(
+         generate_select_opts_for_source_names,
+         @posting.source_id
+    ) %>
+    <%= f.label :source_id %><br>
+    <%= f.select :source_id, source_opts, include_blank: true %>
   </div>
   <div class="field">
     <%= f.label :content %><br>

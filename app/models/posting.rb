@@ -2,7 +2,8 @@ class Posting < ActiveRecord::Base
   include Queryable
   include BelongsToJobApplication
 
-  belongs_to :job_application, inverse_of: :cover_letter
+  belongs_to :job_application, inverse_of: :posting
+  belongs_to :source, inverse_of: :postings
 
   validates :job_application, presence: true
   validates_uniqueness_of :job_application_id
