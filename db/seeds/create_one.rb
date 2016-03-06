@@ -1,3 +1,5 @@
+require 'faker'
+
 module Seed
   class << self
     private

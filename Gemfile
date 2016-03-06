@@ -32,7 +32,7 @@ group :development, :test do
   gem 'spring', '~> 1.6.3'
 
   # seed data
-  gem 'faker', '~> 1.4.3'
+  gem 'faker', '~> 1.6.3', require: false
 
   # code climate
   gem 'codeclimate-test-reporter', '~> 0.4.8', require: nil
@@ -44,7 +44,7 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 3.4.2'
-  gem 'factory_girl_rails', '~> 1.7.0'
+  gem 'factory_girl_rails', '~> 4.6.0'
 end
 
 group :production do
@@ -56,4 +56,4 @@ group :production do
   gem 'puma', '~> 2.12.3'
 end
 
-ruby '2.2.3'
+ruby '2.3.0'
