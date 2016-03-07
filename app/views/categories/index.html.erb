@@ -1,0 +1,26 @@
+<% @page_title = 'Categories' %>
+
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Categories</h1>
+
+<div id='categories'>
+  <table class='table table-striped table-hover'>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Some companies</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @categories.each do |category| %>
+        <% company_names = display_names(category.company_names, delimiter: '; ') %>
+        <tr>
+          <td><%= link_to category.display_name, category %></td>
+          <td><%= truncate(company_names) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

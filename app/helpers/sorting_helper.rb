@@ -14,6 +14,12 @@ module SortingHelper
     active = params[:active]
     options[:active] = active if active
 
+    category_names = params[:category_names]
+    options[:category_names] = category_names if category_names
+
+    search = params[:search]
+    options[:search] = search if search
+
     # NOTE: previously, the 2nd argument was `params.merge....`, which was put
     # in at commit # 95ba8cc1 to work with the Filterable module. This broke
     # normal functionality, but made the 'active' toggle work with existing
@@ -27,6 +33,11 @@ module SortingHelper
   def sort_column
     sorting_attr = params[:sort]
     col_allowed?(sorting_attr) ? sorting_attr : default_sorting_column
+  end
+
+  def sort_direction
+    dir = params[:direction]
+    direction_allowed?(dir) ? dir : 'asc'
   end
 
   private
@@ -53,11 +64,6 @@ module SortingHelper
 
   def direction_allowed?(direction)
     directions.include?(direction)
-  end
-
-  def sort_direction
-    dir = params[:direction]
-    direction_allowed?(dir) ? dir : 'asc'
   end
 
   def whitelisted?(attr = nil)

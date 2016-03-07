@@ -10,6 +10,10 @@ Rails.application.routes.draw do
   resources :notes,         only: :index
   resources :cover_letters, only: :index
   resources :postings,      only: :index
+  resources :companies,     only: [:index, :show, :new, :create]
+  resources :categories,    only: [:index, :show]
+  resources :users,         except: :index
+
   resources :job_applications do
     resources :notes,         except: :index
     resource  :cover_letter
@@ -18,8 +22,6 @@ Rails.application.routes.draw do
   resources :contacts do
     resources :notes, except: :index
   end
-  resources :companies, only: [:index, :show, :new, :create]
-  resources :users,     except: :index
 
   root 'home#index'
 end

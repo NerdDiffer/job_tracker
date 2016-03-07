@@ -12,7 +12,7 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.json
   def index
-    @companies = search_and_sort_index
+    @companies = search_filter_sort
   end
 
   # GET /companies/1
@@ -59,7 +59,7 @@ class CompaniesController < ApplicationController
   end
 
   def whitelisted_attr
-    [:name, :website, :category, :sort, :direction, :search]
+    [:name, :website, :sort, :direction, :search]
   end
 
   def model
@@ -71,12 +71,17 @@ class CompaniesController < ApplicationController
   end
 
   def default_sorting_column
-    'name'
+    'companies.name'
   end
 
-  def search_and_sort_index
-    search = params[:search]
-    col_and_dir = sort_column + ' ' + sort_direction
-    Company.search(search).order(col_and_dir)
+  def sort_col_and_dir
+    sort_column + ' ' + sort_direction
+  end
+
+  def search_filter_sort
+    name_query = params[:search] || ''
+    category_names = params[:category_names] || []
+    Company.search_and_filter(name_query, category_names)
+           .order(sort_col_and_dir)
   end
 end

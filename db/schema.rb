@@ -11,19 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304210102) do
+ActiveRecord::Schema.define(version: 20160306202749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name",      null: false
+    t.string "permalink", null: false
+  end
+
+  add_index "categories", ["permalink"], name: "index_categories_on_permalink", unique: true, using: :btree
+
   create_table "companies", force: :cascade do |t|
     t.string   "name"
     t.string   "website"
-    t.string   "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "permalink"
   end
+
+  create_table "companies_categories", id: false, force: :cascade do |t|
+    t.integer "company_id",  null: false
+    t.integer "category_id", null: false
+  end
+
+  add_index "companies_categories", ["category_id"], name: "index_companies_categories_on_category_id", using: :btree
+  add_index "companies_categories", ["company_id", "category_id"], name: "index_companies_categories_on_company_id_and_category_id", unique: true, using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "company_id"
@@ -121,6 +135,8 @@ ActiveRecord::Schema.define(version: 20160304210102) do
     t.string   "remember_digest"
   end
 
+  add_foreign_key "companies_categories", "categories"
+  add_foreign_key "companies_categories", "companies"
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "users"
   add_foreign_key "cover_letters", "job_applications"

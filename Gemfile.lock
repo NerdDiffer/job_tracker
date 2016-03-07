@@ -43,6 +43,8 @@ GEM
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-multiselect-rails (0.9.9)
+      rails (>= 4.0.0)
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -64,12 +66,12 @@ GEM
     docile (1.1.5)
     erubis (2.7.0)
     execjs (2.6.0)
-    factory_girl (2.6.4)
-      activesupport (>= 2.3.9)
-    factory_girl_rails (1.7.0)
-      factory_girl (~> 2.6.0)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.6.0)
+      factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faker (1.4.3)
+    faker (1.6.3)
       i18n (~> 0.5)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
@@ -137,7 +139,7 @@ GEM
     rake (10.5.0)
     redcarpet (3.3.4)
     redis (3.2.2)
-    rspec-core (3.4.2)
+    rspec-core (3.4.3)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -194,12 +196,13 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt (~> 3.1.10)
+  bootstrap-multiselect-rails (~> 0.9.9)
   bootstrap-sass (~> 3.3.6)
   byebug (~> 8.2.2)
   codeclimate-test-reporter (~> 0.4.8)
   coffee-rails (~> 4.1.1)
-  factory_girl_rails (~> 1.7.0)
-  faker (~> 1.4.3)
+  factory_girl_rails (~> 4.6.0)
+  faker (~> 1.6.3)
   friendly_id (~> 5.1.0)
   hiredis (~> 0.6.1)
   jquery-rails (~> 4.0.5)
@@ -218,4 +221,4 @@ DEPENDENCIES
   web-console (~> 2.3.0)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

@@ -10,7 +10,7 @@ RSpec.describe CompaniesController, type: :controller do
   describe 'GET #index' do
     before(:each) do
       allow(@controller)
-        .to receive(:search_and_sort_index)
+        .to receive(:search_filter_sort)
         .and_return([:foo, :bar])
       get(:index)
     end
@@ -164,6 +164,58 @@ RSpec.describe CompaniesController, type: :controller do
     end
     it 'calls .where on results of .belonging_to_user' do
       expect(relation).to receive(:where).with(company_id: 2)
+    end
+  end
+
+  describe '#default_sorting_column' do
+    it 'returns "companies.name"' do
+      actual = controller.send(:default_sorting_column)
+      expect(actual).to eq 'companies.name'
+    end
+  end
+
+  describe '#sort_col_and_dir' do
+    before(:each) do
+      allow(controller).to receive(:sort_column).and_return('foo')
+      allow(controller).to receive(:sort_direction).and_return('bar')
+    end
+
+    it 'calls #sort_column' do
+      expect(controller).to receive(:sort_column)
+      controller.send(:sort_col_and_dir)
+    end
+    it 'calls #sort_direction' do
+      expect(controller).to receive(:sort_direction)
+      controller.send(:sort_col_and_dir)
+    end
+    it 'returns this string' do
+      actual = controller.send(:sort_col_and_dir)
+      expect(actual).to eq 'foo bar'
+    end
+  end
+
+  describe '#search_filter_sort' do
+    let(:relation) { double('Company::ActiveRecord_Relation') }
+    let(:params) { { search: 'unicorn', category_names: ['foo', 'bar'] } }
+    let(:sort_col_and_dir) { 'sort_col_and_dir' }
+
+    before(:each) do
+      allow(controller).to receive(:params).and_return(params)
+      allow(Company).to receive(:search_and_filter).and_return(relation)
+      allow(relation).to receive(:order)
+      allow(controller).to receive(:sort_col_and_dir).and_return(sort_col_and_dir)
+    end
+    after(:each) do
+      controller.send(:search_filter_sort)
+    end
+
+    it 'calls .search_and_filter on Company' do
+      expect(Company)
+        .to receive(:search_and_filter)
+        .with('unicorn', ['foo', 'bar'])
+    end
+    it 'calls .order on the relation' do
+      expect(relation).to receive(:order).with(sort_col_and_dir)
     end
   end
 end

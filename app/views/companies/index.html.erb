@@ -6,24 +6,15 @@
 
 <%= link_to 'New company', new_company_path %>
 
-<%= form_tag companies_path, method: 'get' do %>
-  <!-- these 2 hidden fields help you sort/search w/ multiple criteria -->
-  <%= hidden_field_tag(:direction, params[:direction]) %>
-  <%= hidden_field_tag(:sort, params[:sort]) %>
-
-  <%= content_tag :p do %>
-    <%= search_field_tag :search, params[:search] %>
-    <%= submit_tag('Search', :name => nil) %>
-  <% end %>
-<% end %>
+<%= render 'search_filter' %>
 
 <div id='companies'>
   <table class='table table-striped table-hover'>
     <thead>
       <tr>
-        <th><%= generate_sortable_link('name', 'Name') %></th>
+        <th><%= generate_sortable_link('companies.name', 'Name') %></th>
         <th>Website</th>
-        <th><%= generate_sortable_link('category', 'Category') %></th>
+        <th>Categories</th>
       </tr>
     </thead>
 
@@ -38,7 +29,7 @@
               target: '_blank'
             ) %>
           </td>
-          <td><%= company.category %></td>
+          <td><%= display_names(company.category_names) %></td>
         </tr>
       <% end %>
     </tbody>

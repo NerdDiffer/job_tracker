@@ -5,6 +5,10 @@
 <h1><%= @company.name %></h1>
 
 <p>
+  <%= link_to 'Back', companies_path %>
+</p>
+
+<p>
   <strong>Website:</strong>
   <% website = @company.website %>
   <%= link_to(
@@ -15,11 +19,12 @@
 </p>
 
 <p>
-  <strong>Category:</strong>
-  <%= @company.category %>
+  <h2>Categories</h2>
+  <% categories = @company.categories %>
+  <% categories.each do |category| %>
+    <li><%= link_to(category.display_name, category_path(category)) %></li>
+  <% end %>
 </p>
-
-<%= link_to 'Back', companies_path %>
 
 <div class='attached_records'>
   <h2>Contacts</h2>
