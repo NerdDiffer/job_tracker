@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CoverLettersController, type: :controller do
+describe JobApplications::CoverLettersController, type: :controller do
   let(:user) { build(:user, id: 1) }
   let(:cover_letter) { build(:cover_letter) }
   let(:job_application) { build(:job_application) }
@@ -9,14 +9,14 @@ RSpec.describe CoverLettersController, type: :controller do
 
   describe 'GET #index' do
     let(:relation) do
-      ActiveRecord::Relation.new(CoverLetter, 'cover_letters')
+      ActiveRecord::Relation.new(JobApplications::CoverLetter, 'cover_letters')
     end
 
     before(:each) do
       allow(controller)
         .to receive(:collection_belonging_to_user)
         .and_return(relation)
-      allow(CoverLetter).to receive(:sorted).and_return(cover_letter)
+      allow(JobApplications::CoverLetter).to receive(:sorted).and_return(cover_letter)
       allow(controller)
         .to receive(:custom_index_sort)
         .and_return([cover_letter])
@@ -47,7 +47,7 @@ RSpec.describe CoverLettersController, type: :controller do
         expect(controller).to receive(:collection_belonging_to_user)
       end
       it 'calls .sorted' do
-        expect(CoverLetter).to receive(:sorted)
+        expect(JobApplications::CoverLetter).to receive(:sorted)
       end
       it 'calls #custom_index_sort' do
         expect(controller).to receive(:custom_index_sort)
@@ -81,7 +81,7 @@ RSpec.describe CoverLettersController, type: :controller do
       expect(response.code).to eq '200'
     end
     it 'assigns a new cover_letter as @cover_letter' do
-      expect(assigns(:cover_letter)).to be_a_new(CoverLetter)
+      expect(assigns(:cover_letter)).to be_a_new(JobApplications::CoverLetter)
     end
   end
 
@@ -105,7 +105,7 @@ RSpec.describe CoverLettersController, type: :controller do
   describe 'POST #create' do
     let(:attr_for_create) do
       {
-        cover_letter: {
+        job_applications_cover_letter: {
           first_name: 'Foo',
           last_name: 'Bar',
           title: '_title',
@@ -124,7 +124,7 @@ RSpec.describe CoverLettersController, type: :controller do
       before(:each) do
         allow(controller).to receive(:respond_to).and_return(true)
         allow(controller).to receive(:render).and_return(true)
-        allow(CoverLetter).to receive(:new).and_return(cover_letter)
+        allow(JobApplications::CoverLetter).to receive(:new).and_return(cover_letter)
       end
       after(:each) do
         post(:create, attr_for_create)
@@ -133,8 +133,8 @@ RSpec.describe CoverLettersController, type: :controller do
       it 'calls #cover_letter_params_with_associated_ids' do
         expect(controller).to receive(:cover_letter_params_with_associated_ids)
       end
-      it 'calls .new on CoverLetter' do
-        expect(CoverLetter).to receive(:new).with(attr_for_create)
+      it 'calls .new on JobApplications::CoverLetter' do
+        expect(JobApplications::CoverLetter).to receive(:new).with(attr_for_create)
       end
     end
 
@@ -143,12 +143,12 @@ RSpec.describe CoverLettersController, type: :controller do
         allow(cover_letter).to receive(:job_application).and_return(job_application)
         allow(cover_letter).to receive(:save).and_return(true)
         allow(controller).to receive(:render).and_return(true)
-        allow(CoverLetter).to receive(:new).and_return(cover_letter)
+        allow(JobApplications::CoverLetter).to receive(:new).and_return(cover_letter)
         post(:create, attr_for_create)
       end
 
-      it 'sets @cover_letter to a new CoverLetter object' do
-        expect(assigns(:cover_letter)).to be_a_new(CoverLetter)
+      it 'sets @cover_letter to a new JobApplications::CoverLetter object' do
+        expect(assigns(:cover_letter)).to be_a_new(JobApplications::CoverLetter)
       end
       it 'redirects to the created cover_letter' do
         expect(response).to redirect_to(cover_letter.job_application)
@@ -158,12 +158,12 @@ RSpec.describe CoverLettersController, type: :controller do
     context 'with invalid params' do
       before(:each) do
         allow(cover_letter).to receive(:save).and_return(false)
-        allow(CoverLetter).to receive(:new).and_return(cover_letter)
+        allow(JobApplications::CoverLetter).to receive(:new).and_return(cover_letter)
         post(:create, attr_for_create)
       end
 
       it 'assigns a newly created but unsaved cover_letter as @cover_letter' do
-        expect(assigns(:cover_letter)).to be_a_new(CoverLetter)
+        expect(assigns(:cover_letter)).to be_a_new(JobApplications::CoverLetter)
       end
 
       it 're-renders the "new" template' do
@@ -175,7 +175,7 @@ RSpec.describe CoverLettersController, type: :controller do
   describe 'PUT #update' do
     let(:attr_for_update) do
       {
-        cover_letter: { content: '' },
+        job_applications_cover_letter: { content: '' },
         job_application_id: 2
       }
     end

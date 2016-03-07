@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PostingsController, type: :controller do
+describe JobApplications::PostingsController, type: :controller do
   let(:user) { build(:user, id: 1) }
   let(:posting) { build(:posting) }
   let(:job_application) { build(:job_application) }
@@ -9,14 +9,14 @@ RSpec.describe PostingsController, type: :controller do
 
   describe 'GET #index' do
     let(:relation) do
-      ActiveRecord::Relation.new(Posting, 'postings')
+      ActiveRecord::Relation.new(JobApplications::Posting, 'postings')
     end
 
     before(:each) do
       allow(controller)
         .to receive(:collection_belonging_to_user)
         .and_return(relation)
-      allow(Posting).to receive(:sorted).and_return(posting)
+      allow(JobApplications::Posting).to receive(:sorted).and_return(posting)
       allow(controller)
         .to receive(:custom_index_sort)
         .and_return([posting])
@@ -47,7 +47,7 @@ RSpec.describe PostingsController, type: :controller do
         expect(controller).to receive(:collection_belonging_to_user)
       end
       it 'calls .sorted' do
-        expect(Posting).to receive(:sorted)
+        expect(JobApplications::Posting).to receive(:sorted)
       end
       it 'calls #custom_index_sort' do
         expect(controller).to receive(:custom_index_sort)
@@ -81,7 +81,7 @@ RSpec.describe PostingsController, type: :controller do
       expect(response.code).to eq '200'
     end
     it 'assigns a new posting as @posting' do
-      expect(assigns(:posting)).to be_a_new(Posting)
+      expect(assigns(:posting)).to be_a_new(JobApplications::Posting)
     end
   end
 
@@ -124,7 +124,7 @@ RSpec.describe PostingsController, type: :controller do
       before(:each) do
         allow(controller).to receive(:respond_to).and_return(true)
         allow(controller).to receive(:render).and_return(true)
-        allow(Posting).to receive(:new).and_return(posting)
+        allow(JobApplications::Posting).to receive(:new).and_return(posting)
       end
       after(:each) do
         post(:create, attr_for_create)
@@ -133,8 +133,8 @@ RSpec.describe PostingsController, type: :controller do
       it 'calls #posting_params_with_associated_ids' do
         expect(controller).to receive(:posting_params_with_associated_ids)
       end
-      it 'calls .new on Posting' do
-        expect(Posting).to receive(:new).with(attr_for_create)
+      it 'calls .new on JobApplications::Posting' do
+        expect(JobApplications::Posting).to receive(:new).with(attr_for_create)
       end
     end
 
@@ -143,12 +143,12 @@ RSpec.describe PostingsController, type: :controller do
         allow(posting).to receive(:job_application).and_return(job_application)
         allow(posting).to receive(:save).and_return(true)
         allow(controller).to receive(:render).and_return(true)
-        allow(Posting).to receive(:new).and_return(posting)
+        allow(JobApplications::Posting).to receive(:new).and_return(posting)
         post(:create, attr_for_create)
       end
 
-      it 'sets @posting to a new Posting object' do
-        expect(assigns(:posting)).to be_a_new(Posting)
+      it 'sets @posting to a new JobApplications::Posting object' do
+        expect(assigns(:posting)).to be_a_new(JobApplications::Posting)
       end
       it 'redirects to the created posting' do
         expect(response).to redirect_to(posting.job_application)
@@ -158,12 +158,12 @@ RSpec.describe PostingsController, type: :controller do
     context 'with invalid params' do
       before(:each) do
         allow(posting).to receive(:save).and_return(false)
-        allow(Posting).to receive(:new).and_return(posting)
+        allow(JobApplications::Posting).to receive(:new).and_return(posting)
         post(:create, attr_for_create)
       end
 
       it 'assigns a newly created but unsaved posting as @posting' do
-        expect(assigns(:posting)).to be_a_new(Posting)
+        expect(assigns(:posting)).to be_a_new(JobApplications::Posting)
       end
       it 're-renders the "new" template' do
         expect(response).to render_template('new')
@@ -174,7 +174,7 @@ RSpec.describe PostingsController, type: :controller do
   describe 'PUT #update' do
     let(:attr_for_update) do
       {
-        posting: { content: '' },
+        job_applications_posting: { content: '' },
         job_application_id: 2
       }
     end

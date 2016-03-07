@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :notes, inverse_of: :user, dependent: :destroy
   has_many :job_applications, dependent: :destroy
   has_many :companies, through: :job_applications
-  has_many :cover_letters, through: :job_applications
+  has_many :cover_letters, through: :job_applications, class_name: 'JobApplications::CoverLetter'
   has_many :postings, through: :job_applications
 
   has_secure_password

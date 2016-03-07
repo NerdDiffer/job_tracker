@@ -6,8 +6,8 @@ class JobApplication < ActiveRecord::Base
   belongs_to :company
   belongs_to :user
   has_many :notes, as: :notable, dependent: :destroy
-  has_one :posting, inverse_of: :job_application, dependent: :destroy
-  has_one :cover_letter, inverse_of: :job_application, dependent: :destroy
+  has_one :posting, inverse_of: :job_application, dependent: :destroy, class_name: 'JobApplications::Posting'
+  has_one :cover_letter, inverse_of: :job_application, dependent: :destroy, class_name: 'JobApplications::CoverLetter'
 
   validates :user, presence: true
 

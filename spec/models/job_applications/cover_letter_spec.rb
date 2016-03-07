@@ -1,24 +1,24 @@
 require 'rails_helper'
 
-RSpec.describe Posting, type: :model do
-  let(:posting) { build(:posting) }
+RSpec.describe JobApplications::CoverLetter, type: :model do
+  let(:cover_letter) { build(:cover_letter) }
   let(:job_application) { build(:job_application) }
 
   before(:each) do
-    allow(posting).to receive(:job_application).and_return(job_application)
+    allow(cover_letter).to receive(:job_application).and_return(job_application)
   end
 
   describe '#job_application_title' do
     it 'calls #title on job_application' do
       expect(job_application).to receive(:title)
-      posting.job_application_title
+      cover_letter.job_application_title
     end
   end
 
   describe '#user' do
     it 'calls #user on job_application' do
       expect(job_application).to receive(:user)
-      posting.user
+      cover_letter.user
     end
   end
 end

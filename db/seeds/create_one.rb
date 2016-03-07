@@ -78,19 +78,25 @@ module Seed
     end
 
     def create_posting(job_application_id, source_id)
-      Posting.create!(job_application_id: job_application_id,
-                      content: Faker::Lorem.paragraph,
-                      posting_date: Faker::Date.backward(30),
-                      source_id: source_id,
-                      job_title: Faker::Name.title)
+      posting_params = {
+        job_application_id: job_application_id,
+        content: Faker::Lorem.paragraph,
+        posting_date: Faker::Date.backward(30),
+        source_id: source_id,
+        job_title: Faker::Name.title
+      }
+      JobApplications::Posting.create!(posting_params)
     end
 
-    def create_cover_letter(job_application_id, posting_date)
+    def create_cover_letter(job_application_id, date)
       content = Faker::Lorem.paragraph
-      sent_date = Faker::Date.between(posting_date, Date.today)
-      CoverLetter.create!(job_application_id: job_application_id,
-                          content: content,
-                          sent_date: sent_date)
+      sent_date = Faker::Date.between(date, Date.today)
+      cover_letter_params = {
+        job_application_id: job_application_id,
+        content: content,
+        sent_date: sent_date
+      }
+      JobApplications::CoverLetter.create!(cover_letter_params)
     end
   end
 end
