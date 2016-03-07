@@ -32,11 +32,19 @@ module Seed
       Category.create!(name: name)
     end
 
+    def already_assigned?(company, category_id)
+      company.categories.exists?(id: category_id)
+    end
+
     def assign_companies_categories(company)
       n = (1..2).to_a.sample
       n.times do
-        category = Category.find(random_category_id)
-        company.categories << category
+        category_id = random_category_id
+
+        unless already_assigned?(company, category_id)
+          category = Category.find(category_id)
+          company.categories << category
+        end
       end
     end
 
