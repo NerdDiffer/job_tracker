@@ -11,19 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803212035) do
+ActiveRecord::Schema.define(version: 20160306202749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name",      null: false
+    t.string "permalink", null: false
+  end
+
+  add_index "categories", ["permalink"], name: "index_categories_on_permalink", unique: true, using: :btree
+
   create_table "companies", force: :cascade do |t|
     t.string   "name"
     t.string   "website"
-    t.string   "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "permalink"
   end
+
+  create_table "companies_categories", id: false, force: :cascade do |t|
+    t.integer "company_id",  null: false
+    t.integer "category_id", null: false
+  end
+
+  add_index "companies_categories", ["category_id"], name: "index_companies_categories_on_category_id", using: :btree
+  add_index "companies_categories", ["company_id", "category_id"], name: "index_companies_categories_on_company_id_and_category_id", unique: true, using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "company_id"
@@ -36,12 +50,14 @@ ActiveRecord::Schema.define(version: 20150803212035) do
     t.datetime "updated_at",   null: false
     t.string   "last_name"
     t.string   "permalink"
+    t.integer  "user_id",      null: false
   end
 
   add_index "contacts", ["company_id"], name: "index_contacts_on_company_id", using: :btree
+  add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "cover_letters", force: :cascade do |t|
-    t.integer  "job_application_id"
+    t.integer  "job_application_id", null: false
     t.string   "content"
     t.date     "sent_date"
     t.datetime "created_at",         null: false
@@ -49,6 +65,7 @@ ActiveRecord::Schema.define(version: 20150803212035) do
   end
 
   add_index "cover_letters", ["job_application_id"], name: "index_cover_letters_on_job_application_id", using: :btree
+  add_index "cover_letters", ["job_application_id"], name: "uniq_job_application_id_on_cover_letters", unique: true, using: :btree
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -63,38 +80,50 @@ ActiveRecord::Schema.define(version: 20150803212035) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
-  create_table "interactions", force: :cascade do |t|
-    t.integer  "contact_id"
-    t.string   "notes"
-    t.date     "approx_date"
-    t.integer  "medium"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "interactions", ["contact_id"], name: "index_interactions_on_contact_id", using: :btree
-
   create_table "job_applications", force: :cascade do |t|
     t.integer  "company_id"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.boolean  "active",     default: true
-    t.string   "user_id"
+    t.integer  "user_id",                   null: false
   end
 
   add_index "job_applications", ["company_id"], name: "index_job_applications_on_company_id", using: :btree
+  add_index "job_applications", ["user_id"], name: "index_job_applications_on_user_id", using: :btree
+
+  create_table "notes", force: :cascade do |t|
+    t.integer  "notable_id",   null: false
+    t.string   "notable_type", null: false
+    t.text     "content"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "user_id",      null: false
+  end
+
+  add_index "notes", ["notable_id"], name: "index_notes_on_notable_id", using: :btree
+  add_index "notes", ["user_id"], name: "index_notes_on_user_id", using: :btree
 
   create_table "postings", force: :cascade do |t|
-    t.integer  "job_application_id"
+    t.integer  "job_application_id", null: false
     t.string   "content"
     t.date     "posting_date"
-    t.string   "source"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.string   "job_title"
+    t.integer  "source_id"
   end
 
   add_index "postings", ["job_application_id"], name: "index_postings_on_job_application_id", using: :btree
+  add_index "postings", ["job_application_id"], name: "uniq_job_application_id_on_postings", unique: true, using: :btree
+  add_index "postings", ["source_id"], name: "index_postings_on_source_id", using: :btree
+
+  create_table "sources", force: :cascade do |t|
+    t.string   "name",       default: "other", null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "sources", ["name"], name: "index_sources_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -106,11 +135,14 @@ ActiveRecord::Schema.define(version: 20150803212035) do
     t.string   "remember_digest"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-
+  add_foreign_key "companies_categories", "categories"
+  add_foreign_key "companies_categories", "companies"
   add_foreign_key "contacts", "companies"
+  add_foreign_key "contacts", "users"
   add_foreign_key "cover_letters", "job_applications"
-  add_foreign_key "interactions", "contacts"
   add_foreign_key "job_applications", "companies"
+  add_foreign_key "job_applications", "users"
+  add_foreign_key "notes", "users"
   add_foreign_key "postings", "job_applications"
+  add_foreign_key "postings", "sources"
 end

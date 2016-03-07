@@ -5,14 +5,6 @@ RSpec.describe UsersController, type: :controller do
 
   before(:each) { log_in_as(user) }
 
-  describe 'GET #index' do
-    it 'assigns all users as @users' do
-      allow(User).to receive(:all).and_return([user])
-      get(:index)
-      expect(assigns(:users)).to eq([user])
-    end
-  end
-
   describe 'GET #show' do
     it 'assigns the requested user as @user' do
       allow(User).to receive(:find).and_return(user)
@@ -130,6 +122,7 @@ RSpec.describe UsersController, type: :controller do
   describe 'DELETE #destroy' do
     before(:each) do
       allow(User).to receive(:find).and_return(user)
+      allow(user).to receive(:destroy).and_return(true)
     end
 
     it 'calls destroy on user' do
@@ -139,6 +132,30 @@ RSpec.describe UsersController, type: :controller do
     it 'redirects to the users list' do
       delete(:destroy, id: 'foo')
       expect(response).to redirect_to(users_url)
+    end
+  end
+
+  describe '#check_user' do
+    after(:each) do
+      controller.send(:check_user)
+    end
+
+    it 'calls #current_user?' do
+      allow(controller).to receive(:current_user?).and_return(true)
+      expect(controller).to receive(:current_user?).with(assigns(:user))
+    end
+    context 'when #correct_user? is true' do
+      it 'does not redirect' do
+        allow(controller).to receive(:current_user?).and_return(true)
+        expect(controller).not_to receive(:redirect_to)
+      end
+    end
+    context 'when #correct_user? is false' do
+      it 'redirects to root_url' do
+        allow(controller).to receive(:current_user?).and_return(false)
+        allow(controller).to receive(:redirect_to).and_return(true)
+        expect(controller).to receive(:redirect_to).with(root_url)
+      end
     end
   end
 end

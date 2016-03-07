@@ -5,41 +5,25 @@ describe SearchSuggestion::Dictionary do
   let(:dictionary)  { described_class.new('foo', dummy_class) }
 
   describe '#initialize' do
-    before(:each) do
-      allow_any_instance_of(described_class)
-        .to receive(:name_of_key_base)
-        .and_return(true)
-      allow_any_instance_of(described_class)
-        .to receive(:name_of_union_key)
-        .and_return(true)
+    it 'has these attributes & values' do
+      new_dictionary = described_class.new('foo', dummy_class)
+      expect(new_dictionary).to have_attributes(
+        base_key: 'foo',
+        union_key: 'job_tracker:ALL:foo',
+        model: dummy_class
+      )
     end
 
-    context '@key_base' do
-      it 'calls #name_of_key_base' do
-        expect_any_instance_of(described_class).to receive(:name_of_key_base)
-        described_class.new('foo', dummy_class)
+    describe 'methods called' do
+      before(:each) do
+        allow_any_instance_of(described_class)
+          .to receive(:name_of_union_key)
+          .and_return(true)
       end
-      it 'sets value of @key_base' do
-        new_dictionary = described_class.new('foo', dummy_class)
-        expect(new_dictionary.key_base).not_to be_nil
-      end
-    end
 
-    context '@union_key' do
       it 'calls #name_of_union_key' do
         expect_any_instance_of(described_class).to receive(:name_of_union_key)
         described_class.new('foo', dummy_class)
-      end
-      it 'sets value of @union_key' do
-        new_dictionary = described_class.new('foo', dummy_class)
-        expect(new_dictionary.union_key).not_to be_nil
-      end
-    end
-
-    context '@model' do
-      it 'sets the model variable' do
-        new_dictionary = described_class.new('foo', dummy_class)
-        expect(new_dictionary.model).to eq dummy_class
       end
     end
   end
@@ -85,17 +69,11 @@ describe SearchSuggestion::Dictionary do
     end
   end
 
-  describe '#name_of_key_base' do
-    it 'returns a string in the format "/job_tracker:.*/"' do
-      actual = dictionary.send(:name_of_key_base, 'foo')
-      expect(actual).to match(/job_tracker:.*/)
-    end
-  end
-
   describe '#name_of_union_key' do
-    it 'returns a string in the format "/job_tracker:ALL:.*/"' do
-      actual = dictionary.send(:name_of_union_key, 'foo')
-      expect(actual).to match(/job_tracker:ALL:.*/)
+    it 'calls SearchSuggestion::KeyName.union' do
+      allow(SearchSuggestion::KeyName).to receive(:union)
+      expect(SearchSuggestion::KeyName).to receive(:union)
+      dictionary.send(:name_of_union_key)
     end
   end
 end

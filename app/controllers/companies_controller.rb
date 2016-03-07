@@ -2,20 +2,24 @@ class CompaniesController < ApplicationController
   include SortingHelper
   include ScaffoldedActions
 
+  attr_reader :company
+
   helper_method :sort_column, :sort_direction
 
   before_action :logged_in_user
-  before_action :set_company, only: [:show, :edit, :update, :destroy]
+  before_action :set_company, only: :show
 
   # GET /companies
   # GET /companies.json
   def index
-    @companies = search_and_sort_index
+    @companies = search_filter_sort
   end
 
   # GET /companies/1
   # GET /companies/1.json
   def show
+    @contacts = contacts_belonging_to_user_and_current_company
+    @job_applications = job_applications_belonging_to_user_and_current_company
   end
 
   # GET /companies/new
@@ -23,36 +27,11 @@ class CompaniesController < ApplicationController
     @company = Company.new
   end
 
-  # GET /companies/1/edit
-  def edit
-  end
-
   # POST /companies
   # POST /companies.json
   def create
     @company = Company.new(company_params)
-    save_and_respond(@company)
-  end
-
-  # PATCH/PUT /companies/1
-  # PATCH/PUT /companies/1.json
-  def update
-    respond_to do |format|
-      if @company.update(company_params)
-        successful_update(format, @company)
-      else
-        failed_update(format, @company)
-      end
-    end
-  end
-
-  # DELETE /companies/1
-  # DELETE /companies/1.json
-  def destroy
-    @company.destroy
-    respond_to do |format|
-      destruction(format, companies_url)
-    end
+    save_and_respond(company)
   end
 
   private
@@ -65,8 +44,22 @@ class CompaniesController < ApplicationController
     params.require(:company).permit(whitelisted_attr)
   end
 
+  def contacts_belonging_to_user_and_current_company
+    user_id    = current_user.id
+    company_id = company.id
+    Contact.belonging_to_user(user_id)
+      .where(company_id: company_id)
+  end
+
+  def job_applications_belonging_to_user_and_current_company
+    user_id    = current_user.id
+    company_id = company.id
+    JobApplication.belonging_to_user(user_id)
+      .where(company_id: company_id)
+  end
+
   def whitelisted_attr
-    [:name, :website, :category, :sort, :direction, :search]
+    [:name, :website, :sort, :direction, :search]
   end
 
   def model
@@ -78,12 +71,17 @@ class CompaniesController < ApplicationController
   end
 
   def default_sorting_column
-    'name'
+    'companies.name'
   end
 
-  def search_and_sort_index
-    search = params[:search]
-    col_and_dir = sort_column + ' ' + sort_direction
-    Company.search(search).order(col_and_dir)
+  def sort_col_and_dir
+    sort_column + ' ' + sort_direction
+  end
+
+  def search_filter_sort
+    name_query = params[:search] || ''
+    category_names = params[:category_names] || []
+    Company.search_and_filter(name_query, category_names)
+           .order(sort_col_and_dir)
   end
 end

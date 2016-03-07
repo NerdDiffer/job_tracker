@@ -25,7 +25,9 @@ describe SearchSuggestion::Refresh do
       allow(dummy_class).to receive(:find_each).and_yield(:foo).and_yield(:bar)
       allow(dictionary).to receive(:model).and_return(dummy_class)
       allow(dictionary).to receive(:process_value).and_return(value)
-      allow(dictionary).to receive(:key_name).and_return(rec_key_name)
+      allow(SearchSuggestion::KeyName)
+        .to receive(:generic)
+        .and_return(rec_key_name)
       allow(dictionary).to receive(:process_record).and_return(true)
     end
     after(:each) do
@@ -42,7 +44,9 @@ describe SearchSuggestion::Refresh do
         .with(:bar, :name)
     end
     it 'calls #key_name' do
-      expect(dictionary).to receive(:key_name).with(value)
+      expect(SearchSuggestion::KeyName)
+        .to receive(:generic)
+        .with(dictionary.base_key, value)
     end
     it 'calls #process_record' do
       expect(dictionary).to receive(:process_record).with(rec_key_name, value)
@@ -177,16 +181,9 @@ describe SearchSuggestion::Refresh do
     end
   end
 
-  describe '.key_name' do
-    it 'returns a string in the format `arg1:arg2`' do
-      actual = dictionary.send(:key_name, 'foo')
-      expect(actual).to match(/job_tracker:.*/)
-    end
-  end
-
   describe '#glob_keys' do
     before(:each) do
-      allow(dictionary).to receive(:key_name).and_return(true)
+      allow(SearchSuggestion::KeyName).to receive(:generic).and_return(true)
       allow(REDIS_CLIENT).to receive(:keys).and_return(true)
     end
     after(:each) do
@@ -194,7 +191,9 @@ describe SearchSuggestion::Refresh do
     end
 
     it 'calls key_name' do
-      expect(dictionary).to receive(:key_name)
+      expect(SearchSuggestion::KeyName)
+        .to receive(:generic)
+        .with(dictionary.base_key, '*')
     end
     it 'calls "keys" on redis client' do
       expect(REDIS_CLIENT).to receive(:keys)

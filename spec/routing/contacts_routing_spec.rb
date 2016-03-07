@@ -33,5 +33,44 @@ RSpec.describe ContactsController, type: :routing do
     it 'routes to #destroy' do
       expect(delete: '/contacts/1').to route_to('contacts#destroy', id: '1')
     end
+
+    context 'nested resources' do
+      describe NotesController do
+        it 'routes to notes#new' do
+          expected = { controller: 'notes', action: 'new', contact_id: '1' }
+          expect(get: '/contacts/1/notes/new').to route_to(expected)
+        end
+        it 'routes to notes#show' do
+          expected = { controller: 'notes', action: 'show',
+                       contact_id: '1', id: '1' }
+          expect(get: '/contacts/1/notes/1').to route_to(expected)
+        end
+        it 'routes to notes#edit' do
+          expected = { controller: 'notes', action: 'edit',
+                       contact_id: '1', id: '1' }
+          expect(get: '/contacts/1/notes/1/edit').to route_to(expected)
+        end
+        it 'routes to notes#create' do
+          expected = { controller: 'notes', action: 'create',
+                       contact_id: '1' }
+          expect(post: '/contacts/1/notes').to route_to(expected)
+        end
+        it 'routes to notes#update via PUT' do
+          expected = { controller: 'notes', action: 'update',
+                       contact_id: '1', id: '1' }
+          expect(put: '/contacts/1/notes/1').to route_to(expected)
+        end
+        it 'routes to notes#update via PATCH' do
+          expected = { controller: 'notes', action: 'update',
+                       contact_id: '1', id: '1' }
+          expect(patch: '/contacts/1/notes/1').to route_to(expected)
+        end
+        it 'routes to notes#destroy' do
+          expected = { controller: 'notes', action: 'destroy',
+                       contact_id: '1', id: '1' }
+          expect(delete: '/contacts/1/notes/1').to route_to(expected)
+        end
+      end
+    end
   end
 end

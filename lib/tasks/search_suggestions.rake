@@ -5,12 +5,12 @@ namespace :search_suggestions do
     SearchSuggestion.refresh_company_names
   end
 
-  desc 'Refresh search suggestions for contact names'
-  task refresh_contact_names: :environment do
-    puts 'Deleting existing keys for contact names and refreshing...'
-    SearchSuggestion.refresh_contact_names
+  desc 'Refresh search suggestions for category names'
+  task refresh_category_names: :environment do
+    puts 'Deleting existing keys for category names and refreshing...'
+    SearchSuggestion.refresh_category_names
   end
 
   desc 'run all seed tasks for search suggestions'
-  task all: [:refresh_company_names, :refresh_contact_names]
+  task all: [:refresh_company_names, :refresh_category_names]
 end

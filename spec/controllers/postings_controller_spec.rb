@@ -8,27 +8,57 @@ RSpec.describe PostingsController, type: :controller do
   before(:each) { log_in_as(user) }
 
   describe 'GET #index' do
-    before(:each) do
-      allow(Posting).to receive(:sorted).and_return(posting)
-      allow(@controller).to receive(:custom_index_sort).and_return([posting])
-      get(:index, sort: true)
+    let(:relation) do
+      ActiveRecord::Relation.new(Posting, 'postings')
     end
 
-    it 'returns a 200' do
-      expect(response).to have_http_status(200)
+    before(:each) do
+      allow(controller)
+        .to receive(:collection_belonging_to_user)
+        .and_return(relation)
+      allow(Posting).to receive(:sorted).and_return(posting)
+      allow(controller)
+        .to receive(:custom_index_sort)
+        .and_return([posting])
     end
-    it 'assigns all postings as @postings' do
-      expect(assigns(:postings)).to eq([posting])
+
+    describe 'functional tests' do
+      before(:each) do
+        get(:index, sort: true)
+      end
+
+      it 'returns a 200' do
+        expect(response).to have_http_status(200)
+      end
+      it 'assigns all postings as @postings' do
+        expect(assigns(:postings)).not_to be_nil
+      end
+      it 'renders index' do
+        expect(response).to render_template(:index)
+      end
     end
-    it 'renders index' do
-      expect(response).to render_template(:index)
+
+    describe 'expected method calls' do
+      after(:each) do
+        get(:index, sort: true)
+      end
+
+      it 'calls #collection_belonging_to_user' do
+        expect(controller).to receive(:collection_belonging_to_user)
+      end
+      it 'calls .sorted' do
+        expect(Posting).to receive(:sorted)
+      end
+      it 'calls #custom_index_sort' do
+        expect(controller).to receive(:custom_index_sort)
+      end
     end
   end
 
   describe 'GET #show' do
     before(:each) do
-      allow(Posting).to receive(:find).and_return(posting)
-      get(:show, id: 'joe-schmoe')
+      stub_before_actions
+      get(:show, job_application_id: 1)
     end
 
     it 'returns a 200' do
@@ -57,8 +87,8 @@ RSpec.describe PostingsController, type: :controller do
 
   describe 'GET #edit' do
     before(:each) do
-      allow(Posting).to receive(:find).and_return(posting)
-      get(:edit, id: 'joe-schmoe')
+      stub_before_actions
+      get(:edit, job_application_id: 1)
     end
 
     it 'returns a 200' do
@@ -75,42 +105,66 @@ RSpec.describe PostingsController, type: :controller do
   describe 'POST #create' do
     let(:attr_for_create) do
       {
-        first_name: 'Foo',
-        last_name: 'Bar',
-        title: '_title',
+        posting: {
+          first_name: 'Foo',
+          last_name: 'Bar',
+          title: '_title',
+        },
         job_application_id: 1
       }
     end
 
     before(:each) do
-      allow(JobApplication).to receive(:find).and_return(job_application)
-      allow(Posting).to receive(:new).and_return(posting)
+      allow(controller)
+        .to receive(:posting_params_with_associated_ids)
+        .and_return(attr_for_create)
+    end
+
+    context 'expected method calls' do
+      before(:each) do
+        allow(controller).to receive(:respond_to).and_return(true)
+        allow(controller).to receive(:render).and_return(true)
+        allow(Posting).to receive(:new).and_return(posting)
+      end
+      after(:each) do
+        post(:create, attr_for_create)
+      end
+
+      it 'calls #posting_params_with_associated_ids' do
+        expect(controller).to receive(:posting_params_with_associated_ids)
+      end
+      it 'calls .new on Posting' do
+        expect(Posting).to receive(:new).with(attr_for_create)
+      end
     end
 
     context 'with valid params' do
       before(:each) do
+        allow(posting).to receive(:job_application).and_return(job_application)
         allow(posting).to receive(:save).and_return(true)
-        post(:create, posting: attr_for_create)
+        allow(controller).to receive(:render).and_return(true)
+        allow(Posting).to receive(:new).and_return(posting)
+        post(:create, attr_for_create)
       end
 
       it 'sets @posting to a new Posting object' do
         expect(assigns(:posting)).to be_a_new(Posting)
       end
       it 'redirects to the created posting' do
-        expect(response).to redirect_to(posting)
+        expect(response).to redirect_to(posting.job_application)
       end
     end
 
     context 'with invalid params' do
       before(:each) do
         allow(posting).to receive(:save).and_return(false)
-        post(:create, posting: attr_for_create)
+        allow(Posting).to receive(:new).and_return(posting)
+        post(:create, attr_for_create)
       end
 
       it 'assigns a newly created but unsaved posting as @posting' do
         expect(assigns(:posting)).to be_a_new(Posting)
       end
-
       it 're-renders the "new" template' do
         expect(response).to render_template('new')
       end
@@ -120,33 +174,33 @@ RSpec.describe PostingsController, type: :controller do
   describe 'PUT #update' do
     let(:attr_for_update) do
       {
-        id: 'foo-bar',
-        posting: { job_application_id: 2 }
+        posting: { content: '' },
+        job_application_id: 2
       }
     end
 
     before(:each) do
-      allow(Posting).to receive(:find).and_return(posting)
+      stub_before_actions
     end
 
     context 'with valid params' do
       before(:each) do
+        allow(posting).to receive(:job_application).and_return(job_application)
         allow(posting).to receive(:update).and_return(true)
+        allow(controller).to receive(:render).and_return(true)
       end
 
       it 'assigns the requested posting as @posting' do
         put(:update, attr_for_update)
         expect(assigns(:posting)).to eq(posting)
       end
-
       it 'calls update on the requested posting' do
         expect(posting).to receive(:update)
         put(:update, attr_for_update)
       end
-
       it 'redirects to the posting' do
         put(:update, attr_for_update)
-        expect(response).to redirect_to(posting)
+        expect(response).to redirect_to(posting.job_application)
       end
     end
 
@@ -159,7 +213,6 @@ RSpec.describe PostingsController, type: :controller do
       it 'assigns the posting as @posting' do
         expect(assigns(:posting)).to eq(posting)
       end
-
       it 're-renders the "edit" template' do
         expect(response).to render_template('edit')
       end
@@ -168,17 +221,51 @@ RSpec.describe PostingsController, type: :controller do
 
   describe 'DELETE #destroy' do
     before(:each) do
-      allow(Posting).to receive(:find).and_return(posting)
+      allow(posting).to receive(:job_application).and_return(job_application)
+      allow(posting).to receive(:destroy).and_return(true)
+      stub_before_actions
     end
 
     it 'calls destroy on the requested posting' do
       expect(posting).to receive(:destroy)
-      delete(:destroy, id: 1)
+      delete(:destroy, job_application_id: 1)
     end
 
     it 'redirects to the postings list' do
-      delete(:destroy, id: 1)
-      expect(response).to redirect_to(postings_url)
+      delete(:destroy, job_application_id: 1)
+      expect(response).to redirect_to(posting.job_application)
     end
+  end
+
+  describe '#posting_params_with_associated_ids' do
+    let(:params) { { job_application_id: 1 } }
+
+    before(:each) do
+      allow(controller).to receive(:params).and_return(params)
+      allow(controller)
+        .to receive(:posting_params)
+        .and_return({})
+    end
+    after(:each) do
+      controller.send(:posting_params_with_associated_ids)
+    end
+
+    it 'calls #posting_params' do
+      expect(controller).to receive(:posting_params)
+    end
+    it 'calls #merge on contact_params' do
+      posting_params = controller.send(:posting_params)
+      expected_args = { job_application_id: 1 }
+      expect(posting_params).to receive(:merge).with(expected_args)
+    end
+  end
+
+  private
+
+  def stub_before_actions
+    allow(controller).to receive(:set_posting)
+    allow(controller).to receive(:check_user)
+    allow(controller).to receive(:posting).and_return(posting)
+    controller.instance_eval { @posting = posting }
   end
 end

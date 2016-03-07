@@ -6,17 +6,19 @@ class Contact < ActiveRecord::Base
 
   friendly_id :name
 
+  belongs_to :user
   belongs_to :company
-  has_many :interactions
-  has_many :cover_letters, through: :interactions
+  has_many :notes, as: :notable, dependent: :destroy
 
+  validates :user, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :permalink, uniqueness: true
-
-  after_save :refresh_search_suggestions
+  validates :permalink, uniqueness: {
+    scope: :user_id, message: "Check you don't already have a contact with the same first & last name"
+  }
 
   # scopes
+  scope :belonging_to_user, -> (user_id) { where(user_id: user_id) }
   scope :sorted, -> { order(first_name: :asc) }
 
   # class methods
@@ -48,11 +50,5 @@ class Contact < ActiveRecord::Base
 
   def company_name
     company.name if company
-  end
-
-  private
-
-  def refresh_search_suggestions
-    SearchSuggestion.refresh_contact_names
   end
 end

@@ -1,34 +1,31 @@
 module SearchSuggestion
   class << self
-    def refresh_contact_names
-      base_key = 'contact_names'
-      dictionary = SearchSuggestion::Dictionary.new(base_key, Contact)
+    def refresh_category_names
+      dictionary = SearchSuggestion::Dictionary.new('category_names', Category)
       dictionary.refresh
     end
 
     def refresh_company_names
-      base_key = 'company_names'
-      dictionary = SearchSuggestion::Dictionary.new(base_key, Company)
+      dictionary = SearchSuggestion::Dictionary.new('company_names', Company)
       dictionary.refresh
     end
 
-    def terms_for(query, options = {})
-      base_key = options[:base_key]
-      dictionary = select_dictionary(base_key)
+    def terms_for(query, key)
+      dictionary = select_dictionary(key)
       search = dictionary.search(query)
       search.results
     end
 
     private
 
-    def select_dictionary(base_key)
-      if base_key == 'contact_names'
-        model = Contact
+    def select_dictionary(key)
+      if key == 'category_names'
+        model = Category
       else
-        base_key = 'company_names'
+        key = 'company_names'
         model = Company
       end
-      SearchSuggestion::Dictionary.new(base_key, model)
+      SearchSuggestion::Dictionary.new(key, model)
     end
   end
 end

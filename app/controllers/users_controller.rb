@@ -1,11 +1,7 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-
-  # GET /users
-  def index
-    @users = User.all
-  end
+  before_action :logged_in_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user,       only: [:show, :edit, :update, :destroy]
+  before_action :check_user,     only: [:show, :edit, :update, :destroy]
 
   # GET /users/1
   def show
@@ -60,5 +56,9 @@ class UsersController < ApplicationController
 
   def whitelisted_attr
     [:first_name, :last_name, :email, :password, :password_confirmation]
+  end
+
+  def check_user
+    redirect_to(root_url) unless current_user?(@user)
   end
 end

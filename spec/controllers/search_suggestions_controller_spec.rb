@@ -10,8 +10,8 @@ RSpec.describe SearchSuggestionsController, type: :controller do
         .to receive(:terms_for)
         .and_return(foo: 'bar')
       term = '_term'
-      parent_set = '_parent_set'
-      get(:index, term: term, parent_set: parent_set)
+      key = '_key'
+      get(:index, term: term, key: key)
     end
 
     it 'returns a 200' do

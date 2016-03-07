@@ -4,8 +4,6 @@
 
 <h1>Listing Postings</h1>
 
-<%= link_to 'New posting', new_posting_path %>
-
 <table class='table table-striped table-hover'>
   <thead>
     <tr>
@@ -19,13 +17,20 @@
 
   <tbody>
     <% @postings.each do |posting| %>
+      <% job_application = posting.job_application %>
+      <% content = truncate(posting.content) %>
+      <% default_link_dest = job_application_posting_path(job_application) %>
+      <% destroy_link_opts = {
+        method: :delete, data: { confirm: 'Are you sure?' }
+      } %>
+
       <tr>
-        <td><%= link_to posting.job_application.title, posting.job_application %></td>
+        <td><%= link_to job_application.title, job_application %></td>
         <td><%= posting.posting_date %></td>
-        <td><%= posting.source %></td>
-        <td><%= link_to(truncate(posting.content), posting) %></td>
-        <td><%= link_to 'Edit', edit_posting_path(posting) %></td>
-        <td><%= link_to 'Destroy', posting, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= posting.source.display_name %></td>
+        <td><%= link_to content, default_link_dest %></td>
+        <td><%= link_to 'Edit', edit_job_application_posting_path(job_application) %></td>
+        <td><%= link_to 'Destroy', default_link_dest, destroy_link_opts %></td>
       </tr>
     <% end %>
   </tbody>

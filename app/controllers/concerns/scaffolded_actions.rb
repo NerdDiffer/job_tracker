@@ -31,9 +31,9 @@ module ScaffoldedActions
     format.json { render json: object.errors, status: :unprocessable_entity }
   end
 
-  def destruction(format, url_for_collection)
+  def destruction(format, redirect_url)
     message = "#{model} was successfully destroyed."
-    format.html { redirect_to url_for_collection, notice: message }
+    format.html { redirect_to redirect_url, notice: message }
     format.json { head :no_content }
   end
 

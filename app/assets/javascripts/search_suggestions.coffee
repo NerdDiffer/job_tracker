@@ -9,9 +9,9 @@ jQuery ->
   # TODO: refactor string interpolation so memory footprints are smaller
   base_path = '/search_suggestions'
   company_names = 'company_names'
-  contact_names = 'contact_names'
+  category_names = 'category_names'
 
   $('#contact_company_name, #job_application_company_name').autocomplete
-    source: "#{base_path}?base_key=#{company_names}"
-  $('#interaction_contact_name').autocomplete
-    source: "#{base_path}?base_key=#{contact_names}"
+    source: "#{base_path}?key=#{company_names}"
+  $('#company_category_name').autocomplete
+    source: "#{base_path}?key=#{company_names}"

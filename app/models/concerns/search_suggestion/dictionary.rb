@@ -2,14 +2,11 @@ module SearchSuggestion
   class Dictionary
     include Refresh
 
-    APP_PREFIX = 'job_tracker'.freeze
-    DLMTR = ':'.freeze
-
-    attr_reader :key_base, :union_key, :model
+    attr_reader :base_key, :union_key, :model
 
     def initialize(base_key, model)
-      @key_base  = name_of_key_base(base_key)
-      @union_key = name_of_union_key(base_key)
+      @base_key  = base_key
+      @union_key = name_of_union_key
       @model = model
     end
 
@@ -27,12 +24,8 @@ module SearchSuggestion
 
     private
 
-    def name_of_key_base(base_key)
-      "#{APP_PREFIX}#{DLMTR}#{base_key}"
-    end
-
-    def name_of_union_key(base_key)
-      "#{APP_PREFIX}#{DLMTR}ALL#{DLMTR}#{base_key}"
+    def name_of_union_key
+      SearchSuggestion::KeyName.union(base_key)
     end
   end
 end

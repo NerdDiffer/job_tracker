@@ -3,13 +3,14 @@ require 'rails_helper'
 RSpec.describe CompaniesController, type: :controller do
   let(:user) { build(:user, id: 1) }
   let(:company) { build(:company) }
+  let(:job_application) { build(:job_application) }
 
   before(:each) { log_in_as(user) }
 
   describe 'GET #index' do
     before(:each) do
       allow(@controller)
-        .to receive(:search_and_sort_index)
+        .to receive(:search_filter_sort)
         .and_return([:foo, :bar])
       get(:index)
     end
@@ -28,6 +29,12 @@ RSpec.describe CompaniesController, type: :controller do
   describe 'GET #show' do
     before(:each) do
       allow(Company).to receive(:find).and_return(company)
+      allow(controller)
+        .to receive(:contacts_belonging_to_user_and_current_company)
+        .and_return('contacts')
+      allow(controller)
+        .to receive(:job_applications_belonging_to_user_and_current_company)
+        .and_return('job_applications')
       get(:show, id: 'example-company')
     end
 
@@ -40,29 +47,22 @@ RSpec.describe CompaniesController, type: :controller do
     it 'renders show' do
       expect(response).to render_template(:show)
     end
+    describe '@contacts' do
+      it 'assigns results to @contacts' do
+        expect(assigns(:contacts)).to eq 'contacts'
+      end
+    end
+    describe '@job_applications' do
+      it 'assigns results to @job_applications' do
+        expect(assigns(:job_applications)).to eq 'job_applications'
+      end
+    end
   end
 
   describe 'GET #new' do
     it 'assigns a new company as @company' do
       get(:new)
       expect(assigns(:company)).to be_a_new(Company)
-    end
-  end
-
-  describe 'GET #edit' do
-    before(:each) do
-      allow(Company).to receive(:find).and_return(company)
-      get :edit, id: 'example-company'
-    end
-
-    it 'returns a 200' do
-      expect(response).to have_http_status(200)
-    end
-    it 'assigns the requested company as @company' do
-      expect(assigns(:company)).to eq(company)
-    end
-    it 'renders edit' do
-      expect(response).to render_template(:edit)
     end
   end
 
@@ -105,67 +105,117 @@ RSpec.describe CompaniesController, type: :controller do
     end
   end
 
-  describe 'PUT #update' do
-    let(:attr_for_update) do
-      {
-        id: company.name,
-        company: {
-          name: 'foo',
-          category: 'bar'
-        }
-      }
+  describe '#contacts_belonging_to_user_and_current_company' do
+    let(:relation) do
+      ActiveRecord::Relation.new(Contact, 'contacts')
     end
 
     before(:each) do
-      allow(Company).to receive(:find).and_return(company)
+      allow(user).to receive(:id).and_return(1)
+      allow(company).to receive(:id).and_return(2)
+      allow(controller).to receive(:current_user).and_return(user)
+      allow(controller).to receive(:company).and_return(company)
+      allow(Contact).to receive(:belonging_to_user).and_return(relation)
+      allow(relation).to receive(:where).and_return(relation)
+    end
+    after(:each) do
+      controller.send(:contacts_belonging_to_user_and_current_company)
     end
 
-    context 'with valid params' do
-      before(:each) do
-        allow(company).to receive(:update).and_return(true)
-      end
-
-      it 'assigns the requested company as @company' do
-        put(:update, attr_for_update)
-        expect(assigns(:company)).to eq(company)
-      end
-      it 'updates the requested company' do
-        expect(company).to receive(:update)
-        put(:update, attr_for_update)
-      end
-      it 'redirects to the company' do
-        put(:update, attr_for_update)
-        expect(response).to redirect_to(company)
-      end
+    it 'calls #current_user' do
+      expect(controller).to receive(:current_user)
     end
-
-    context 'with invalid params' do
-      before(:each) do
-        allow(company).to receive(:update).and_return(false)
-        put(:update, attr_for_update)
-      end
-
-      it 'assigns the company as @company' do
-        expect(assigns(:company)).to eq(company)
-      end
-      it 're-renders the "edit" template' do
-        expect(response).to render_template('edit')
-      end
+    it 'calls #id on current_user' do
+      expect(controller.current_user).to receive(:id)
+    end
+    it 'calls .belonging_to_user' do
+      expect(Contact).to receive(:belonging_to_user).with(1)
+    end
+    it 'calls .where on results of .belonging_to_user' do
+      expect(relation).to receive(:where).with(company_id: 2)
     end
   end
 
-  describe 'DELETE #destroy' do
-    before(:each) do
-      allow(Company).to receive(:find).and_return(company)
+  describe '#job_applications_belonging_to_user_and_current_company' do
+    let(:relation) do
+      ActiveRecord::Relation.new(JobApplication, 'job_applications')
     end
 
-    it 'calls destroy on the requested company' do
-      expect(company).to receive(:destroy)
-      delete(:destroy, id: 'example-company')
+    before(:each) do
+      allow(user).to receive(:id).and_return(1)
+      allow(company).to receive(:id).and_return(2)
+      allow(controller).to receive(:current_user).and_return(user)
+      allow(controller).to receive(:company).and_return(company)
+      allow(JobApplication).to receive(:belonging_to_user).and_return(relation)
+      allow(relation).to receive(:where).and_return(relation)
     end
-    it 'redirects to the companies list' do
-      delete(:destroy, id: 'example-company')
-      expect(response).to redirect_to(companies_url)
+    after(:each) do
+      controller.send(:job_applications_belonging_to_user_and_current_company)
+    end
+
+    it 'calls #current_user' do
+      expect(controller).to receive(:current_user)
+    end
+    it 'calls #id on current_user' do
+      expect(controller.current_user).to receive(:id)
+    end
+    it 'calls .belonging_to_user' do
+      expect(JobApplication).to receive(:belonging_to_user).with(1)
+    end
+    it 'calls .where on results of .belonging_to_user' do
+      expect(relation).to receive(:where).with(company_id: 2)
+    end
+  end
+
+  describe '#default_sorting_column' do
+    it 'returns "companies.name"' do
+      actual = controller.send(:default_sorting_column)
+      expect(actual).to eq 'companies.name'
+    end
+  end
+
+  describe '#sort_col_and_dir' do
+    before(:each) do
+      allow(controller).to receive(:sort_column).and_return('foo')
+      allow(controller).to receive(:sort_direction).and_return('bar')
+    end
+
+    it 'calls #sort_column' do
+      expect(controller).to receive(:sort_column)
+      controller.send(:sort_col_and_dir)
+    end
+    it 'calls #sort_direction' do
+      expect(controller).to receive(:sort_direction)
+      controller.send(:sort_col_and_dir)
+    end
+    it 'returns this string' do
+      actual = controller.send(:sort_col_and_dir)
+      expect(actual).to eq 'foo bar'
+    end
+  end
+
+  describe '#search_filter_sort' do
+    let(:relation) { double('Company::ActiveRecord_Relation') }
+    let(:params) { { search: 'unicorn', category_names: ['foo', 'bar'] } }
+    let(:sort_col_and_dir) { 'sort_col_and_dir' }
+
+    before(:each) do
+      allow(controller).to receive(:params).and_return(params)
+      allow(Company).to receive(:search_and_filter).and_return(relation)
+      allow(relation).to receive(:order)
+      allow(controller).to receive(:sort_col_and_dir).and_return(sort_col_and_dir)
+    end
+    after(:each) do
+      controller.send(:search_filter_sort)
+    end
+
+    it 'calls .search_and_filter on Company' do
+      expect(Company)
+        .to receive(:search_and_filter)
+        .with('unicorn', ['foo', 'bar'])
+    end
+    it 'calls .order on the relation' do
+      expect(relation).to receive(:order).with(sort_col_and_dir)
     end
   end
 end

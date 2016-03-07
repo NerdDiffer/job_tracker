@@ -9,7 +9,7 @@ module SearchSuggestion
     def populate_sets(attribute = :name)
       model.find_each do |record|
         value = process_value(record, attribute)
-        rec_key_name = key_name(value)
+        rec_key_name = SearchSuggestion::KeyName.generic(base_key, value)
 
         process_record(rec_key_name, value)
       end
@@ -60,13 +60,8 @@ module SearchSuggestion
       keys.each { |key| REDIS_CLIENT.del(key) }
     end
 
-    def key_name(term)
-      delimiter = SearchSuggestion::Dictionary::DLMTR
-      "#{key_base}#{delimiter}#{term}"
-    end
-
     def glob_keys
-      glob = key_name('*')
+      glob = SearchSuggestion::KeyName.generic(base_key, '*')
       REDIS_CLIENT.keys(glob)
     end
   end

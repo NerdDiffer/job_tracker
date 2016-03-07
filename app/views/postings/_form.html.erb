@@ -1,11 +1,7 @@
-<%= form_for(@posting) do |f| %>
+<%= form_for @posting, url: job_application_posting_path do |f| %>
 
   <%= error_messages_for @posting %>
 
-  <div class="field">
-    <%= f.label :job_application_id %><br>
-    <%= f.text_field :job_application_id %>
-  </div>
   <div class="field">
     <%= f.label :job_title %><br>
     <%= f.text_field :job_title %>
@@ -15,8 +11,12 @@
     <%= f.date_field :posting_date %>
   </div>
   <div class="field">
-    <%= f.label :source %><br>
-    <%= f.text_field :source %>
+    <% source_opts = options_for_select(
+         generate_select_opts_for_source_names,
+         @posting.source_id
+    ) %>
+    <%= f.label :source_id %><br>
+    <%= f.select :source_id, source_opts, include_blank: true %>
   </div>
   <div class="field">
     <%= f.label :content %><br>

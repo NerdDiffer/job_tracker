@@ -1,11 +1,7 @@
-<%= form_for(@cover_letter) do |f| %>
+<%= form_for @cover_letter, url: job_application_cover_letter_path do |f| %>
 
   <%= error_messages_for @cover_letter %>
 
-  <div class="field">
-    <%= f.label :job_application_id %><br>
-    <%= f.text_field :job_application_id %>
-  </div>
   <div class="field">
     <%= f.label :sent_date %><br>
     <%= f.date_field :sent_date %>

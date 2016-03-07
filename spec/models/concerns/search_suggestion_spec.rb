@@ -17,21 +17,21 @@ describe SearchSuggestion do
     end
   end
 
-  describe '.refresh_contact_names' do
+  describe '.refresh_category_names' do
     it_behaves_like 'refreshing a Dictionary object' do
-      let(:base_key) { 'contact_names' }
-      let(:model)    { Contact }
+      let(:base_key) { 'category_names' }
+      let(:model)    { Category }
 
       after(:each) do
-        described_class.refresh_contact_names
+        described_class.refresh_category_names
       end
 
       it 'passes this value for base_key' do
-        expect(base_key).to eq 'contact_names'
+        expect(base_key).to eq 'category_names'
       end
 
       it 'passes this value for model' do
-        expect(model).to eq Contact
+        expect(model).to eq Category
       end
     end
   end
@@ -68,7 +68,7 @@ describe SearchSuggestion do
       allow(search).to receive(:results).and_return([])
     end
     after(:each) do
-      described_class.terms_for('foo', base_key: 'bar')
+      described_class.terms_for('foo', 'bar')
     end
 
     it 'calls .select_dictionary with a hash with the key :base_key' do
@@ -84,15 +84,16 @@ describe SearchSuggestion do
   end
 
   describe '.select_dictionary' do
-    context 'when base_key is "contact_names"' do
+    context 'when base_key is "category_names"' do
       it 'calls Dictionary.new with these arguments' do
         expect(SearchSuggestion::Dictionary)
           .to receive(:new)
-          .with('contact_names', Contact)
-        described_class.send(:select_dictionary, 'contact_names')
+          .with('category_names', Category)
+        described_class.send(:select_dictionary, 'category_names')
       end
     end
-    context 'when base_key is NOT "contact_names"' do
+
+    context 'when base_key is NOT "category_names"' do
       it 'calls Dictionary.new with these arguments' do
         expect(SearchSuggestion::Dictionary)
           .to receive(:new)
