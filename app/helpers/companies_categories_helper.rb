@@ -6,7 +6,7 @@ module CompaniesCategoriesHelper
 
   def generate_select_opts_for_category_names
     all_categories = fetch_all_categories
-    all_categories.map { |category| category.display_name }
+    all_categories.map(&:display_name)
   end
 
   private

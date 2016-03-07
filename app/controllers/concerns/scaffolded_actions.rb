@@ -11,8 +11,8 @@ module ScaffoldedActions
     end
   end
 
-  def successful_creation(format, object)
-    message = "#{model} was successfully created."
+  def successful_creation(format, object, message = nil)
+    message ||= "#{model} was successfully created."
     canned_success(format, object, message, :created)
   end
 
@@ -21,8 +21,8 @@ module ScaffoldedActions
     format.json { render json: object.errors, status: :unprocessable_entity }
   end
 
-  def successful_update(format, object)
-    message = "#{model} was successfully updated."
+  def successful_update(format, object, message = nil)
+    message ||= "#{model} was successfully updated."
     canned_success(format, object, message, :ok)
   end
 

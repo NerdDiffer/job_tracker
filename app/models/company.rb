@@ -23,24 +23,18 @@ class Company < ActiveRecord::Base
     search ? by_name(search) : unscoped
   end
 
-  def self.by_category_name(category_names)
-    category_names = category_names.map { |n| "'#{n}'" }
-    category_names = category_names.join(', ')
+  def self.by_category_name(names_of_categories)
+    names_of_categories = names_of_categories.map { |n| "'#{n}'" }
+    names_of_categories = names_of_categories.join(', ')
 
     includes(:categories)
-      .where("categories.name IN (#{category_names})")
+      .where("categories.name IN (#{names_of_categories})")
   end
 
-  def self.search_and_filter(name_query, category_names)
+  def self.search_and_filter(name_query, names_of_categories)
     result = Company.joins(:companies_categories, :categories)
-
-    unless name_query.empty?
-      result = result.by_name(name_query)
-    end
-    unless category_names.empty?
-      result = result.by_category_name(category_names)
-    end
-
+    result = result.by_name(name_query) unless name_query.empty?
+    result = result.by_category_name(names_of_categories) unless names_of_categories.empty?
     result.distinct
   end
 

@@ -41,11 +41,9 @@ class NotesController < ApplicationController
     respond_to do |format|
       if note.save
         message = "Note created for #{@notable.class}"
-        format.html { redirect_to @notable, notice: message }
-        format.json { render :show, status: :created, location: @notable }
+        successful_creation(format, @notable, message)
       else
-        format.html { render :new }
-        format.json { render json: note.errors, status: :unprocessable_entity }
+        failed_creation(format, note)
       end
     end
   end
@@ -56,11 +54,9 @@ class NotesController < ApplicationController
     respond_to do |format|
       if note.update(note_params)
         message = "Successfully updated Note for #{@notable.class}"
-        format.html { redirect_to @notable, notice: message }
-        format.json { render :show, status: :ok, location: @notable }
+        successful_update(format, @notable, message)
       else
-        format.html { render :edit }
-        format.json { render json: note.errors, status: :unprocessable_entity }
+        failed_update(format, note)
       end
     end
   end

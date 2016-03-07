@@ -10,8 +10,8 @@
   <thead>
     <tr>
       <th><%= render partial: 'filter_active' %></th>
-      <th><%= generate_sortable_link('title', 'Company & Job Title') %></th>
-      <th><%= generate_sortable_link('updated_at', "Last Updated") %></th>
+      <th><%= generate_sortable_link('title', title: 'Company & Job Title') %></th>
+      <th><%= generate_sortable_link('updated_at', title: 'Updated') %></th>
       <th class='actions' colspan="2">Actions</th>
     </tr>
   </thead>

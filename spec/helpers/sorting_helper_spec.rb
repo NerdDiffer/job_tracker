@@ -5,6 +5,7 @@ RSpec.describe SortingHelper, type: :helper do
     before(:each) do
       allow(helper).to receive(:toggle_direction).and_return('foo')
       allow(helper).to receive(:css_class).and_return('bar')
+      allow(helper).to receive(:link_options!).and_return(true)
       allow(helper).to receive(:link_to)
     end
 
@@ -20,6 +21,10 @@ RSpec.describe SortingHelper, type: :helper do
       input = 'attribute'
       expect(input).to receive(:titleize)
       helper.generate_sortable_link(input)
+    end
+    it 'calls #link_options!' do
+      expect(helper).to receive(:link_options!)
+      helper.generate_sortable_link('attribute')
     end
     it 'calls #link_to' do
       options = { sort: 'attribute', direction: 'foo' }
@@ -47,6 +52,24 @@ RSpec.describe SortingHelper, type: :helper do
         allow(helper).to receive(:col_allowed?).and_return(false)
         expect(helper).to receive(:default_sorting_column)
         helper.sort_column
+      end
+    end
+  end
+
+  describe '#sort_direction' do
+    context 'when direction is allowed' do
+      it 'returns value of params[:direction]' do
+        params = { direction: '_direction' }
+        allow(helper).to receive(:params).and_return(params)
+        allow(helper).to receive(:direction_allowed?).and_return(true)
+        expect(helper.send(:sort_direction)).to eq params[:direction]
+      end
+    end
+
+    context 'when direction is NOT allowed' do
+      it 'returns asc' do
+        allow(helper).to receive(:direction_allowed?).and_return(false)
+        expect(helper.send(:sort_direction)).to eq 'asc'
       end
     end
   end
@@ -125,24 +148,6 @@ RSpec.describe SortingHelper, type: :helper do
       directions = helper.send(:directions)
       expect(directions).to receive(:include?)
       helper.send(:direction_allowed?, 'foo')
-    end
-  end
-
-  describe '#sort_direction' do
-    context 'when direction is allowed' do
-      it 'returns value of params[:direction]' do
-        params = { direction: '_direction' }
-        allow(helper).to receive(:params).and_return(params)
-        allow(helper).to receive(:direction_allowed?).and_return(true)
-        expect(helper.send(:sort_direction)).to eq params[:direction]
-      end
-    end
-
-    context 'when direction is NOT allowed' do
-      it 'returns asc' do
-        allow(helper).to receive(:direction_allowed?).and_return(false)
-        expect(helper.send(:sort_direction)).to eq 'asc'
-      end
     end
   end
 

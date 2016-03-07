@@ -1,24 +1,21 @@
 module SortingHelper
+  include LinkOptions
+
+  attr_reader :link_options
+
   # Generate an HTML link for use in sorting #index views
   # @param attribute [String] the name of the attribute to sort by
-  # @param title [String] the name you want to display
+  # @param named_args [Hash] additional named arguments
+  #   @option named_args [String] :title the name you want to display
   # @return [String] a generated HTML link
-  def generate_sortable_link(attribute, title = nil)
+  def generate_sortable_link(attribute, named_args = {})
     direction = toggle_direction(attribute)
     css_class = css_class(attribute)
 
-    title ||= attribute.titleize
-    options = { sort: attribute, direction: direction }
+    title = named_args[:title] || attribute.titleize
+    @link_options = { sort: attribute, direction: direction }
+    link_options!
     html_options = { class: css_class }
-
-    active = params[:active]
-    options[:active] = active if active
-
-    category_names = params[:category_names]
-    options[:category_names] = category_names if category_names
-
-    search = params[:search]
-    options[:search] = search if search
 
     # NOTE: previously, the 2nd argument was `params.merge....`, which was put
     # in at commit # 95ba8cc1 to work with the Filterable module. This broke
@@ -27,7 +24,7 @@ module SortingHelper
     # TODO: make it work for:
     # - filtering with sorting
     # - regular sorts
-    link_to(title, options, html_options)
+    link_to(title, link_options, html_options)
   end
 
   def sort_column

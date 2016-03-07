@@ -48,14 +48,14 @@ class CompaniesController < ApplicationController
     user_id    = current_user.id
     company_id = company.id
     Contact.belonging_to_user(user_id)
-      .where(company_id: company_id)
+           .where(company_id: company_id)
   end
 
   def job_applications_belonging_to_user_and_current_company
     user_id    = current_user.id
     company_id = company.id
     JobApplication.belonging_to_user(user_id)
-      .where(company_id: company_id)
+                  .where(company_id: company_id)
   end
 
   def whitelisted_attr
