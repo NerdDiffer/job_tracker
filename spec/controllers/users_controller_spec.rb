@@ -57,7 +57,7 @@ RSpec.describe UsersController, type: :controller do
 
       it 'redirects to the created user' do
         post(:create, user: attr_for_create)
-        expect(response).to redirect_to(user)
+        expect(response).to redirect_to(user_path)
       end
     end
 
@@ -99,7 +99,7 @@ RSpec.describe UsersController, type: :controller do
 
       it 'redirects to the user' do
         put(:update, attr_for_update)
-        expect(response).to redirect_to(user)
+        expect(response).to redirect_to(user_url)
       end
     end
 
@@ -131,7 +131,7 @@ RSpec.describe UsersController, type: :controller do
     end
     it 'redirects to the users list' do
       delete(:destroy, id: 'foo')
-      expect(response).to redirect_to(users_url)
+      expect(response).to redirect_to(user_url)
     end
   end
 

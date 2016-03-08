@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new
-    return redirect_to(current_user) if logged_in?
+    return redirect_to(user_path) if logged_in?
     # otherwise, display login page
   end
 
@@ -55,7 +55,7 @@ class SessionsController < ApplicationController
       forget(user)
     end
 
-    redirect_back_or(user)
+    redirect_back_or(user_path)
   end
 
   def remember_me?

@@ -31,7 +31,7 @@
           <%= link_to('Account', '#', dropdown_opts) %>
           <ul class='dropdown-menu'>
             <% logout_opts = { method: 'delete', class: 'last_a' }%>
-            <li><%= link_to('Profile', current_user) %></li>
+            <li><%= link_to('Profile', user_path) %></li>
             <li><%= link_to('Log out', logout_path, logout_opts) %></li>
           </ul>
         </li>

@@ -8,7 +8,7 @@ RSpec.describe SessionsController, type: :controller do
       allow(@controller).to receive(:current_user).and_return(user)
       allow(@controller).to receive(:logged_in?).and_return(true)
       get(:new)
-      expect(response).to redirect_to(user)
+      expect(response).to redirect_to(user_path)
     end
     it 'renders "new" if not logged in' do
       allow(@controller).to receive(:logged_in?).and_return(false)
@@ -177,7 +177,7 @@ RSpec.describe SessionsController, type: :controller do
         expect(flash[:success]).not_to be_nil
       end
       it 'calls #redirect_back_or with user' do
-        expect(@controller).to receive(:redirect_back_or).with(user)
+        expect(@controller).to receive(:redirect_back_or).with(user_path)
         @controller.send(:login_authenticated_user, user)
       end
     end
