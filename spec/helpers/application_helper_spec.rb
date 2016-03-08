@@ -78,6 +78,19 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
+  describe '#delete_link_opts' do
+    it 'returned hash has these keys' do
+      delete_link_opts = helper.delete_link_opts
+      actual = delete_link_opts.keys
+      expect(actual).to eq %I(method data)
+    end
+    it 'the :data key is a hash with a :confirm key' do
+      delete_link_opts = helper.delete_link_opts
+      actual = delete_link_opts[:data][:confirm]
+      expect(actual).not_to be_nil
+    end
+  end
+
   describe '#error_messages_partial' do
     it 'returns path to error messages partial' do
       actual = helper.send(:error_messages_partial)

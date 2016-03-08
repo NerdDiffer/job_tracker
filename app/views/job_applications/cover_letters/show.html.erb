@@ -3,13 +3,9 @@
 <p id="notice"><%= notice %></p>
 
 <% default_link_dest = job_application_posting_path(@cover_letter.job_application) %>
-<% destroy_link_html_opts = {
-  data: { confirm: 'Are you sure?' },
-  method: :delete
-} %>
 
 <%= link_to 'Edit', edit_job_application_cover_letter_path(@cover_letter.job_application) %> |
-<%= link_to 'Destroy', default_link_dest, destroy_link_html_opts %> |
+<%= link_to 'Delete', default_link_dest, delete_link_opts %> |
 <%= link_to 'Back', :back %>
 
 <p>

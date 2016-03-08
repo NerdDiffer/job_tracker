@@ -17,15 +17,11 @@
       <% truncated_content = truncate(note.content) %>
       <% default_link_dest = [@notable, note] %>
       <% edit_link_dest = [:edit, @notable, note] %>
-      <% destroy_link_html_opts = {
-        data: { confirm: 'Are you sure?' },
-        method: :delete
-      } %>
       <tr>
         <td><%= link_to(updated_at, default_link_dest) %></td>
         <td><%= link_to(truncated_content, default_link_dest) %></td>
         <td><%= link_to 'Edit', edit_link_dest %></td>
-        <td><%= link_to 'Destroy', default_link_dest, destroy_link_html_opts %></td>
+        <td><%= link_to 'Delete', default_link_dest, delete_link_opts %></td>
       </tr>
     <% end %>
   </tbody>

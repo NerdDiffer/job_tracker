@@ -2,7 +2,7 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Postings</h1>
+<h1>Postings</h1>
 
 <table class='table table-striped table-hover'>
   <thead>
@@ -20,9 +20,6 @@
       <% job_application = posting.job_application %>
       <% content = truncate(posting.content) %>
       <% default_link_dest = job_application_posting_path(job_application) %>
-      <% destroy_link_opts = {
-        method: :delete, data: { confirm: 'Are you sure?' }
-      } %>
 
       <tr>
         <td><%= link_to job_application.title, job_application %></td>
@@ -30,7 +27,7 @@
         <td><%= posting.source.display_name %></td>
         <td><%= link_to content, default_link_dest %></td>
         <td><%= link_to 'Edit', edit_job_application_posting_path(job_application) %></td>
-        <td><%= link_to 'Destroy', default_link_dest, destroy_link_opts %></td>
+        <td><%= link_to 'Delete', default_link_dest, delete_link_opts %></td>
       </tr>
     <% end %>
   </tbody>

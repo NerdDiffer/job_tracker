@@ -2,7 +2,7 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Contacts</h1>
+<h1>Contacts</h1>
 
 <%= link_to 'New contact', new_contact_path %>
 
@@ -15,7 +15,7 @@
       <th>Office Phone</th>
       <th>Mobile Phone</th>
       <th>Email</th>
-      <th class='actions'>Actions</th>
+      <th class='actions' colspan='2'>Actions</th>
     </tr>
   </thead>
 
@@ -28,9 +28,8 @@
         <td><%= contact.phone_office %></td>
         <td><%= contact.phone_mobile %></td>
         <td><%= contact.email %></td>
-        <td class='actions'>
-          <%= link_to("Edit", edit_contact_path(contact)) %>
-        </td>
+        <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
+        <td><%= link_to 'Delete', contact, delete_link_opts %></td>
       </tr>
     <% end %>
   </tbody>

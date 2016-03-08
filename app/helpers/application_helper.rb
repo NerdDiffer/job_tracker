@@ -29,6 +29,13 @@ module ApplicationHelper
     html_safe(md.render(text))
   end
 
+  def delete_link_opts
+    {
+      method: :delete,
+      data: { confirm: 'Are you sure?' }
+    }
+  end
+
   private
 
   def error_messages_partial
