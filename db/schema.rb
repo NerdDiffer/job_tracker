@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306202749) do
+ActiveRecord::Schema.define(version: 20160311180700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "name"
+    t.string "email",           null: false
+    t.string "password_digest"
+    t.string "remember_digest"
+  end
+
+  add_index "accounts", ["email"], name: "index_accounts_on_email", unique: true, using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string "name",      null: false
@@ -80,6 +89,15 @@ ActiveRecord::Schema.define(version: 20160306202749) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
+  create_table "identities", force: :cascade do |t|
+    t.integer "user_id",           null: false
+    t.integer "identifiable_id",   null: false
+    t.string  "identifiable_type", null: false
+  end
+
+  add_index "identities", ["identifiable_type", "identifiable_id"], name: "index_identities_on_identifiable_type_and_identifiable_id", unique: true, using: :btree
+  add_index "identities", ["user_id"], name: "index_identities_on_user_id", unique: true, using: :btree
+
   create_table "job_applications", force: :cascade do |t|
     t.integer  "company_id"
     t.datetime "created_at",                null: false
@@ -117,6 +135,13 @@ ActiveRecord::Schema.define(version: 20160306202749) do
   add_index "postings", ["job_application_id"], name: "uniq_job_application_id_on_postings", unique: true, using: :btree
   add_index "postings", ["source_id"], name: "index_postings_on_source_id", using: :btree
 
+  create_table "provider_identities", force: :cascade do |t|
+    t.string "uid",      null: false
+    t.string "provider", null: false
+  end
+
+  add_index "provider_identities", ["provider", "uid"], name: "index_provider_identities_on_provider_and_uid", unique: true, using: :btree
+
   create_table "sources", force: :cascade do |t|
     t.string   "name",       default: "other", null: false
     t.datetime "created_at",                   null: false
@@ -126,13 +151,8 @@ ActiveRecord::Schema.define(version: 20160306202749) do
   add_index "sources", ["name"], name: "index_sources_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email"
-    t.string   "password_digest"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.string   "remember_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "companies_categories", "categories"
@@ -140,6 +160,7 @@ ActiveRecord::Schema.define(version: 20160306202749) do
   add_foreign_key "contacts", "companies"
   add_foreign_key "contacts", "users"
   add_foreign_key "cover_letters", "job_applications"
+  add_foreign_key "identities", "users"
   add_foreign_key "job_applications", "companies"
   add_foreign_key "job_applications", "users"
   add_foreign_key "notes", "users"
