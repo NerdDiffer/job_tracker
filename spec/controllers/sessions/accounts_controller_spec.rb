@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe SessionsController, type: :controller do
+describe Sessions::AccountsController, type: :controller do
   let(:user) { build(:user) }
+  let(:account)  { build(:account) }
 
   describe 'GET #new' do
     it 'redirects to current_user if logged in' do
@@ -18,66 +19,110 @@ RSpec.describe SessionsController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'if email_and_password are present' do
-      before(:each) do
-        allow(@controller).to receive(:email_and_password?).and_return(true)
-        allow(@controller).to receive(:authenticated?).and_return(false)
-      end
-
-      it 'calls #find_user_by_email' do
-        expect(@controller).to receive(:find_user_by_email)
-        post(:create)
-      end
-    end
-
     context 'if authenticated?' do
       before(:each) do
-        allow(@controller).to receive(:email_and_password?).and_return(true)
-        allow(@controller).to receive(:find_user_by_email).and_return(user)
+        allow(@controller).to receive(:set_account)
+        allow(@controller).to receive(:set_user)
+        allow(@controller).to receive(:user).and_return(user)
         allow(@controller).to receive(:authenticated?).and_return(true)
+        allow(@controller).to receive(:login_authenticated_user)
+      end
+      after(:each) do
+        post(:create)
       end
 
+      it 'calls #authenticated?' do
+        expect(@controller).to receive(:authenticated?)
+      end
       it 'calls #login_authenticted_user' do
         expect(@controller).to receive(:login_authenticated_user)
-        post(:create)
       end
     end
 
     context 'if not authenticated' do
       before(:each) do
-        allow(@controller).to receive(:email_and_password?).and_return(true)
-        allow(@controller).to receive(:find_user_by_email).and_return(user)
+        allow(@controller).to receive(:set_account)
+        allow(@controller).to receive(:set_user)
+        allow(@controller).to receive(:user).and_return(user)
         allow(@controller).to receive(:authenticated?).and_return(false)
-        post(:create)
       end
 
       it 'sets a flash message' do
+        post(:create)
         expect(flash.now[:danger]).not_to be_nil
       end
       it 'renders "new"' do
+        post(:create)
         expect(response).to render_template 'new'
+      end
+      it 'does not call #login_authenticated_user' do
+        expect(@controller).not_to receive(:login_authenticated_user)
+        post(:create)
       end
     end
   end
 
-  describe 'DELETE #destroy' do
-    context 'if logged_in?' do
+  describe '#set_account' do
+    context 'if email_and_password? is true' do
       before(:each) do
-        allow(@controller).to receive(:logged_in?).and_return(true)
+        allow(@controller).to receive(:email_and_password?).and_return(true)
+        allow(@controller).to receive(:find_account_by_email).and_return(account)
       end
 
-      it 'logs out' do
-        expect(@controller).to receive(:log_out)
-        delete(:destroy)
+      it 'calls #find_account_by_email' do
+        expect(@controller).to receive(:find_account_by_email)
+        @controller.send(:set_account)
+      end
+      it 'sets a value for @account' do
+        @controller.send(:set_account)
+        actual = @controller.account
+        expect(actual).not_to be_nil
       end
     end
-    it 'sets flash message' do
-      delete(:destroy)
-      expect(flash[:notice]).not_to be_nil
+
+    context 'if email_and_password? is false' do
+      before(:each) do
+        allow(@controller).to receive(:email_and_password?).and_return(false)
+      end
+
+      it 'does NOT call #find_account_by_email' do
+        expect(@controller).not_to receive(:find_account_by_email)
+        @controller.send(:set_account)
+      end
+      it '@account is nil' do
+        @controller.send(:set_account)
+        actual = @controller.account
+        expect(actual).to be_nil
+      end
     end
-    it 'redirects to root_url' do
-      delete(:destroy)
-      expect(response).to redirect_to root_url
+  end
+
+  describe '#set_user' do
+    context 'when account is NOT nil' do
+      before(:each) do
+        allow(@controller).to receive(:account).and_return(account)
+        allow(account).to receive(:user).and_return(user)
+      end
+
+      it 'calls #user on account' do
+        expect(account).to receive(:user)
+        @controller.send(:set_user)
+      end
+      it 'sets a value for @user' do
+        @controller.send(:set_user)
+        expect(@controller.user).not_to be_nil
+      end
+    end
+
+    context 'when account is nil' do
+      before(:each) do
+        allow(@controller).to receive(:account).and_return(nil)
+      end
+
+      it 'sets @user to nil' do
+        expect(@controller.user).to be_nil
+        @controller.send(:set_user)
+      end
     end
   end
 
@@ -141,57 +186,83 @@ RSpec.describe SessionsController, type: :controller do
       allow(@controller).to receive(:params).and_return(params)
     end
 
-    it 'calls authenticate on the user' do
-      expect(user).to receive(:authenticate)
-      @controller.send(:authenticated?, user)
+    context 'when user is nil' do
+      before(:each) do
+        allow(@controller).to receive(:user).and_return(nil)
+      end
+
+      it 'returns false' do
+        actual = @controller.send(:authenticated?)
+        expect(actual).to be_nil
+      end
     end
-    it 'returns false if user is falsey' do
-      expect(user).not_to receive(:authenticate)
-      actual = @controller.send(:authenticated?, nil)
-      expect(actual).to be_falsey
+
+    context 'when user is authenticated' do
+      before(:each) do
+        allow(@controller).to receive(:user).and_return(user)
+        allow(user).to receive(:authenticate).and_return(true)
+      end
+
+      it 'calls authenticate on the user' do
+        expect(user).to receive(:authenticate).with('foo')
+        @controller.send(:authenticated?)
+      end
+      it 'returns true if authentication was successful' do
+        actual = @controller.send(:authenticated?)
+        expect(actual).to be_truthy
+      end
     end
-    it 'returns false if authentication was NOT successful' do
-      allow(user).to receive(:authenticate).and_return(false)
-      actual = @controller.send(:authenticated?, user)
-      expect(actual).to be_falsey
-    end
-    it 'returns true if authentication was successful' do
-      expect(user).to receive(:authenticate)
-      @controller.send(:authenticated?, user)
+
+    context 'when user is NOT authenticated' do
+      before(:each) do
+        allow(@controller).to receive(:user).and_return(user)
+        allow(user).to receive(:authenticate).and_return(false)
+      end
+
+      it 'calls authenticate on the user' do
+        expect(user).to receive(:authenticate).with('foo')
+        @controller.send(:authenticated?)
+      end
+      it 'returns false if authentication was NOT successful' do
+        actual = @controller.send(:authenticated?)
+        expect(actual).to be_falsey
+      end
     end
   end
 
   describe '#login_authenticated_user' do
     shared_examples_for 'logging in an authenticated_user' do
       before(:each) do
+        allow(@controller).to receive(:user).and_return(user)
         allow(@controller).to receive(:log_in).and_return(true)
         allow(@controller).to receive(:redirect_back_or).and_return(true)
       end
 
       it 'calls log_in with user' do
         expect(@controller).to receive(:log_in).with(user)
-        @controller.send(:login_authenticated_user, user)
+        @controller.send(:login_authenticated_user)
       end
       it 'sets flash message' do
-        @controller.send(:login_authenticated_user, user)
+        @controller.send(:login_authenticated_user)
         expect(flash[:success]).not_to be_nil
       end
       it 'calls #redirect_back_or with user' do
         expect(@controller).to receive(:redirect_back_or).with(user_path)
-        @controller.send(:login_authenticated_user, user)
+        @controller.send(:login_authenticated_user)
       end
     end
 
     context 'when remember_me is set' do
       it_behaves_like 'logging in an authenticated_user' do
         before(:each) do
+          allow(@controller).to receive(:user).and_return(user)
           allow(@controller).to receive(:remember_me?).and_return(true)
           allow(@controller).to receive(:remember).and_return(true)
         end
 
         it 'calls remember with user' do
           expect(@controller).to receive(:remember).with(user)
-          @controller.send(:login_authenticated_user, user)
+          @controller.send(:login_authenticated_user)
         end
       end
     end
@@ -199,13 +270,14 @@ RSpec.describe SessionsController, type: :controller do
     context 'when remember_me is NOT set' do
       it_behaves_like 'logging in an authenticated_user' do
         before(:each) do
+          allow(@controller).to receive(:user).and_return(user)
           allow(@controller).to receive(:remember_me?).and_return(false)
           allow(@controller).to receive(:forget).and_return(true)
         end
 
         it 'calls forget with user' do
           expect(@controller).to receive(:forget).with(user)
-          @controller.send(:login_authenticated_user, user)
+          @controller.send(:login_authenticated_user)
         end
       end
     end
