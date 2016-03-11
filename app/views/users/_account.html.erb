@@ -1,0 +1,12 @@
+<p>
+  <strong>Email:</strong>
+  <%= @user.identifiable.email %>
+</p>
+
+<p>
+  <strong>Name</strong>
+  <%= @user.identifiable.name %>
+</p>
+
+<%= link_to 'Edit', edit_user_account_path %> |
+<%= link_to 'Back', :back %>
