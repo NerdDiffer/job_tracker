@@ -51,9 +51,9 @@ module Seed
       user_id = opts[:scope]
 
       case model
-      when 'Contact'; then random_contact_id(user_id)
-      when 'JobApplication'; random_job_application_id(user_id)
-      else; fail 'pass in a valid model constant'
+      when 'Contact' then random_contact_id(user_id)
+      when 'JobApplication' then random_job_application_id(user_id)
+      else raise 'pass in a valid model constant'
       end
     end
   end

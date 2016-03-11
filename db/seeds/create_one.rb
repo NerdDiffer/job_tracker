@@ -4,24 +4,6 @@ module Seed
   class << self
     private
 
-    def create_default_user
-      user = default_user.merge(password: default_password,
-                                password_confirmation: default_password)
-      User.create!(user)
-    end
-
-    def create_user
-      first_name = Faker::Name.first_name
-      last_name  = Faker::Name.last_name
-      email      = Faker::Internet.safe_email(first_name)
-      password   = default_password
-      password_confirmation = default_password
-      User.create!(first_name: first_name, last_name: last_name,
-                   email: email,
-                   password: password,
-                   password_confirmation: password_confirmation)
-    end
-
     def create_company
       name = Faker::Company.name
       website = "www.#{name.parameterize}.com"
