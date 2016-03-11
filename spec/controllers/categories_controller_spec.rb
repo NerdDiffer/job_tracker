@@ -7,11 +7,11 @@ describe CategoriesController, type: :controller do
     let(:categories) { double('categories') }
 
     before(:each) do
-      allow(Category).to receive(:all).and_return(categories)
+      allow(Category).to receive(:sorted).and_return(categories)
     end
 
     it 'calls .all on Category' do
-      expect(Category).to receive(:all)
+      expect(Category).to receive(:sorted)
       get :index
     end
     it 'returns http success' do

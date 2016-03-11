@@ -10,6 +10,8 @@ class Category < ActiveRecord::Base
 
   after_save :refresh_search_suggestions
 
+  scope :sorted, -> { order(name: :asc) }
+
   def permalink
     self.permalink = name.parameterize
   end

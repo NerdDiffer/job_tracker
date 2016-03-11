@@ -77,7 +77,7 @@ describe CompaniesCategoriesHelper do
 
   describe '#fetch_all_categories' do
     before(:each) do
-      allow(Category).to receive(:all).and_return(true)
+      allow(Category).to receive(:sorted).and_return(true)
     end
 
     it 'sets an ivar, @categories' do
@@ -85,7 +85,7 @@ describe CompaniesCategoriesHelper do
       expect(actual).not_to be_nil
     end
     it 'calls .all on Category' do
-      expect(Category).to receive(:all)
+      expect(Category).to receive(:sorted)
       helper.send(:fetch_all_categories)
     end
   end

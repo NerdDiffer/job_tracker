@@ -20,6 +20,6 @@ module CompaniesCategoriesHelper
   end
 
   def fetch_all_categories
-    @categories ||= Category.all
+    @categories ||= Category.sorted
   end
 end

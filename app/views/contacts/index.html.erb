@@ -6,16 +6,14 @@
 
 <%= link_to 'New contact', new_contact_path %>
 
-<table class='table table-striped table-hover'>
+<table class='contacts table table-striped table-hover'>
   <thead>
     <tr>
-      <th><%= generate_sortable_link('name') %></th>
-      <th>Title</th>
-      <th><%= generate_sortable_link('company_name', title: 'Company') %></th>
-      <th>Office Phone</th>
-      <th>Mobile Phone</th>
-      <th>Email</th>
-      <th class='actions' colspan='2'>Actions</th>
+      <th class='name'><%= generate_sortable_link('name') %></th>
+      <th class='company'><%= generate_sortable_link('company_name', title: 'Company') %></th>
+      <th class='phone'>Phone(s)</th>
+      <th class='email'>Email</th>
+      <th class='actions'>Actions</th>
     </tr>
   </thead>
 
@@ -23,13 +21,16 @@
     <% @contacts.each do |contact| %>
       <tr>
         <td><%= link_to(contact.name, contact) %></td>
-        <td><%= contact.title %></td>
         <td><%= link_to(contact.company.name, contact.company) if contact.company.present? %></td>
-        <td><%= contact.phone_office %></td>
-        <td><%= contact.phone_mobile %></td>
-        <td><%= contact.email %></td>
-        <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
-        <td><%= link_to 'Delete', contact, delete_link_opts %></td>
+        <td>
+          <%= contact.phone_office %><br />
+          <%= contact.phone_mobile %>
+        </td>
+        <td class='email'><%= contact.email %></td>
+        <td>
+          <%= link_to 'Edit', edit_contact_path(contact) %><br />
+          <%= link_to 'Delete', contact, delete_link_opts %>
+        </td>
       </tr>
     <% end %>
   </tbody>

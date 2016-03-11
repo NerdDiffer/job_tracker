@@ -2,25 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.contacts {
+.categories {
   &.table {
-    table-layout: fixed;
+    // table-layout: fixed;
     th {
-      &.name, &.company {
-        width: 15%;
-      }
-      &.phone {
-        width: 25%;
-      }
-      &.email {
-        width: 25%;
-      }
-      &.actions {
-        width: 10%;
+      &.name {
+        width: 20%;
       }
     }
     td {
-      &.email {
+      &.companies {
         text-overflow: ellipsis;
         word-wrap: break-word;
       }
