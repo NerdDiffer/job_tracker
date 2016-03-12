@@ -48,8 +48,7 @@ module SessionsHelper
 
   # redirects to stored location (or to a default location)
   def redirect_back_or(default)
-    forwarding_url = session[:forwarding_url]
-    session.delete(:forwarding_url)
+    forwarding_url = session.delete(:forwarding_url)
     redirect_to(forwarding_url || default)
   end
 

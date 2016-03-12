@@ -1,27 +1,32 @@
-class SessionsController < ApplicationController
+class Sessions::AccountsController < Sessions::BaseController
+  before_action :set_account, only: :create
+  before_action :set_user,    only: :create
+
+  attr_reader :account
+
   def new
     return redirect_to(user_path) if logged_in?
     # otherwise, display login page
   end
 
   def create
-    user = find_user_by_email if email_and_password?
-
-    if authenticated?(user)
-      login_authenticated_user(user)
+    if authenticated?
+      login_authenticated_user
     else
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
   end
 
-  def destroy
-    log_out if logged_in?
-    flash[:notice] = 'You have logged out'
-    redirect_to(root_url)
+  private
+
+  def set_account
+    @account = find_account_by_email if email_and_password?
   end
 
-  private
+  def set_user
+    @user = account.user rescue nil
+  end
 
   def email_and_password?
     email? && password?
@@ -35,17 +40,17 @@ class SessionsController < ApplicationController
     params[:session][:password].present?
   end
 
-  def find_user_by_email
+  def find_account_by_email
     email = params[:session][:email].downcase
-    User.find_by(email: email)
+    Users::Account.find_by(email: email)
   end
 
-  def authenticated?(user)
+  def authenticated?
     password = params[:session][:password]
     user && user.authenticate(password)
   end
 
-  def login_authenticated_user(user)
+  def login_authenticated_user
     log_in(user)
     flash[:success] = 'You are now logged in'
 
