@@ -18,8 +18,9 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'redcarpet', '~> 3.3.4'
 gem 'bootstrap-multiselect-rails', '~> 0.9.9'
 
-# Use ActiveModel has_secure_password
+# Authentication-related
 gem 'bcrypt', '~> 3.1.10'
+gem 'omniauth-twitter', '~> 1.2.1'
 
 # Use pry instead of irb when calling `$ rails console` from command line
 gem 'pry-rails', '~> 0.3.4'
