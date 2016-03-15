@@ -7,3 +7,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            scope: 'profile', name: 'google'
   provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
 end
+
+OmniAuth.config.on_failure = Proc.new do |env|
+  failure = Sessions::ProviderIdentitiesController.action(:failure)
+  failure.call(env)
+end
