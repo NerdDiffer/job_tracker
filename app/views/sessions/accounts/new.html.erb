@@ -1,7 +1,5 @@
 <div class='sessions'>
-  <p>This is a single user application. You cannot sign up for an account.</p>
-
-  <%= form_for(:session, :url => login_path) do |f| %>
+  <%= form_for(:session, url: login_path) do |f| %>
     <div class="field">
       <%= f.label :email %><br>
       <%= f.email_field :email %>
@@ -18,5 +16,4 @@
       <button type="submit" class="btn btn-default">Log in</button>
     </div>
   <% end %>
-
 </div>
