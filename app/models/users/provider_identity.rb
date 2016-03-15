@@ -3,6 +3,7 @@ module Users
   class ProviderIdentity < ActiveRecord::Base
     has_one :identity, as: :identifiable
 
+    validates_presence_of [:uid, :provider, :identity]
     validates :uid, uniqueness: { scope: :provider }
     validates_associated :identity
 

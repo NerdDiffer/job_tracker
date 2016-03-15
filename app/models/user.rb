@@ -29,16 +29,16 @@ class User < ActiveRecord::Base
     identifiable.forget if identifiable_account?
   end
 
+  def remember_token
+    identifiable.remember_token if identifiable_account?
+  end
+
   def authenticate(unencrypted_password)
     identifiable.authenticate(unencrypted_password) if identifiable_account?
   end
 
-  def authenticated?
-    identifiable.authenticated? if identifiable_account?
-  end
-
-  def remember_token
-    identifiable.remember_token if identifiable_account?
+  def authenticated?(attr, token)
+    identifiable.authenticated?(attr, token) if identifiable_account?
   end
 
   private

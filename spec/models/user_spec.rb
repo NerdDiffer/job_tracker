@@ -165,14 +165,14 @@ RSpec.describe User, type: :model do
 
       it 'calls #identifiable_account?' do
         expect(user).to receive(:identifiable_account?)
-        user.authenticated?
+        user.authenticated?('foo', 'bar')
       end
       it 'does NOT call #identifiable' do
         expect(user).not_to receive(:identifiable)
-        user.authenticated?
+        user.authenticated?('foo', 'bar')
       end
       it 'returns nil' do
-        expect(user.authenticated?).to be_nil
+        expect(user.authenticated?('foo', 'bar')).to be_nil
       end
     end
     context 'if #identifiable_account? is true' do
@@ -184,14 +184,14 @@ RSpec.describe User, type: :model do
 
       it 'calls #identifiable_account' do
         expect(user).to receive(:identifiable_account?)
-        user.authenticated?
+        user.authenticated?('foo', 'bar')
       end
       it 'calls #identifiable' do
         expect(user).to receive(:identifiable)
-        user.authenticated?
+        user.authenticated?('foo', 'bar')
       end
       it 'returns a truthy value' do
-        expect(user.authenticated?).to be_truthy
+        expect(user.authenticated?('foo', 'bar')).to be_truthy
       end
     end
   end

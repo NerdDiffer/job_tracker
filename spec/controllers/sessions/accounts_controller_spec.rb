@@ -171,17 +171,23 @@ describe Sessions::AccountsController, type: :controller do
     end
   end
 
-  describe '#find_user_by_email' do
-    it 'calls user.find_by with a hash' do
-      params = { session: { email: 'foo' } }
+  describe '#find_account_by_email' do
+    let(:params) { { session: { email: 'foo' } } }
+
+    before(:each) do
       allow(@controller).to receive(:params).and_return(params)
-      expect(User).to receive(:find_by).with(email: 'foo')
-      @controller.send(:find_user_by_email)
+      allow(Users::Account).to receive(:find_by)
+    end
+
+    it 'calls user.find_by with a hash' do
+      expect(Users::Account).to receive(:find_by).with(email: 'foo')
+      @controller.send(:find_account_by_email)
     end
   end
 
   describe '#authenticated?' do
-    params = { session: { password: 'foo' } }
+    let(:params) { { session: { password: 'foo' } } }
+
     before(:each) do
       allow(@controller).to receive(:params).and_return(params)
     end

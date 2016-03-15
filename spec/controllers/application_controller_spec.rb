@@ -128,6 +128,7 @@ RSpec.describe ApplicationController, type: :controller do
 
   describe '#remember' do
     before(:each) do
+      allow(user).to receive(:remember)
       allow(user).to receive(:id).and_return(1)
       allow(user).to receive(:remember_token).and_return('foo')
     end
@@ -149,6 +150,11 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe '#forget' do
+    before(:each) do
+      allow(user).to receive(:forget)
+      allow(cookies).to receive(:delete).with(:remember_token)
+      allow(cookies).to receive(:delete).with(:user_id)
+    end
     after(:each) do
       @controller.forget(user)
     end
@@ -157,11 +163,9 @@ RSpec.describe ApplicationController, type: :controller do
       expect(user).to receive(:forget)
     end
     it 'deletes the :user_id key from the cookie' do
-      allow(cookies).to receive(:delete).with(:remember_token)
       expect(cookies).to receive(:delete).with(:user_id)
     end
     it 'deletes the :remember_token key from the cookie' do
-      allow(cookies).to receive(:delete).with(:user_id)
       expect(cookies).to receive(:delete).with(:remember_token)
     end
   end
@@ -260,9 +264,13 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe '#authenticated_user?' do
-    it 'calls #authenticated? on the user' do
-      cookies = { remember_token: 'foo' }
+    let(:cookies) { { remember_token: 'foo' } }
+
+    before(:each) do
       allow(@controller).to receive(:cookies).and_return(cookies)
+    end
+
+    it 'calls #authenticated? on the user' do
       expect(user).to receive(:authenticated?).with(:remember, 'foo')
       @controller.send(:authenticated_user?, user)
     end

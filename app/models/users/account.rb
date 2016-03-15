@@ -7,10 +7,11 @@ module Users
 
     attr_accessor :remember_token
 
-    has_one :identity, as: :identifiable
-
     has_secure_password
 
+    has_one :identity, as: :identifiable
+
+    validates :identity, presence: true
     validates :email,
               length: { maximum: 255 },
               format: { with: VALID_EMAIL_REGEX },
