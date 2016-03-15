@@ -67,11 +67,11 @@ describe Users::AuthenticatedSessions, type: :model do
         allow(ActiveModel::SecurePassword)
           .to receive(:min_cost)
           .and_return(false)
-        allow(BCrypt::Engine).to receive(:cost).and_return('###########')
+        allow(BCrypt::Engine).to receive(:cost)
+        allow(BCrypt::Password).to receive(:create)
       end
 
       it 'calls BCrypt::Engine.cost' do
-        skip 'why is this failing?'
         expect(BCrypt::Engine).to receive(:cost)
         account.send(:cost)
       end
