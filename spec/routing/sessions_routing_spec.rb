@@ -23,8 +23,9 @@ end
 describe Sessions::ProviderIdentitiesController, type: :routing do
   describe 'routing' do
     it 'routes to #new' do
-      expected = 'sessions/provider_identities#create'
-      expect(get: '/auth/twitter/callback').to route_to(expected)
+      expected = { controller: 'sessions/provider_identities',
+                   action: 'create', provider: 'name_of_provider' }
+      expect(get: '/auth/name_of_provider/callback').to route_to(expected)
     end
 
     it 'routes to #create' do

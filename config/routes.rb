@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   match '/search_suggestions', to: 'search_suggestions#index', via: :get
 
   # Sessions
-  get '/auth/twitter/callback', to: 'sessions/provider_identities#create'
-  get '/auth/failure',          to: 'sessions/provider_identities#failure'
+  get '/auth/:provider/callback', to: 'sessions/provider_identities#create'
+  get '/auth/failure',            to: 'sessions/provider_identities#failure'
   get    'login',  to: 'sessions/accounts#new'
   post   'login',  to: 'sessions/accounts#create'
   delete 'logout', to: 'sessions/base#destroy'
