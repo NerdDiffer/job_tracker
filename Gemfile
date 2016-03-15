@@ -21,8 +21,8 @@ gem 'bootstrap-multiselect-rails', '~> 0.9.9'
 # Authentication-related
 gem 'bcrypt', '~> 3.1.10'
 gem 'omniauth-twitter', '~> 1.2.1'
-gem 'omniauth-google-oauth2',  '~> 0.4.1'
-gem 'omniauth-github',  '~> 1.1.2'
+gem 'omniauth-google-oauth2', '~> 0.4.1'
+gem 'omniauth-github', '~> 1.1.2'
 
 # Use pry instead of irb when calling `$ rails console` from command line
 gem 'pry-rails', '~> 0.3.4'
