@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
+    @user = Users::Account.new
   end
 
   # GET /users/1/edit
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    @user = Users::Account.new(user_params)
 
     if @user.save
       log_in @user
@@ -51,7 +51,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(whitelisted_attr)
+    params.require(:users_account).permit(whitelisted_attr)
   end
 
   def whitelisted_attr
