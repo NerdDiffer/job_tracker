@@ -1,5 +1,5 @@
 module Seed
-  @initial_users_count   = 5
+  @initial_users_count   = 6
   @initial_records_count = 30
   @initial_sources = %w(Other LinkedIn Glassdoor StackOverflow GitHub Dice
     Indeed AngelList Craigslist Hired SimplyHired Beyond HackerNews)
@@ -7,8 +7,9 @@ module Seed
     Construction Education Finance Food Gaming Government Health Hospitality
     Industrial Insurance Legal Media Music Non-Profit Real-Estate Retail
     Search Security Science Software Transportation Web)
-  @default_user = { first_name: 'Foo', last_name: 'Bar',
-                    email: 'foobar@example.com' }
+  @default_account = { first_name: 'Foo', last_name: 'Bar',
+                       email: 'foobar@example.com' }
+  @default_provider = 'developer'
   @default_password = 'password'
 
   class << self
@@ -19,6 +20,7 @@ module Seed
     attr_accessor :initial_sources
     attr_accessor :initial_categories
     attr_accessor :default_password
-    attr_reader   :default_user
+    attr_accessor :default_provider
+    attr_reader   :default_account
   end
 end

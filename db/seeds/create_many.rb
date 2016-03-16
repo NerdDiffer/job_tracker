@@ -1,9 +1,16 @@
 module Seed
   class << self
     def users
-      create_default_user
-      other_user_count = initial_users_count - 1
-      other_user_count.times { create_user }
+      create_default_account
+
+      num_of_other_accounts = (initial_users_count / 2) - 1
+      num_of_other_accounts.times { create_account }
+
+      num_of_omni_auth_users = (initial_users_count / 2)
+      num_of_omni_auth_users.times do |i|
+        uid = (i + 1)
+        create_omni_auth_user(uid)
+      end
     end
 
     def companies_categories_companies_categories
