@@ -1,13 +1,18 @@
 Rails.application.routes.draw do
+  root 'home#index'
+
   match '/search_suggestions', to: 'search_suggestions#index', via: :get
 
   # Sessions
-  get    'login'  => 'sessions#new'
-  post   'login'  => 'sessions#create'
-  delete 'logout' => 'sessions#destroy'
+  get    '/auth/:provider/callback', to: 'sessions/omni_auth_users#create'
+  get    '/auth/failure',            to: 'sessions/omni_auth_users#failure'
+  get    'login',                    to: 'sessions/accounts#new'
+  post   'login',                    to: 'sessions/accounts#create'
+  delete 'logout',                   to: 'sessions/base#destroy'
 
   # User accounts, profiles
-  resource :profile, controller: 'users', as: 'user'
+  get '/register', to: 'users#new'
+  resource :profile, controller: 'users', as: 'user', except: :new
 
   resources :notes,         only: :index
   resources :cover_letters, only: :index, controller: 'job_applications/cover_letters'
@@ -24,6 +29,4 @@ Rails.application.routes.draw do
   resources :contacts do
     resources :notes, except: :index
   end
-
-  root 'home#index'
 end
