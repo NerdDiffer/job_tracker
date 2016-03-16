@@ -217,7 +217,7 @@ describe Sessions::AccountsController, type: :controller do
         expect(flash[:success]).not_to be_nil
       end
       it 'calls #redirect_back_or with user' do
-        expect(@controller).to receive(:redirect_back_or).with(user_path)
+        expect(@controller).to receive(:redirect_back_or).with(root_url)
         @controller.send(:login_authenticated_user)
       end
     end

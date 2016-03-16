@@ -14,14 +14,14 @@ class User < ActiveRecord::Base
 
   validates :type, presence: true
 
+  def account?
+    type == account
+  end
+
   private
 
   def account
     'Users::Account'
-  end
-
-  def account?
-    type == account
   end
 
   def add_type_error

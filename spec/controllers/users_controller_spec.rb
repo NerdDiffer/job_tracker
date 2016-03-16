@@ -31,8 +31,9 @@ RSpec.describe UsersController, type: :controller do
   describe 'POST #create' do
     let(:attr_for_create) do
       {
-        first_name: 'foo', last_name: 'bar',
-        email: 'foo@example.com', password: 'foobar'
+        name: 'Foo Bar',
+        email: 'foo@example.com',
+        password: 'foobar'
       }
     end
 

@@ -11,12 +11,11 @@ module Seed
     end
 
     def create_account
-      first_name = Faker::Name.first_name
-      last_name  = Faker::Name.last_name
-      email      = Faker::Internet.safe_email(first_name)
+      name = Faker::Name.name
+      email      = Faker::Internet.safe_email(name)
       password   = default_password
       password_confirmation = default_password
-      Users::Account.create!(first_name: first_name, last_name: last_name,
+      Users::Account.create!(name: name,
                              email: email,
                              password: password,
                              password_confirmation: password_confirmation)

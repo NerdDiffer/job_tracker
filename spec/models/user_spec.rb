@@ -3,13 +3,6 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   let(:user) { build(:user) }
 
-  describe '#account' do
-    it 'returns name of Users::Account class as a string' do
-      expected = 'Users::Account'
-      expect(user.send(:account)).to eq expected
-    end
-  end
-
   describe '#account?' do
     let(:type)    { 'type' }
     let(:account) { 'account' }
@@ -19,7 +12,7 @@ RSpec.describe User, type: :model do
       allow(user).to receive(:account).and_return(account)
     end
     after(:each) do
-      user.send(:account?)
+      user.account?
     end
 
     it 'calls #type' do
@@ -32,6 +25,13 @@ RSpec.describe User, type: :model do
 
     it 'type is compared to account' do
       expect(type).to receive(:==).with(account)
+    end
+  end
+
+  describe '#account' do
+    it 'returns name of Users::Account class as a string' do
+      expected = 'Users::Account'
+      expect(user.send(:account)).to eq expected
     end
   end
 

@@ -54,7 +54,7 @@ module Sessions
         forget(user)
       end
 
-      redirect_back_or(user_path)
+      redirect_back_or(root_url)
     end
 
     def remember_me?

@@ -11,12 +11,13 @@ module Sessions
         redirect_to(action: 'failure')
         return
       end
-      redirect_to(root_url, notice: 'Signed in')
+      flash[:success] = 'Signed in'
+      redirect_to(root_url)
     end
 
     def failure
-      danger = { danger: 'There was an error authenticating you.' }
-      redirect_to(root_url, flash: danger)
+      flash[:danger] = 'There was an error authenticating you.'
+      redirect_to(root_url)
     end
 
     private

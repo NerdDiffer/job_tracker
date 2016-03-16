@@ -22,7 +22,9 @@ module Users
       private
 
       def extract_params(auth)
-        { provider: auth['provider'], uid: auth['uid'] }
+        { provider: auth['provider'],
+          uid:      auth['uid'],
+          name:     auth['info']['name'] }
       end
     end
 

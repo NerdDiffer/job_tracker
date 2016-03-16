@@ -7,8 +7,7 @@ module Seed
     Construction Education Finance Food Gaming Government Health Hospitality
     Industrial Insurance Legal Media Music Non-Profit Real-Estate Retail
     Search Security Science Software Transportation Web)
-  @default_account = { first_name: 'Foo', last_name: 'Bar',
-                       email: 'foobar@example.com' }
+  @default_account = { name: 'Foo Bar', email: 'foobar@example.com' }
   @default_provider = 'developer'
   @default_password = 'password'
 

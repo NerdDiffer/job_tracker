@@ -52,12 +52,16 @@ describe Users::OmniAuthUser, type: :model do
 
   describe '.extract_params' do
     let(:auth) do
-      { 'provider' => 'developer', 'uid' => '12345' }
+      {
+        'provider' => 'developer',
+        'uid'      => '12345',
+        'info'     => { 'name' => 'Foo Bar' }
+      }
     end
 
-    it 'extracts the "provider" and "uid" keys from passed-in hash' do
+    it 'extracts the "provider", "uid" and "name" keys from passed-in hash' do
       actual = described_class.send(:extract_params, auth)
-      expected = { provider: 'developer', uid: '12345' }
+      expected = { provider: 'developer', uid: '12345', name: 'Foo Bar' }
       expect(actual).to eq expected
     end
   end
