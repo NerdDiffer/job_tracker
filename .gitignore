@@ -1,5 +1,6 @@
 # Ignore environment variables with sensitive login info
 .env*
+config/env_vars.yml
 
 # Ignore redis dump file
 dump.rdb
