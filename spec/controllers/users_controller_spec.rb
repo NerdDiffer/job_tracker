@@ -46,17 +46,17 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it 'sets @user to a new User' do
-        post(:create, user: attr_for_create)
+        post(:create, users_account: attr_for_create)
         expect(assigns(:user)).to be_a(User)
       end
 
       it 'calls log_in' do
         expect(@controller).to receive(:log_in)
-        post(:create, user: attr_for_create)
+        post(:create, users_account: attr_for_create)
       end
 
       it 'redirects to the created user' do
-        post(:create, user: attr_for_create)
+        post(:create, users_account: attr_for_create)
         expect(response).to redirect_to(user_path)
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe UsersController, type: :controller do
     context 'with invalid params' do
       before(:each) do
         allow(user).to receive(:save).and_return(false)
-        post(:create, user: attr_for_create)
+        post(:create, users_account: attr_for_create)
       end
 
       it 're-renders the "new" template' do
@@ -75,7 +75,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'PUT #update' do
     let(:attr_for_update) do
-      { id: user.id, user: { email: 'bar@example.com' } }
+      { users_account: { email: 'bar@example.com' } }
     end
 
     before(:each) do
