@@ -2,7 +2,6 @@ module Users
   class OmniAuthUser < ::User
     before_validation :downcase_provider
 
-    validate  :validate_type
     validates :provider, presence: true
     validates :uid, presence: true, uniqueness: { scope: :provider }
 
@@ -32,10 +31,6 @@ module Users
 
     def downcase_provider
       self.provider = provider.downcase
-    end
-
-    def validate_type
-      add_type_error if account?
     end
   end
 end

@@ -34,23 +34,4 @@ RSpec.describe User, type: :model do
       expect(user.send(:account)).to eq expected
     end
   end
-
-  describe '#add_type_error' do
-    before(:each) do
-      allow(user).to receive(:account).and_return('account')
-    end
-    after(:each) do
-      user.errors.clear
-    end
-
-    it 'calls #account' do
-      expect(user).to receive(:account)
-      user.send(:add_type_error)
-    end
-    it 'adds an error to the :type attribute' do
-      user.send(:add_type_error)
-      actual = user.errors[:type].any?
-      expect(actual).to be_truthy
-    end
-  end
 end

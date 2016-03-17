@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = Users::Account.new
+    @user = new_account
   end
 
   # GET /users/1/edit
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = Users::Account.new(user_params)
+    @user = new_account(user_params)
 
     if @user.save
       log_in @user
@@ -48,6 +48,10 @@ class UsersController < ApplicationController
   def set_user
     id = current_user.id
     @user = User.find(id)
+  end
+
+  def new_account(params_for_new_account = {})
+    Users::Account.new(params_for_new_account)
   end
 
   def user_params

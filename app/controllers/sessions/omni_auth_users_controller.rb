@@ -24,18 +24,18 @@ module Sessions
 
     def set_user
       request_auth_hash
-      @user = find_omni_auth_user || create_omni_auth_user!
+      @user = find || create!
     end
 
     def request_auth_hash
       @auth_hash = request.env['omniauth.auth']
     end
 
-    def find_omni_auth_user
+    def find
       Users::OmniAuthUser.find_from_omni_auth(auth_hash)
     end
 
-    def create_omni_auth_user!
+    def create!
       Users::OmniAuthUser.create_from_omni_auth!(auth_hash)
     end
   end

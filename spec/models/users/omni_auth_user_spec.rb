@@ -30,7 +30,7 @@ describe Users::OmniAuthUser, type: :model do
     end
   end
 
-  describe '.create_from_omni_auth!!' do
+  describe '.create_from_omni_auth!' do
     let(:auth) { :auth }
     let(:params) { :params }
 
@@ -63,38 +63,6 @@ describe Users::OmniAuthUser, type: :model do
       actual = described_class.send(:extract_params, auth)
       expected = { provider: 'developer', uid: '12345', name: 'Foo Bar' }
       expect(actual).to eq expected
-    end
-  end
-
-  describe '#validate_type' do
-    it 'calls #account?' do
-      allow(omni_auth_user).to receive(:account?)
-      expect(omni_auth_user).to receive(:account?)
-      omni_auth_user.send(:validate_type)
-    end
-
-    context 'if #account? is true' do
-      before(:each) do
-        allow(omni_auth_user).to receive(:account?).and_return(true)
-        allow(omni_auth_user).to receive(:add_type_error)
-      end
-
-      it 'calls #add_type_error' do
-        expect(omni_auth_user).to receive(:add_type_error)
-        omni_auth_user.send(:validate_type)
-      end
-    end
-
-    context 'if #account? is false' do
-      before(:each) do
-        allow(omni_auth_user).to receive(:account?).and_return(false)
-        omni_auth_user.send(:validate_type)
-      end
-
-      it 'does NOT call #add_type_error' do
-        expect(omni_auth_user).not_to receive(:add_type_error)
-        omni_auth_user.send(:validate_type)
-      end
     end
   end
 end

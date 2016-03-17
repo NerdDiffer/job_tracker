@@ -4,7 +4,6 @@ module Users
 
     before_validation :downcase_email
 
-    validate  :validate_type
     validates :provider, absence: true
     validates :uid, absence: true
     validates :email,
@@ -20,10 +19,6 @@ module Users
 
     def downcase_email
       self.email = email.downcase if email.present?
-    end
-
-    def validate_type
-      add_type_error unless account?
     end
   end
 end

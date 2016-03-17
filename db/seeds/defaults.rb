@@ -7,9 +7,9 @@ module Seed
     Construction Education Finance Food Gaming Government Health Hospitality
     Industrial Insurance Legal Media Music Non-Profit Real-Estate Retail
     Search Security Science Software Transportation Web)
-  @default_account = { name: 'Foo Bar', email: 'foobar@example.com' }
   @default_provider = 'developer'
   @default_password = 'password'
+  @default_account = { name: 'Foo Bar', email: 'foobar@example.com' }
 
   class << self
     # number of users (including yourself) to start out
@@ -18,8 +18,8 @@ module Seed
     attr_accessor :initial_records_count
     attr_accessor :initial_sources
     attr_accessor :initial_categories
-    attr_accessor :default_password
     attr_accessor :default_provider
+    attr_accessor :default_password
     attr_reader   :default_account
   end
 end

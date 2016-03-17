@@ -3,8 +3,6 @@ class User < ActiveRecord::Base
 
   attr_accessor :remember_token
 
-  has_secure_password(validations: false)
-
   has_many :contacts, dependent: :destroy
   has_many :notes, inverse_of: :user, dependent: :destroy
   has_many :job_applications, dependent: :destroy
@@ -14,6 +12,8 @@ class User < ActiveRecord::Base
 
   validates :type, presence: true
 
+  has_secure_password(validations: false)
+
   def account?
     type == account
   end
@@ -22,9 +22,5 @@ class User < ActiveRecord::Base
 
   def account
     'Users::Account'
-  end
-
-  def add_type_error
-    errors.add(:type, "Type must NOT be #{account}")
   end
 end

@@ -3,7 +3,7 @@ module EnvVars
     config.before_configuration do
       env_file_name = Rails.root.join('config', 'env_vars.yml').to_s
 
-      if File.exists?(env_file_name)
+      if File.exist?(env_file_name)
         env_file = YAML.load_file(env_file_name)
         env = Rails.env
         keys = env_file[env]

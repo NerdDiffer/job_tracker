@@ -11,9 +11,9 @@ module Seed
     end
 
     def create_account
-      name = Faker::Name.name
-      email      = Faker::Internet.safe_email(name)
-      password   = default_password
+      name     = Faker::Name.name
+      email    = Faker::Internet.safe_email(name)
+      password = default_password
       password_confirmation = default_password
       Users::Account.create!(name: name,
                              email: email,
@@ -22,13 +22,16 @@ module Seed
     end
 
     def create_omni_auth_user(uid)
-      Users::OmniAuthUser.create!(provider: default_provider, uid: uid)
+      Users::OmniAuthUser.create!(provider: default_provider,
+                                  uid: uid,
+                                  name: Faker::Name.name)
     end
 
     def create_company
       name = Faker::Company.name
       website = "www.#{name.parameterize}.com"
-      Company.create!(name: name, website: website)
+      Company.create!(name: name,
+                      website: website)
     end
 
     def create_category(name)
@@ -62,10 +65,15 @@ module Seed
       phone_2 = Faker::PhoneNumber.phone_number
       email = Faker::Internet.safe_email(first_name)
       title = Faker::Name.title
-      Contact.create!(company_id: company_id, user_id: user_id,
-                      first_name: first_name, last_name: last_name,
-                      phone_office: phone_1, phone_mobile: phone_2,
-                      email: email, title: title)
+
+      Contact.create!(company_id: company_id,
+                      user_id: user_id,
+                      first_name: first_name,
+                      last_name: last_name,
+                      phone_office: phone_1,
+                      phone_mobile: phone_2,
+                      email: email,
+                      title: title)
     end
 
     def create_note(model, notable_id, user_id)
@@ -92,12 +100,10 @@ module Seed
     end
 
     def create_cover_letter(job_application_id, date)
-      content = Faker::Lorem.paragraph
-      sent_date = Faker::Date.between(date, Date.today)
       cover_letter_params = {
         job_application_id: job_application_id,
-        content: content,
-        sent_date: sent_date
+        content: Faker::Lorem.paragraph,
+        sent_date: Faker::Date.between(date, Date.today)
       }
       JobApplications::CoverLetter.create!(cover_letter_params)
     end

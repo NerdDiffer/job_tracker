@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
-  let(:user) { build(:user, id: 1) }
+  let(:user) { build(:user) }
 
   before(:each) { log_in_as(user) }
 
@@ -17,6 +17,15 @@ RSpec.describe UsersController, type: :controller do
     it 'assigns a new user as @user' do
       get(:new)
       expect(assigns(:user)).to be_a_new(User)
+    end
+    it 'renders the "new" template' do
+      get(:new)
+      expect(response).to render_template 'new'
+    end
+    it 'calls #new_account' do
+      allow(controller).to receive(:new_account)
+      expect(controller).to receive(:new_account).with(no_args)
+      controller.new
     end
   end
 
@@ -37,8 +46,21 @@ RSpec.describe UsersController, type: :controller do
       }
     end
 
+    shared_examples_for 'calls these methods every time' do
+      after(:each) do
+        post(:create, users_account: attr_for_create)
+      end
+
+      it 'calls #new_account' do
+        expect(controller).to receive(:new_account)
+      end
+      it 'calls #user_params' do
+        expect(controller).to receive(:user_params)
+      end
+    end
+
     before(:each) do
-      allow(User).to receive(:new).and_return(user)
+      allow(controller).to receive(:new_account).and_return(user)
     end
 
     context 'with valid params' do
@@ -46,16 +68,16 @@ RSpec.describe UsersController, type: :controller do
         allow(user).to receive(:save).and_return(true)
       end
 
+      it_behaves_like 'calls these methods every time'
+
       it 'sets @user to a new User' do
         post(:create, users_account: attr_for_create)
         expect(assigns(:user)).to be_a(User)
       end
-
       it 'calls log_in' do
-        expect(@controller).to receive(:log_in)
+        expect(controller).to receive(:log_in)
         post(:create, users_account: attr_for_create)
       end
-
       it 'redirects to the created user' do
         post(:create, users_account: attr_for_create)
         expect(response).to redirect_to(user_path)
@@ -67,6 +89,8 @@ RSpec.describe UsersController, type: :controller do
         allow(user).to receive(:save).and_return(false)
         post(:create, users_account: attr_for_create)
       end
+
+      it_behaves_like 'calls these methods every time'
 
       it 're-renders the "new" template' do
         expect(response).to render_template('new')
@@ -133,6 +157,48 @@ RSpec.describe UsersController, type: :controller do
     it 'redirects to the users list' do
       delete(:destroy, id: 'foo')
       expect(response).to redirect_to(user_url)
+    end
+  end
+
+  describe '#set_user' do
+    before(:each) do
+      allow(controller).to receive(:current_user).and_return(user)
+      allow(user).to receive(:id).and_return(1)
+      allow(User).to receive(:find).and_return(user)
+    end
+
+    it 'calls #current_user' do
+      expect(controller).to receive(:current_user)
+      controller.send(:set_user)
+    end
+    it 'calls #id on the current_user' do
+      expect(user).to receive(:id)
+      controller.send(:set_user)
+    end
+    it 'calls #find on User' do
+      expect(User).to receive(:find).with(1)
+      controller.send(:set_user)
+    end
+    it 'sets a value for @user' do
+      expect { controller.send(:set_user) }
+        .to change { assigns(:user) }
+        .from(nil).to(user)
+    end
+  end
+
+  describe '#new_account' do
+    before(:each) do
+      allow(Users::Account).to receive(:new)
+    end
+
+    it 'calls .new on Users::Account with an empty hash' do
+      expect(Users::Account).to receive(:new).with({})
+      controller.send(:new_account)
+    end
+    it 'calls .new on Users::Account with some params' do
+      mock_params = { foo: 'bar' }
+      expect(Users::Account).to receive(:new).with(mock_params)
+      controller.send(:new_account, mock_params)
     end
   end
 

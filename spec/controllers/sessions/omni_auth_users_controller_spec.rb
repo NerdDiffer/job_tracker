@@ -52,23 +52,23 @@ describe Sessions::OmniAuthUsersController, type: :controller do
   end
 
   describe '#set_user' do
-    context 'if #find_omni_auth_user is truthy' do
+    context 'if #find is truthy' do
       before(:each) do
         allow(@controller).to receive(:request_auth_hash)
-        allow(@controller).to receive(:find_omni_auth_user).and_return(true)
-        allow(@controller).to receive(:create_omni_auth_user!)
+        allow(@controller).to receive(:find).and_return(true)
+        allow(@controller).to receive(:create!)
       end
 
       it 'calls #request_auth_hash' do
         expect(@controller).to receive(:request_auth_hash)
         @controller.send(:request_auth_hash)
       end
-      it 'calls #find_omni_auth_user' do
-        expect(@controller).to receive(:find_omni_auth_user)
+      it 'calls #find' do
+        expect(@controller).to receive(:find)
         @controller.send(:set_user)
       end
-      it 'does NOT call #create_omni_auth_user!' do
-        expect(@controller).not_to receive(:create_omni_auth_user!)
+      it 'does NOT call #create!' do
+        expect(@controller).not_to receive(:create!)
         @controller.send(:set_user)
       end
       it 'sets a value for @user' do
@@ -78,23 +78,23 @@ describe Sessions::OmniAuthUsersController, type: :controller do
       end
     end
 
-    context 'if #find_omni_auth_user is falsey' do
+    context 'if #find is falsey' do
       before(:each) do
         allow(@controller).to receive(:request_auth_hash)
-        allow(@controller).to receive(:find_omni_auth_user).and_return(nil)
-        allow(@controller).to receive(:create_omni_auth_user!).and_return(:foo)
+        allow(@controller).to receive(:find).and_return(nil)
+        allow(@controller).to receive(:create!).and_return(:foo)
       end
 
       it 'calls #request_auth_hash' do
         expect(@controller).to receive(:request_auth_hash)
         @controller.send(:request_auth_hash)
       end
-      it 'calls #find_omni_auth_user' do
-        expect(@controller).to receive(:find_omni_auth_user)
+      it 'calls #find' do
+        expect(@controller).to receive(:find)
         @controller.send(:set_user)
       end
-      it 'calls #create_omni_auth_user!' do
-        expect(@controller).to receive(:create_omni_auth_user!)
+      it 'calls #create!' do
+        expect(@controller).to receive(:create!)
         @controller.send(:set_user)
       end
       it 'sets a value for @user' do
@@ -107,20 +107,20 @@ describe Sessions::OmniAuthUsersController, type: :controller do
     context 'if calls to both methods return falsey values' do
       before(:each) do
         allow(@controller).to receive(:request_auth_hash)
-        allow(@controller).to receive(:find_omni_auth_user).and_return(nil)
-        allow(@controller).to receive(:create_omni_auth_user!).and_return(nil)
+        allow(@controller).to receive(:find).and_return(nil)
+        allow(@controller).to receive(:create!).and_return(nil)
       end
 
       it 'calls #request_auth_hash' do
         expect(@controller).to receive(:request_auth_hash)
         @controller.send(:request_auth_hash)
       end
-      it 'calls #find_omni_auth_user' do
-        expect(@controller).to receive(:find_omni_auth_user)
+      it 'calls #find' do
+        expect(@controller).to receive(:find)
         @controller.send(:set_user)
       end
-      it 'calls #create_omni_auth_user!' do
-        expect(@controller).to receive(:create_omni_auth_user!)
+      it 'calls #create!' do
+        expect(@controller).to receive(:create!)
         @controller.send(:set_user)
       end
       it '@user is nil' do
@@ -162,13 +162,13 @@ describe Sessions::OmniAuthUsersController, type: :controller do
     end
   end
 
-  describe '#find_omni_auth_user' do
+  describe '#find' do
     before(:each) do
       allow(@controller).to receive(:auth_hash).and_return(:foo)
       allow(Users::OmniAuthUser).to receive(:find_from_omni_auth)
     end
     after(:each) do
-      @controller.send(:find_omni_auth_user)
+      @controller.send(:find)
     end
 
     it 'calls #auth_hash' do
@@ -179,19 +179,19 @@ describe Sessions::OmniAuthUsersController, type: :controller do
     end
   end
 
-  describe '#create_omni_auth_user!' do
+  describe '#create!' do
     before(:each) do
       allow(@controller).to receive(:auth_hash).and_return(:foo)
       allow(Users::OmniAuthUser).to receive(:create_from_omni_auth!)
     end
     after(:each) do
-      @controller.send(:create_omni_auth_user!)
+      @controller.send(:create!)
     end
 
     it 'calls #auth_hash' do
       expect(@controller).to receive(:auth_hash)
     end
-    it 'calls .find_from_omni_auth! on Users::OmniAuthUser' do
+    it 'calls .create_from_omni_auth! on Users::OmniAuthUser' do
       expect(Users::OmniAuthUser)
         .to receive(:create_from_omni_auth!)
         .with(:foo)
