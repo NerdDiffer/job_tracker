@@ -5,8 +5,6 @@ RSpec.describe CompaniesController, type: :controller do
   let(:company) { build(:company) }
   let(:job_application) { build(:job_application) }
 
-  before(:each) { log_in_as(user) }
-
   describe 'GET #index' do
     before(:each) do
       allow(@controller)
@@ -60,6 +58,8 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe 'GET #new' do
+    before(:each) { log_in_as(user) }
+
     it 'assigns a new company as @company' do
       get(:new)
       expect(assigns(:company)).to be_a_new(Company)
@@ -72,6 +72,7 @@ RSpec.describe CompaniesController, type: :controller do
     end
 
     before(:each) do
+      log_in_as(user)
       allow(Company).to receive(:new).and_return(company)
     end
 
