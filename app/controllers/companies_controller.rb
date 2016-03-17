@@ -18,8 +18,10 @@ class CompaniesController < ApplicationController
   # GET /companies/1
   # GET /companies/1.json
   def show
-    @contacts = contacts_belonging_to_user_and_current_company
-    @job_applications = job_applications_belonging_to_user_and_current_company
+    if logged_in?
+      @contacts = contacts_belonging_to_user_and_current_company
+      @job_applications = job_applications_belonging_to_user_and_current_company
+    end
   end
 
   # GET /companies/new

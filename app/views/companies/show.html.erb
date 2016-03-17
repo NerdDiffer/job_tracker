@@ -26,24 +26,9 @@
   <% end %>
 </p>
 
-<div class='attached_records'>
-  <h2>Contacts</h2>
-  <%= link_to(
-    'Add Contact',
-    new_contact_path({ company_id: @company.id })
-  ) %>
-  <% @contacts.each do |contact| %>
-    <li><%= link_to contact.name, contact %></li>
-  <% end %>
-</div>
-
-<div class='attached_records'>
-  <h2>Job Applications</h2>
-  <%= link_to(
-    'Add Job Application',
-    new_job_application_path({ company_id: @company.id })
-  ) %>
-  <% @job_applications.each do |job_application| %>
-    <li><%= link_to job_application.title, job_application %></li>
-  <% end %>
-</div>
+<% if logged_in? %>
+  <% locals = { company: @company,
+                contacts: @contacts,
+                job_applications: @job_applications } %>
+  <%= render(partial: 'user_attached_records', locals: locals) %>
+<% end %>

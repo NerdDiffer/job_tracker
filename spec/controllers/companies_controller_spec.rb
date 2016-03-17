@@ -25,34 +25,58 @@ RSpec.describe CompaniesController, type: :controller do
   end
 
   describe 'GET #show' do
-    before(:each) do
-      allow(Company).to receive(:find).and_return(company)
-      allow(controller)
-        .to receive(:contacts_belonging_to_user_and_current_company)
-        .and_return('contacts')
-      allow(controller)
-        .to receive(:job_applications_belonging_to_user_and_current_company)
-        .and_return('job_applications')
-      get(:show, id: 'example-company')
-    end
-
-    it 'returns a 200' do
-      expect(response).to have_http_status(200)
-    end
-    it 'assigns the requested company as @company' do
-      expect(assigns(:company)).to eq(company)
-    end
-    it 'renders show' do
-      expect(response).to render_template(:show)
-    end
-    describe '@contacts' do
-      it 'assigns results to @contacts' do
-        expect(assigns(:contacts)).to eq 'contacts'
+    shared_examples 'expectations whether logged in or not' do
+      it 'returns a 200' do
+        expect(response).to have_http_status(200)
+      end
+      it 'assigns the requested company as @company' do
+        expect(assigns(:company)).to eq(company)
+      end
+      it 'renders show' do
+        expect(response).to render_template(:show)
       end
     end
-    describe '@job_applications' do
-      it 'assigns results to @job_applications' do
-        expect(assigns(:job_applications)).to eq 'job_applications'
+
+    context 'when logged in' do
+      before(:each) do
+        log_in_as(user)
+        allow(Company).to receive(:find).and_return(company)
+        allow(controller)
+          .to receive(:contacts_belonging_to_user_and_current_company)
+          .and_return('contacts')
+        allow(controller)
+          .to receive(:job_applications_belonging_to_user_and_current_company)
+          .and_return('job_applications')
+        get(:show, id: 'example-company')
+      end
+
+      it_behaves_like 'expectations whether logged in or not'
+
+      describe '@contacts' do
+        it 'assigns results to @contacts' do
+          expect(assigns(:contacts)).to eq 'contacts'
+        end
+      end
+      describe '@job_applications' do
+        it 'assigns results to @job_applications' do
+          expect(assigns(:job_applications)).to eq 'job_applications'
+        end
+      end
+    end
+
+    context 'when NOT logged in' do
+      before(:each) do
+        allow(Company).to receive(:find).and_return(company)
+        get(:show, id: 'example-company')
+      end
+
+      it_behaves_like 'expectations whether logged in or not'
+
+      it '@contacts is nil' do
+        expect(assigns(:contacts)).to be_nil
+      end
+      it '@job_applications is nil' do
+        expect(assigns(:job_applications)).to be_nil
       end
     end
   end
