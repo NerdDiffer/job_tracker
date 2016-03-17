@@ -17,6 +17,7 @@ gem 'coffee-rails', '~> 4.1.1'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'redcarpet', '~> 3.3.4'
 gem 'bootstrap-multiselect-rails', '~> 0.9.9'
+gem 'font-awesome-rails', '~> 4.5.0.1'
 
 # Authentication
 gem 'bcrypt',                 '~> 3.1.10'
