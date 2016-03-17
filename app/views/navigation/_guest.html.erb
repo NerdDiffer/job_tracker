@@ -1,0 +1,36 @@
+<ul class='nav navbar-nav navbar-right nav-pills'>
+  <li><%= link_to('Companies', companies_path) %></li>
+  <li><%= link_to('About', about_path) %></li>
+  <li class='dropdown'>
+    <%= link_to('Login', '#', dropdown_opts) %>
+    <ul class='dropdown-menu' id='login_or_register'>
+      <li>
+        <%= link_to '/auth/github' do %>
+          <i class='fa fa-github'><span>Via GitHub</span></i>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to '/auth/google' do %>
+          <i class='fa fa-google'><span>Via Google</span></i>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to '/auth/twitter' do %>
+          <i class='fa fa-twitter'><span>Via Twitter</span></i>
+        <% end %>
+      </li>
+      <li role='separator' class='divider'></li>
+      <li class='dropdown-header'>Don't use those services?</li>
+      <li>
+        <%= link_to '/register' do %>
+          <i class='fa fa-pencil'><span>Register</span></i>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to login_path do %>
+          <i class='fa fa-sign-in'><span>Login</span></i>
+        <% end %>
+      </li>
+    </ul>
+  </li>
+</ul>

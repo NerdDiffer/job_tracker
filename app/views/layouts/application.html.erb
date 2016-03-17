@@ -2,14 +2,14 @@
 <html>
 <head>
   <title><%= @page_title || 'JobTracker' %> | Get a Job</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag('application', media: 'all') %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div class='container'>
     <%= debug(params) if Rails.env.development? %>
     <nav class='nav navbar-inverse'>
-      <%= render partial: 'shared/navigation' %>
+      <%= render template: 'navigation/main' %>
     </nav>
     <div class='container content'>
       <%= render partial: 'shared/flash' %>

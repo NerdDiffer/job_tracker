@@ -56,6 +56,16 @@ nav {
       }
     }
   }
+  ul#login_or_register {
+    li {
+      display: block;
+      a { margin-left: 0; }
+      span {
+        font-family: 'Helvetica';
+        margin-left: 10px;
+      }
+    }
+  }
 }
 
 /* Custom page footer */
