@@ -4,7 +4,7 @@
 body {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-  background-color: white;
+  background-color: $main_background_color;
   color: $warriors-black;
 }
 
@@ -31,15 +31,17 @@ nav {
   font-size: 1.3rem; // just enough to get links to fit on one line
 
   &.navbar-inverse {
-    background-color: $warriors-yellow;
+    background-color: $nav_background_color;
     border-radius: 0.5rem;
 
     & .navbar-brand, & .navbar-nav > li > a {
-      color: $warriors-blue;
+      color: $text_color_on_dark_background;
     }
     ul.nav > li > a:hover {
-      background-color: $warriors-blue;
-      color: $warriors-yellow;
+      @include nav_background_opposing_intensity(5%)
+    }
+    li.open a.dropdown-toggle:focus {
+      @include nav_background_opposing_intensity(10%)
     }
     ul.nav {
       & > li > a {
@@ -109,8 +111,13 @@ ul.omni_auth_options {
 /* Tables */
 table {
   &.table-hover > tbody > tr:hover {
+    @include table_row_on_hover
   }
   &.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: darken($main_background_color, 3%);
+    &:hover {
+      @include table_row_on_hover
+    }
   }
   td.actions {
     list-style-type: none;
