@@ -31,4 +31,11 @@
     margin-top: 3rem;
     margin-bottom: 1rem;
   }
+  ul {
+    padding-left: 1rem;
+    li {
+      @include omni_auth_options;
+      i { color: black; }
+    }
+  }
 }

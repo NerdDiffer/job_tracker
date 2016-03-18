@@ -56,16 +56,11 @@ nav {
       }
     }
   }
-  ul#login_or_register {
-    li {
-      display: block;
-      a { margin-left: 0; }
-      span {
-        font-family: 'Helvetica';
-        margin-left: 10px;
-      }
-    }
-  }
+}
+
+/* lists */
+ul.omni_auth_options {
+  li { @include omni_auth_options }
 }
 
 /* Custom page footer */

@@ -1,3 +1,15 @@
 // Place all the styles related to the users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.users {
+  &.register_or_login {
+    ul {
+      padding-left: 1rem;
+      li {
+        @include omni_auth_options;
+        i { color: black; }
+      }
+    }
+  }
+}

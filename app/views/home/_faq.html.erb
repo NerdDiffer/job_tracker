@@ -6,7 +6,7 @@
 <p>Use it to track applications you've sent out, the companies it was sent to,
 people you've spoken with and the status of your applications. Attach any cover
 letters or posting to a job application for your reference. Take notes on your
-contacts &amp; and applications.</p>
+contacts and applications.</p>
 
 <h3>Why would I need this?</h3>
 
@@ -14,8 +14,20 @@ Because you need help tracking your next opportunity.
 
 <h3>How do I get started?</h3>
 
-Login, register or sign-in via a 3rd party service.
+<p>
+  <%= link_to 'Login', login_path %> to your account.
+</p>
 
+<p>
+  <%= link_to 'Register', '/register' %> if you don't have one.
+</p>
+
+<p>
+  Or use a 3rd-party service:
+  <ul class='omni_auth_options'>
+    <%= render 'shared/omni_auth_options' %>
+  </ul>
+</p>
 <h3>Does this cost money?</h3>
 
 No, it's completely free. It should not cost anything to look for a job.

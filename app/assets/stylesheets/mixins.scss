@@ -4,3 +4,12 @@
     &:nth-last-of-type(1) { width: 15%; }
   }
 }
+
+@mixin omni_auth_options {
+  display: block;
+  a { margin-left: 0; }
+  span {
+    font-family: 'Helvetica';
+    margin-left: 10px;
+  }
+}
