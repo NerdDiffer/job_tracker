@@ -3,8 +3,9 @@
 
   <ul>
     <li>
-      <i class='fa fa-pencil'></i>
-      <%= link_to('Register for one', '/register') %>
+      <%= link_to '/register' do %>
+        <i class='fa fa-pencil'><span>Register for one</span></i>
+      <% end %>
     </li>
   </ul>
 

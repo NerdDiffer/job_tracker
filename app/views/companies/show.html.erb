@@ -31,9 +31,6 @@
 </p>
 
 <% if logged_in? %>
-  <p>
-    <%= link_to('Edit Categories', edit_company_path(@company)) %>
-  </p>
   <% locals = { company: @company,
                 contacts: @contacts,
                 job_applications: @job_applications } %>

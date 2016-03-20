@@ -8,9 +8,12 @@ form.new_company, form.edit_company {
     padding-left: 1rem;
 
     li {
+      width: 12em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       border: 1px transparent solid;
       display:inline-block;
-      width: 12em;
       margin-bottom: 0.5rem;
 
       input {
