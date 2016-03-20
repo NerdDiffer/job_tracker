@@ -6,8 +6,8 @@ class CompaniesController < ApplicationController
 
   helper_method :sort_column, :sort_direction
 
-  before_action :logged_in_user, only: [:new, :create]
-  before_action :set_company, only: :show
+  before_action :logged_in_user, only: [:new, :create, :edit, :update]
+  before_action :set_company,    only: [:show, :edit, :update]
 
   # GET /companies
   # GET /companies.json
@@ -29,6 +29,9 @@ class CompaniesController < ApplicationController
     @company = Company.new
   end
 
+  def edit
+  end
+
   # POST /companies
   # POST /companies.json
   def create
@@ -36,10 +39,21 @@ class CompaniesController < ApplicationController
     save_and_respond(company)
   end
 
+  def update
+    respond_to do |format|
+      if company.update(company_params)
+        successful_update(format, company)
+      else
+        failed_update(format, company)
+      end
+    end
+  end
+
   private
 
   def set_company
-    @company = Company.find(params[:id])
+    id = params[:id]
+    @company = Company.find(id)
   end
 
   def company_params
@@ -61,7 +75,7 @@ class CompaniesController < ApplicationController
   end
 
   def whitelisted_attr
-    [:name, :website, :sort, :direction, :search]
+    [:name, :website, :sort, :direction, :search, category_ids: []]
   end
 
   def model

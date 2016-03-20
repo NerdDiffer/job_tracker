@@ -90,6 +90,24 @@ RSpec.describe CompaniesController, type: :controller do
     end
   end
 
+  describe 'GET #edit' do
+    before(:each) do
+      log_in_as(user)
+      allow(Company).to receive(:find).and_return(company)
+      get(:edit, id: 'example-company')
+    end
+
+    it 'returns a 200' do
+      expect(response).to have_http_status(200)
+    end
+    it 'assigns the requested company as @company' do
+      expect(assigns(:company)).to eq(company)
+    end
+    it 'renders edit' do
+      expect(response).to render_template(:edit)
+    end
+  end
+
   describe 'POST #create' do
     let(:attr_for_create) do
       { name: 'foo', website: 'www.example.com', category: 'bar' }
@@ -126,6 +144,43 @@ RSpec.describe CompaniesController, type: :controller do
 
       it 're-renders the "new" template' do
         expect(response).to render_template('new')
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    let(:attr_for_update) do
+      { name: 'foo' }
+    end
+
+    before(:each) do
+      log_in_as(user)
+      allow(Company).to receive(:find).and_return(company)
+    end
+
+    context 'with valid params' do
+      before(:each) do
+        allow(company).to receive(:update).and_return(true)
+      end
+
+      it 'calls #update on the company' do
+        expect(company).to receive(:update).with(attr_for_update)
+        put(:update, id: 1, company: attr_for_update)
+      end
+      it 'redirects to the created company' do
+        put(:update, id: 1, company: attr_for_update)
+        expect(response).to redirect_to(company)
+      end
+    end
+
+    context 'with invalid params' do
+      before(:each) do
+        allow(company).to receive(:update).and_return(false)
+        put(:update, id: 1, company: attr_for_update)
+      end
+
+      it 're-renders the "edit" template' do
+        expect(response).to render_template('edit')
       end
     end
   end

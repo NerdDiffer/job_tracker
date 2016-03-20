@@ -20,3 +20,7 @@
   background-color: lighten($nav_background_color, $pct);
   color: darken($text_color_on_dark_background, $pct);
 }
+
+@mixin darken_background_intensity($pct) {
+  background-color: darken($main_background_color, $pct);
+}

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :notes,         only: :index
   resources :cover_letters, only: :index, controller: 'job_applications/cover_letters'
   resources :postings,      only: :index, controller: 'job_applications/postings'
-  resources :companies,     only: [:index, :show, :new, :create]
+  resources :companies,     except: :destroy
   resources :categories,    only: [:index, :show]
 
   resources :job_applications do
