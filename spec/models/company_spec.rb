@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Company, type: :model do
   let(:company) { build(:company) }
 
+  # FIXME: Maybe? I don't see a class method by this name
   describe '.get_record_val_by' do
     context 'retrieving real attributes from associated models' do
       it 'returns company name' do
@@ -22,6 +23,9 @@ RSpec.describe Company, type: :model do
   end
 
   describe '#permalink' do
+    # FIXME: This tests your implementation, not your result. Personally,
+    #   I don't think this test is valuable. It breaks if your implementation
+    #   changes even if the result is the same.
     it 'calls parameterize on the name' do
       allow(company).to receive(:name).and_return('FOO BAR')
       expect(company.name).to receive(:parameterize)
