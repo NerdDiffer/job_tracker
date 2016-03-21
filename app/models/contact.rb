@@ -14,6 +14,9 @@ class Contact < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :permalink, uniqueness: {
+    # FIXME: I believe your validation message here is going to read:
+    #   "Permalink Check you don't...". There are gems that can allow you to
+    #   prefix a caret to the beginning to avoid the attribute name prepending
     scope: :user_id, message: "Check you don't already have a contact with the same first & last name"
   }
 
