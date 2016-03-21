@@ -1,7 +1,7 @@
 class Note < ActiveRecord::Base
   include Queryable
 
-  attr_accessor :notable_name
+  attr_writer :notable_name
 
   belongs_to :user, inverse_of: :notes
   belongs_to :notable, polymorphic: true
