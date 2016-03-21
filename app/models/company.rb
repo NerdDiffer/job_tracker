@@ -58,6 +58,8 @@ class Company < ActiveRecord::Base
   end
 
   def refresh_search_suggestions
+    # It feels weird that you're calling a class method directly on a concern.
+    # Could this be a service object?
     SearchSuggestion.refresh_company_names
   end
 
