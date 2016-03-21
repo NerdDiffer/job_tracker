@@ -16,7 +16,9 @@ RSpec.describe Company, type: :model do
         attribute = :name
         value = 'foo'
         return_attr = 'name'
+
         actual = described_class.get_record_val_by(attribute, value, return_attr)
+
         expect(actual).to eq 'Example Company'
       end
     end
