@@ -35,6 +35,7 @@ RSpec.describe Contact, type: :model do
   end
 
   describe '#name' do
+    # FIXME: Mystery guest at work here.
     it 'returns first & last name' do
       expect(contact.name).to eq 'Joe Schmoe'
     end
