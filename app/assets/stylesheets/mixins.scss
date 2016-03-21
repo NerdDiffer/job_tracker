@@ -7,7 +7,7 @@
 
 @mixin table_row_on_hover { background-color: white; }
 
-@mixin omni_auth_options {
+@mixin link_wraps_font_awesome {
   display: block;
   a { margin-left: 0; }
   span {

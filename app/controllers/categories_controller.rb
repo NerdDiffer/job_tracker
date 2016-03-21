@@ -1,11 +1,8 @@
 class CategoriesController < ApplicationController
   attr_reader :category
 
-  before_action :set_category, only: :show
-
-  def index
-    @categories = Category.sorted
-  end
+  before_action :logged_in_user
+  before_action :set_category
 
   def show
     @companies = category.companies

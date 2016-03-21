@@ -62,7 +62,7 @@ nav {
 
 /* lists */
 ul.omni_auth_options {
-  li { @include omni_auth_options }
+  li { @include link_wraps_font_awesome; }
 }
 
 /* Custom page footer */

@@ -6,7 +6,7 @@ class CompaniesController < ApplicationController
 
   helper_method :sort_column, :sort_direction
 
-  before_action :logged_in_user, only: [:new, :create, :edit, :update]
+  before_action :logged_in_user
   before_action :set_company,    only: [:show, :edit, :update]
 
   # GET /companies
@@ -18,10 +18,8 @@ class CompaniesController < ApplicationController
   # GET /companies/1
   # GET /companies/1.json
   def show
-    if logged_in?
-      @contacts = contacts_belonging_to_user_and_current_company
-      @job_applications = job_applications_belonging_to_user_and_current_company
-    end
+    @contacts = contacts_belonging_to_user_and_current_company
+    @job_applications = job_applications_belonging_to_user_and_current_company
   end
 
   # GET /companies/new

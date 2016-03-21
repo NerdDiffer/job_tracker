@@ -2,32 +2,13 @@ require 'rails_helper'
 
 describe CategoriesController, type: :controller do
   let(:category) { build(:category) }
-
-  describe 'GET #index' do
-    let(:categories) { double('categories') }
-
-    before(:each) do
-      allow(Category).to receive(:sorted).and_return(categories)
-    end
-
-    it 'calls .all on Category' do
-      expect(Category).to receive(:sorted)
-      get :index
-    end
-    it 'returns http success' do
-      get :index
-      expect(response).to have_http_status(:success)
-    end
-    it 'sets value for @categories' do
-      get :index
-      expect(assigns(:categories)).to eq categories
-    end
-  end
+  let(:user)     { build(:user) }
 
   describe 'GET #show' do
     let(:companies) { %I(foo bar) }
 
     before(:each) do
+      log_in_as(user)
       allow(controller).to receive(:set_category)
       allow(category).to receive(:companies).and_return(companies)
       allow(controller).to receive(:category).and_return(category)

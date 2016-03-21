@@ -2,17 +2,12 @@
 
 <h1><%= @company.name %></h1>
 
-<% if logged_in? %>
-  <p>
-    <%= link_to 'Back', companies_path %> |
-    <%= link_to('Edit', edit_company_path(@company)) %>
-  </p>
-<% else %>
-  <p>
-    <%= link_to 'Back', companies_path %>
-  </p>
-<% end %>
+<p>
+  <%= link_to 'Back', companies_path %> |
+  <%= link_to 'Edit', edit_company_path(@company) %>
+</p>
 
+<p>
   <strong>Website:</strong>
   <% website = @company.website %>
   <%= link_to(
@@ -30,9 +25,7 @@
   <% end %>
 </p>
 
-<% if logged_in? %>
-  <% locals = { company: @company,
-                contacts: @contacts,
-                job_applications: @job_applications } %>
-  <%= render(partial: 'user_attached_records', locals: locals) %>
-<% end %>
+<% locals = { company: @company,
+              contacts: @contacts,
+              job_applications: @job_applications } %>
+<%= render(partial: 'user_attached_records', locals: locals) %>

@@ -2,13 +2,13 @@
 
 <p id="notice"><%= notice %></p>
 
-<h1>Companies</h1>
+<h1>Search for companies</h1>
 
-<%= content_tag :p do %>
-  <%= link_to 'New company', new_company_path %>
-  <br/>
-  <%= link_to 'Browse company categories', categories_path %>
-<% end %>
+<p>
+  <%= link_to new_company_path, class: 'add_new_company' do %>
+    <i class='fa fa-plus'><span>Add company</span></i>
+  <% end %>
+</p>
 
 <%= render 'search_filter' %>
 
