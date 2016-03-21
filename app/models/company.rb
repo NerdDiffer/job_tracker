@@ -43,7 +43,7 @@ class Company < ActiveRecord::Base
   end
 
   def category_names
-    categories.map(&:display_name)
+    categories.pluck(:display_name)
   end
 
   private
