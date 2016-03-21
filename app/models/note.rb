@@ -3,7 +3,7 @@ class Note < ActiveRecord::Base
 
   attr_writer :notable_name
 
-  belongs_to :user, inverse_of: :notes
+  belongs_to :user
   belongs_to :notable, polymorphic: true
 
   validates :user, presence: true
