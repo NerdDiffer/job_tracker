@@ -18,6 +18,8 @@ class CompaniesController < ApplicationController
   # GET /companies/1
   # GET /companies/1.json
   def show
+    # TODO: Consider using a presentor object here to return only a single instance var
+    # at a time. Presenters scale really nicely
     @contacts = contacts_belonging_to_user_and_current_company
     @job_applications = job_applications_belonging_to_user_and_current_company
   end
