@@ -14,7 +14,7 @@ class Contact < ActiveRecord::Base
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :permalink, uniqueness: {
-    scope: :user_id, message: "Check you don't already have a contact with the same first & last name"
+    scope: :user_id, message: "Check you don't already have a contact with the same first & last name (case-insensitive)"
   }
 
   # scopes
