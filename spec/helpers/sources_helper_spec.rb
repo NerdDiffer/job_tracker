@@ -34,15 +34,15 @@ describe SourcesHelper, type: :helper do
 
   describe '#fetch_all_sources' do
     before(:each) do
-      allow(Source).to receive(:all).and_return(true)
+      allow(Source).to receive(:sorted).and_return(true)
     end
 
     it 'sets an ivar, @sources' do
       actual = helper.send(:fetch_all_sources)
       expect(actual).not_to be_nil
     end
-    it 'calls .all on Source' do
-      expect(Source).to receive(:all)
+    it 'calls .sorted on Source' do
+      expect(Source).to receive(:sorted)
       helper.send(:fetch_all_sources)
     end
   end

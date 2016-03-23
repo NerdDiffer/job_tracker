@@ -32,13 +32,14 @@ module ScaffoldedActions
   end
 
   def destruction(format, redirect_url)
-    message = "#{model} was successfully destroyed."
-    format.html { redirect_to redirect_url, notice: message }
+    flash = { info: "#{model} was successfully destroyed." }
+    format.html { redirect_to redirect_url, flash: flash }
     format.json { head :no_content }
   end
 
   def canned_success(format, object, message, status)
-    format.html { redirect_to object, notice: message }
+    flash = { success: message }
+    format.html { redirect_to object, flash: flash }
     format.json { render :show, status: status, location: object }
   end
 end

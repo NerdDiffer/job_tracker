@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
     if @user.save
       log_in @user
-      redirect_to user_path, notice: 'Profile was successfully created.'
+      redirect_to user_path, success: 'Profile was successfully created.'
     else
       render :new
     end
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
-      redirect_to user_path, notice: 'Profile was successfully updated.'
+      redirect_to user_path, success: 'Profile was successfully updated.'
     else
       render :edit
     end
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
-    redirect_to user_url, notice: 'Profile was successfully destroyed.'
+    redirect_to user_url, info: 'Profile was successfully destroyed.'
   end
 
   private

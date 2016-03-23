@@ -1,7 +1,5 @@
 <% @page_title = "Note ~ #{@note.updated_at}" %>
 
-<p id="notice"><%= notice %></p>
-
 <p>
   <%= link_to 'Edit', [:edit, @notable, @note] %> |
   <%= link_to 'Delete', [@note.notable, @note], delete_link_opts %>

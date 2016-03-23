@@ -4,7 +4,7 @@ module Sessions
 
     def destroy
       log_out if logged_in?
-      flash[:notice] = 'You have logged out'
+      flash[:info] = 'You have logged out'
       redirect_to(root_url)
     end
   end

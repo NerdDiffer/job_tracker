@@ -11,7 +11,7 @@ module SourcesHelper
 
   # TODO: Find a better way to query & cache this information
   def fetch_all_sources
-    @sources ||= Source.all
+    @sources ||= Source.sorted
   end
 
   def collect(source, sources)
