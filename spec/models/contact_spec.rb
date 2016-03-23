@@ -35,8 +35,23 @@ RSpec.describe Contact, type: :model do
   end
 
   describe '#name' do
+    before(:each) do
+      allow(contact).to receive(:first_name).and_return('Foo')
+      allow(contact).to receive(:last_name).and_return('Bar')
+    end
+
+    it 'calls #first_name' do
+      expect(contact).to receive(:first_name)
+
+      contact.name
+    end
+    it 'calls #last_name' do
+      expect(contact).to receive(:last_name)
+
+      contact.name
+    end
     it 'returns first & last name' do
-      expect(contact.name).to eq 'Joe Schmoe'
+      expect(contact.name).to eq 'Foo Bar'
     end
   end
 
