@@ -40,7 +40,7 @@ group :development, :test do
   gem 'faker', '~> 1.6.3', require: false
 
   # code climate
-  gem 'codeclimate-test-reporter', '~> 0.4.8', require: nil
+  gem 'codeclimate-test-reporter', '~> 0.4.8', require: false
 end
 
 group :development do
