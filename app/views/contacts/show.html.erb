@@ -1,34 +1,34 @@
-<% @page_title = "#{@contact.name}" %>
+<% @page_title = "#{contact.name}" %>
 
-<h1><%= @contact.name %></h1>
+<h1><%= contact.name %></h1>
 
 <p>
   <strong>Title:</strong>
-  <%= @contact.title %>
+  <%= contact.title %>
 </p>
 
 <p>
   <strong>Company:</strong>
-  <%= link_to(@contact.company.name, @contact.company) if @contact.company.present? %>
+  <%= contact.link_to_company %>
 </p>
 
 <p>
   <strong>Office Phone:</strong>
-  <%= @contact.phone_office %>
+  <%= contact.phone_office %>
 </p>
 
 <p>
   <strong>Mobile Phone:</strong>
-  <%= @contact.phone_mobile %>
+  <%= contact.phone_mobile %>
 </p>
 
 <p>
   <strong>Email:</strong>
-  <%= @contact.email %>
+  <%= contact.email %>
 </p>
 
-<%= link_to 'Edit', edit_contact_path(@contact) %> |
-<%= link_to 'Delete', @contact, delete_link_opts %> |
+<%= link_to 'Edit', edit_contact_path(contact) %> |
+<%= link_to 'Delete', contact, delete_link_opts %> |
 <%= link_to 'Back', contacts_path %>
 
 <div class='attached_records notes'>

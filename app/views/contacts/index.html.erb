@@ -16,10 +16,11 @@
   </thead>
 
   <tbody>
-    <% @contacts.each do |contact| %>
+    <% contacts = ContactDecorator.decorate_collection(@contacts) %>
+    <% contacts.each do |contact| %>
       <tr>
         <td><%= link_to(contact.name, contact) %></td>
-        <td><%= link_to(contact.company.name, contact.company) if contact.company.present? %></td>
+        <td><%= contact.link_to_company %></td>
         <td>
           <%= contact.phone_office %><br />
           <%= contact.phone_mobile %>

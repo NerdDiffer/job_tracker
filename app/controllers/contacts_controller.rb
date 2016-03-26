@@ -4,6 +4,7 @@ class ContactsController < ApplicationController
   include OwnResources
 
   attr_reader :contact
+  decorates_assigned :contact
 
   helper_method :sort_column, :sort_direction
 

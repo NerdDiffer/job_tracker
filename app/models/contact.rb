@@ -39,16 +39,11 @@ class Contact < ActiveRecord::Base
     joins(:company).where(company_name_matches)
   end
 
-  # instance methods
   def name
     "#{first_name} #{last_name}"
   end
 
   def permalink
     self.permalink = name.parameterize
-  end
-
-  def company_name
-    company.name if company
   end
 end
