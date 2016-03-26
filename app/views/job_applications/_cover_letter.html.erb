@@ -8,13 +8,13 @@
   </thead>
 
   <tbody>
-    <% @attached = @job_application.cover_letter %>
-    <% content = truncate(@attached.content) %>
-    <% default_link_dest = job_application_cover_letter_path(@job_application) %>
-    <% edit_link_dest = edit_job_application_cover_letter_path(@job_application) %>
+    <% attached = job_application.cover_letter %>
+    <% content = truncate(attached.content) %>
+    <% default_link_dest = job_application_cover_letter_path(job_application) %>
+    <% edit_link_dest = edit_job_application_cover_letter_path(job_application) %>
 
     <tr>
-      <td><%= @attached.sent_date.to_s('month date year') %></td>
+      <td><%= attached.sent_date.to_s('month date year') %></td>
       <td><%= link_to(content, default_link_dest) %></td>
       <td><%= link_to 'Edit', edit_link_dest %></td>
       <td><%= link_to 'Delete', default_link_dest, delete_link_opts %></td>

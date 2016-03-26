@@ -1,26 +1,25 @@
-<% @page_title = "Application for #{@job_application.title}" %>
+<% @page_title = "Application for #{job_application.title}" %>
 
 <div class='job_applications'>
-  <h1><%= @job_application.title %></h1>
-  <p>
+  <h1><%= job_application.title %></h1>
+  <%= content_tag :p do %>
     <strong>Active:</strong>
-    <%= status_tag @job_application.active %>
-  </p>
+    <%= status_tag(job_application.active) %>
+  <% end %>
 
-  <p>
+  <%= content_tag :p do %>
     <strong>Last updated:</strong>
-    <%= @job_application.updated_at %>
-  </p>
+    <%= job_application.updated_at %>
+  <% end %>
 
-  <p>
+  <%= content_tag :p do %>
     <strong>Company:</strong>
-    <%= link_to @job_application.company.name, @job_application.company %>
-  </p>
+    <%= job_application.link_to_company %>
+  <% end %>
 
-  <%= link_to 'Edit', edit_job_application_path(@job_application) %> |
-  <%= link_to 'Delete', @job_application, delete_link_opts %> |
+  <%= link_to 'Edit', edit_job_application_path(job_application) %> |
+  <%= link_to 'Delete', job_application, delete_link_opts %> |
   <%= link_to 'Back', job_applications_path %>
-
 
   <div class='attached_records notes'>
     <%= render 'notes/notable_notes' %>
@@ -28,25 +27,11 @@
 
   <div class='attached_records postings'>
     <h2>Posting</h2>
-    <% if @job_application.posting.present? %>
-      <%= render 'posting', locals: { object: @job_application } %>
-    <% else %>
-      <%= link_to(
-        'Add Posting',
-        new_job_application_posting_path({ job_application_id: @job_application.id })
-      ) %>
-    <% end %>
+    <%= job_application.add_or_view_attached_posting %>
   </div>
 
   <div class='attached_records cover_letters'>
     <h2>Cover Letter</h2>
-    <% if @job_application.cover_letter.present? %>
-      <%= render 'cover_letter', locals: { object: @job_application } %>
-    <% else %>
-      <%= link_to(
-        'Add Cover Letter',
-        new_job_application_cover_letter_path({ job_application_id: @job_application.id })
-      ) %>
-    <% end %>
+    <%= job_application.add_or_view_attached_cover_letter %>
   </div>
 </div>
