@@ -1,8 +1,8 @@
-<%= form_for [@notable, @note] do |f| %>
+<%= form_for [@notable, note] do |f| %>
 
-  <%= error_messages_for @note %>
+  <%= error_messages_for note %>
 
-  <h4><%= @note.notable_name %></h4>
+  <h4><%= note.notable_name %></h4>
 
   <div class="field">
     <%= f.label :content %><br>

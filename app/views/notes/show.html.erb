@@ -1,21 +1,21 @@
-<% @page_title = "Note ~ #{@note.updated_at}" %>
+<% @page_title = "Note ~ #{note.updated_at}" %>
 
 <p>
-  <%= link_to 'Edit', [:edit, @notable, @note] %> |
-  <%= link_to 'Delete', [@note.notable, @note], delete_link_opts %>
+  <%= link_to 'Edit', [:edit, @notable, note] %> |
+  <%= link_to 'Delete', [note.notable, note], delete_link_opts %>
 </p>
 
 <p>
   <strong>Updated:</strong>
-  <%= @note.updated_at.to_s('month day year') %>
+  <%= note.updated_at.to_s('month day year') %>
 </p>
 
 <p>
   <strong><%= @notable.class %>:</strong>
-  <%= link_to(@note.notable_name, @notable)  %>
+  <%= link_to(note.notable_name, @notable)  %>
 </p>
 
 <p>
   <strong>Notes:</strong>
-  <%= markdown(@note.content) %>
+  <%= markdown(note.content) %>
 </p>

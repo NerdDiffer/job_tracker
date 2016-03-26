@@ -13,13 +13,13 @@
   </thead>
 
   <tbody>
-    <% @notes.each do |note| %>
+    <% notes = NoteDecorator.decorate_collection(@notes) %>
+    <% notes.each do |note| %>
       <% default_link_dest = [note.notable, note] %>
-      <% notable_link_dest = generate_notable_link_dest(note) %>
       <% updated_at = note.updated_at.to_s('month date year')%>
       <tr>
         <td><%= link_to updated_at, default_link_dest %></td>
-        <td><%= link_to note.notable_name, notable_link_dest %></td>
+        <td><%= link_to note.notable_name, note.link_destination %></td>
         <td><%= link_to(truncate(note.content), default_link_dest) %></td>
         <td><%= link_to 'Edit', [:edit, note.notable, note] %></td>
         <td><%= link_to 'Delete', default_link_dest, delete_link_opts %></td>
