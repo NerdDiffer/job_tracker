@@ -13,14 +13,4 @@ class User < ActiveRecord::Base
   validates :type, presence: true
 
   has_secure_password(validations: false)
-
-  def account?
-    type == account
-  end
-
-  private
-
-  def account
-    'Users::Account'
-  end
 end
