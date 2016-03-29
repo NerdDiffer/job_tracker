@@ -1,7 +1,7 @@
 class JobApplication < ActiveRecord::Base
   include Queryable
 
-  attr_accessor :company_name
+  attr_writer :company_name
 
   belongs_to :company
   belongs_to :user
@@ -47,10 +47,10 @@ class JobApplication < ActiveRecord::Base
 
   # instance methods
   def title
-    title = if company.present?
+    title = if company_id?
               company.name
             else
-              Time.now.utc.strftime('%Y%m%d%H%M%S')
+              created_at.utc.strftime('%Y%m%d%H%M%S')
             end
 
     title += " - #{posting.job_title}" if posting.present?
@@ -59,6 +59,6 @@ class JobApplication < ActiveRecord::Base
   end
 
   def company_name
-    company.name if company.present?
+    company.name if company_id?
   end
 end
