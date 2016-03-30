@@ -3,7 +3,7 @@
     <tr>
       <th>Posting Date</th>
       <th>Job Title</th>
-      <th colspan="2">Actions</th>
+      <th>Actions</th>
     </tr>
   </thead>
 
@@ -14,8 +14,10 @@
     <tr>
       <td><%= attached.posting_date.to_s('month date year') %></td>
       <td><%= link_to(attached.job_title, default_link_dest) %></td>
-      <td><%= link_to 'Edit', edit_link_dest %></td>
-      <td><%= link_to 'Delete', default_link_dest, delete_link_opts %></td>
+      <td>
+        <%= link_to 'Edit', edit_link_dest %><br />
+        <%= link_to 'Delete', default_link_dest, delete_link_opts %>
+      </td>
     </tr>
   </tbody>
 </table>

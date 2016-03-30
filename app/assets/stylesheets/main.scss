@@ -1,6 +1,5 @@
 @import 'variables';
 
-/* Space out content a bit */
 body {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -8,7 +7,19 @@ body {
   color: $warriors-black;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
+/* Container */
+.container {
+  @media (min-width: $screen-sm-min) {
+    max-width: 730px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+.container-narrow > hr {
+  margin: 2.2rem 0;
+}
+
+// Everything but the jumbotron gets side spacing for mobile first views
 .header,
 .marketing,
 .footer {
@@ -16,14 +27,21 @@ body {
   padding-left: 1rem;
 }
 
-/* Custom page header */
+/* Header */
 .header {
-  /* Make the masthead heading the same height as the navigation */
+  // Make the masthead heading the same height as the navigation
   h3 {
     margin-top: 0;
     margin-bottom: 0;
     line-height: 3rem;
   }
+}
+
+/* Footer */
+.footer {
+  padding-top: 1.6rem;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
 }
 
 /* Navigation */
@@ -52,6 +70,9 @@ nav {
       padding: 0.5rem 0;
       & > li {
         margin-top: 0.7rem;
+        @media (max-width: $screen-sm-min) {
+          float: none;
+        }
       }
       &  > li > a {
         border-radius: 0.5rem;
@@ -60,37 +81,19 @@ nav {
   }
 }
 
-/* lists */
-ul.omni_auth_options {
-  li { @include link_wraps_font_awesome; }
-}
-
-/* Custom page footer */
-.footer {
-  padding-top: 1.6rem;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
-}
-
+/* Main content div */
 .content {
   margin-top: 1.5rem;
   border-top: 1px solid #e5e5e5;
 }
 
-/* Container */
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-.container-narrow > hr {
-  margin: 2.2rem 0;
+/* Lists */
+ul.omni_auth_options {
+  li { @include link_wraps_font_awesome; }
 }
 
 /* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
+@media screen and (min-width: $screen-sm-min) {
   /* Remove the padding we set earlier */
   .header,
   .marketing,

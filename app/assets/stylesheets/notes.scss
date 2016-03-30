@@ -7,3 +7,13 @@
     @include table_3_cols;
   }
 }
+
+table.notes.index {
+  th, td {
+    &.contents {
+      @media (max-width: $screen-sm-min) {
+        display: none;
+      }
+    }
+  }
+}

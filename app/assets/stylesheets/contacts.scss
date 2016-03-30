@@ -7,16 +7,16 @@
     table-layout: fixed;
     th {
       &.name, &.company {
-        width: 15%;
+        width: 20%;
       }
-      &.phone {
-        width: 25%;
-      }
-      &.email {
-        width: 25%;
+      &.phone.email {
+        width: 40%;
       }
       &.actions {
-        width: 10%;
+        width: 20%;
+      }
+      @media (max-width: $screen-xs-max) {
+        text-align: center;
       }
     }
     td {
