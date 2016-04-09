@@ -2,11 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-a.add_new_company {
-  @include link_wraps_font_awesome;
-  float: right;
-}
-
 form.new_company, form.edit_company {
   .company_categories_checkboxes ul {
     list-style: none;

@@ -3,6 +3,7 @@ class CompaniesController < ApplicationController
   include ScaffoldedActions
 
   attr_reader :company
+  decorates_assigned :company
 
   helper_method :sort_column, :sort_direction
 

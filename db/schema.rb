@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316194056) do
+ActiveRecord::Schema.define(version: 20160401235318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,16 @@ ActiveRecord::Schema.define(version: 20160316194056) do
   add_index "postings", ["job_application_id"], name: "uniq_job_application_id_on_postings", unique: true, using: :btree
   add_index "postings", ["source_id"], name: "index_postings_on_source_id", using: :btree
 
+  create_table "recruitments", force: :cascade do |t|
+    t.integer  "agency_id",  null: false
+    t.integer  "client_id",  null: false
+    t.integer  "recruit_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "recruitments", ["recruit_id"], name: "index_recruitments_on_recruit_id", using: :btree
+
   create_table "sources", force: :cascade do |t|
     t.string   "name",       default: "other", null: false
     t.datetime "created_at",                   null: false
@@ -149,4 +159,7 @@ ActiveRecord::Schema.define(version: 20160316194056) do
   add_foreign_key "notes", "users"
   add_foreign_key "postings", "job_applications"
   add_foreign_key "postings", "sources"
+  add_foreign_key "recruitments", "companies", column: "agency_id"
+  add_foreign_key "recruitments", "companies", column: "client_id"
+  add_foreign_key "recruitments", "users", column: "recruit_id"
 end

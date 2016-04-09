@@ -3,9 +3,9 @@ module Seed
   @initial_records_count = 30
   @initial_sources = %w(Other LinkedIn Glassdoor StackOverflow GitHub Dice
     Indeed AngelList Craigslist Hired SimplyHired Beyond HackerNews)
-  @initial_categories = %w(Advertising Agency Automotive Communications
-    Construction Education Finance Food Gaming Government Health Hospitality
-    Industrial Insurance Legal Media Music Non-Profit Real-Estate Retail
+  @initial_categories = %W(Advertising Automotive Communications Construction
+    Education Finance Food Gaming Government Health Hospitality Industrial
+    Insurance Legal Media Music Non-Profit Real-Estate Recruiting\ Agency Retail
     Search Security Science Software Transportation Web)
   @default_provider = 'developer'
   @default_password = 'password'

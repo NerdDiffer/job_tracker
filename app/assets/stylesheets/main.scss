@@ -132,3 +132,9 @@ table {
 textarea.md_edit {
   font-family: $fixed-width-fonts;
 }
+
+/* links */
+a.add_new_member {
+  @include link_wraps_font_awesome;
+  float: right;
+}

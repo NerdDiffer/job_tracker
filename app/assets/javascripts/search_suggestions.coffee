@@ -1,7 +1,8 @@
 jQuery ->
   company_names =
     dictionary: 'company_names',
-    selectors: ['contact_company_name', 'job_application_company_name']
+    selectors: ['contact_company_name', 'job_application_company_name',
+                'recruitment_client_name', 'recruitment_agency_name']
   category_names =
     dictionary: 'category_names',
     selectors: ['company_category_name']
@@ -19,4 +20,6 @@ jQuery ->
   source_for_company_names    = search_suggestions
                                   .generate_source(company_names.dictionary)
   $(selectors_for_company_names).autocomplete
+    source: source_for_company_names
+  $('#company_category_name').autocomplete
     source: source_for_company_names

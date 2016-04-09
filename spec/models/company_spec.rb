@@ -81,4 +81,64 @@ RSpec.describe Company, type: :model do
       company.permalink
     end
   end
+
+  describe '#agency?' do
+    context 'when @agency is null' do
+      let(:status) { 'status' }
+
+      before(:each) do
+        allow(company).to receive(:has_agency_category?).and_return(status)
+      end
+      after(:each) do
+        company.instance_eval { @agency = nil }
+      end
+
+      it 'calls #has_agency_category?' do
+        expect(company).to receive(:has_agency_category?)
+        company.agency?
+      end
+      it 'returns value for @agency' do
+        company.agency?
+        actual = company.instance_eval { @agency }
+        expect(actual).to eq status
+      end
+    end
+
+    context 'when @agency is NOT null' do
+      before(:each) do
+        company.instance_eval { @agency = true }
+      end
+      after(:each) do
+        company.instance_eval { @agency = nil }
+      end
+
+      it 'does NOT call #has_agency_category?' do
+        expect(company).not_to receive(:has_agency_category?)
+        company.agency?
+      end
+      it 'returns value of @agency' do
+        actual = company.agency?
+        expect(actual).to be_truthy
+      end
+    end
+  end
+
+  describe '#has_agency_category?' do
+    let(:category_names) { %I(foo bar) }
+
+    before(:each) do
+      allow(company).to receive(:category_names).and_return(category_names)
+    end
+    after(:each) do
+      company.send(:has_agency_category?)
+    end
+
+    it 'calls #category_names' do
+      expect(company).to receive(:category_names)
+    end
+    it 'calls #include? on the category_names' do
+      agency_category = described_class::AGENCY_CATEGORY
+      expect(category_names).to receive(:include?).with(agency_category)
+    end
+  end
 end

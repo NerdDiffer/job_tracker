@@ -3,11 +3,27 @@ class Company < ActiveRecord::Base
   include Queryable
   include SearchSuggestion::Refresh::Model
 
+  AGENCY_CATEGORY = 'Recruiting Agency'
+
+  attr_reader :agency
+
   friendly_id :name
 
   has_many :contacts
   has_many :job_applications
   has_and_belongs_to_many :categories, join_table: 'companies_categories'
+
+  has_many :recruitments_as_agency,
+    foreign_key: 'agency_id',
+    class_name: 'Recruitment',
+    inverse_of: :agency
+  has_many :clients, through: :recruitments_as_agency
+
+  has_many :recruitments_as_client,
+    foreign_key: 'client_id',
+    class_name: 'Recruitment',
+    inverse_of: :client
+  has_many :agencies, through: :recruitments_as_client
 
   validates :name, uniqueness: true, presence: true
   validates :permalink, uniqueness: true
@@ -46,6 +62,10 @@ class Company < ActiveRecord::Base
     categories.map(&:display_name)
   end
 
+  def agency?
+    @agency ||= has_agency_category?
+  end
+
   private
 
   def name_allowed?
@@ -67,5 +87,9 @@ class Company < ActiveRecord::Base
 
   def delete_redis_keys
     delete_redis_keys!
+  end
+
+  def has_agency_category?
+    category_names.include? AGENCY_CATEGORY
   end
 end
