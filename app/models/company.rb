@@ -3,7 +3,7 @@ class Company < ActiveRecord::Base
   include Queryable
   include SearchSuggestion::Refresh::Model
 
-  AGENCY_CATEGORY = 'Recruiting Agency'
+  AGENCY_CATEGORY = 'Recruiting Agency'.freeze
 
   attr_reader :agency
 
@@ -14,15 +14,15 @@ class Company < ActiveRecord::Base
   has_and_belongs_to_many :categories, join_table: 'companies_categories'
 
   has_many :recruitments_as_agency,
-    foreign_key: 'agency_id',
-    class_name: 'Recruitment',
-    inverse_of: :agency
+           foreign_key: 'agency_id',
+           class_name: 'Recruitment',
+           inverse_of: :agency
   has_many :clients, through: :recruitments_as_agency
 
   has_many :recruitments_as_client,
-    foreign_key: 'client_id',
-    class_name: 'Recruitment',
-    inverse_of: :client
+           foreign_key: 'client_id',
+           class_name: 'Recruitment',
+           inverse_of: :client
   has_many :agencies, through: :recruitments_as_client
 
   validates :name, uniqueness: true, presence: true
@@ -63,7 +63,7 @@ class Company < ActiveRecord::Base
   end
 
   def agency?
-    @agency ||= has_agency_category?
+    @agency ||= agency_category?
   end
 
   private
@@ -89,7 +89,7 @@ class Company < ActiveRecord::Base
     delete_redis_keys!
   end
 
-  def has_agency_category?
+  def agency_category?
     category_names.include? AGENCY_CATEGORY
   end
 end

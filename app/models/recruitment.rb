@@ -1,7 +1,7 @@
 class Recruitment < ActiveRecord::Base
   belongs_to :recruit,
-    class_name: 'User',
-    foreign_key: 'recruit_id'
+             class_name: 'User',
+             foreign_key: 'recruit_id'
   belongs_to :agency, class_name: 'Company'
   belongs_to :client, class_name: 'Company'
 

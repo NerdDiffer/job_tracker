@@ -87,14 +87,14 @@ RSpec.describe Company, type: :model do
       let(:status) { 'status' }
 
       before(:each) do
-        allow(company).to receive(:has_agency_category?).and_return(status)
+        allow(company).to receive(:agency_category?).and_return(status)
       end
       after(:each) do
         company.instance_eval { @agency = nil }
       end
 
-      it 'calls #has_agency_category?' do
-        expect(company).to receive(:has_agency_category?)
+      it 'calls #agency_category?' do
+        expect(company).to receive(:agency_category?)
         company.agency?
       end
       it 'returns value for @agency' do
@@ -112,8 +112,8 @@ RSpec.describe Company, type: :model do
         company.instance_eval { @agency = nil }
       end
 
-      it 'does NOT call #has_agency_category?' do
-        expect(company).not_to receive(:has_agency_category?)
+      it 'does NOT call #agency_category?' do
+        expect(company).not_to receive(:agency_category?)
         company.agency?
       end
       it 'returns value of @agency' do
@@ -123,14 +123,14 @@ RSpec.describe Company, type: :model do
     end
   end
 
-  describe '#has_agency_category?' do
+  describe '#agency_category?' do
     let(:category_names) { %I(foo bar) }
 
     before(:each) do
       allow(company).to receive(:category_names).and_return(category_names)
     end
     after(:each) do
-      company.send(:has_agency_category?)
+      company.send(:agency_category?)
     end
 
     it 'calls #category_names' do
