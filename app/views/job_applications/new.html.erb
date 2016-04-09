@@ -2,6 +2,6 @@
 
 <h1>New Job Application</h1>
 
-<%= render 'form' %>
+<%= render(partial: 'form', locals: { show_select_active: false }) %>
 
 <%= link_to 'Back', job_applications_path %>

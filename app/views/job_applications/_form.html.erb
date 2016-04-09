@@ -7,14 +7,10 @@
     <%= f.text_field(:company_name) %>
   </div>
 
-  <div class="field">
-    <% opts = options_for_select(
-      [["Yes", true], ["No", false]],
-      :selected => @job_application.active
-    ) %>
-    <%= f.label :active %><br>
-    <%= f.select(:active, opts, :include_blank => true) %>
-  </div>
+  <% if show_select_active %>
+    <%= render(partial: 'form_select_active', locals: { f: f })  %>
+  <% end %>
+
   <div class="actions">
     <%= f.submit %>
   </div>
