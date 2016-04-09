@@ -80,7 +80,7 @@ RSpec.describe UsersController, type: :controller do
       end
       it 'redirects to the created user' do
         post(:create, users_account: attr_for_create)
-        expect(response).to redirect_to(user_path)
+        expect(response).to redirect_to(root_path)
       end
     end
 

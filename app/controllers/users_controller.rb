@@ -24,7 +24,8 @@ class UsersController < ApplicationController
 
     if @user.save
       log_in @user
-      redirect_to user_path, success: 'Profile was successfully created.'
+      flash[:success] = 'Thanks for signing up.'
+      redirect_to root_url
     else
       render :new
     end
@@ -33,7 +34,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
-      redirect_to user_path, success: 'Profile was successfully updated.'
+      flash[:success] = 'Profile was successfully updated.'
+      redirect_to user_path
     else
       render :edit
     end
