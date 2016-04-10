@@ -1,13 +1,16 @@
 <ul class='nav navbar-nav nav-pills'>
-  <li><%= link_to('Companies', companies_path) %></li>
-  <li><%= link_to('My Contacts', contacts_path) %></li>
-  <li><%= link_to('My Notes', notes_path) %></li>
+  <li><%= link_to('Job Applications', job_applications_path) %></li>
   <li class='dropdown'>
-    <%= link_to('My Job Applications', '#', dropdown_opts) %>
+    <%= link_to('Directories', '#', dropdown_opts) %>
     <ul class='dropdown-menu'>
-      <li><%= link_to('My Applications', job_applications_path) %></li>
-      <li><%= link_to('My Cover Letters', cover_letters_path) %></li>
-      <li><%= link_to('My Postings', postings_path) %></li>
+      <li class='dropdown-header'>My Resources</li>
+      <li><%= link_to('Contacts', contacts_path) %></li>
+      <li><%= link_to('Notes', notes_path) %></li>
+      <li><%= link_to('Cover Letters', cover_letters_path) %></li>
+      <li><%= link_to('Postings', postings_path) %></li>
+      <li role='separator' class='divider'></li>
+      <li class='dropdown-header'>Public Resources</li>
+      <li><%= link_to('Companies', companies_path) %></li>
     </ul>
   </li>
 </ul>
