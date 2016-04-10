@@ -9,7 +9,10 @@
 
 @mixin link_wraps_font_awesome {
   display: block;
-  a { margin-left: 0; }
+  a {
+    margin-left: 0;
+    color: black;
+  }
   span {
     font-family: 'Helvetica';
     margin-left: 10px;
