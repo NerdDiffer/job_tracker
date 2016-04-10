@@ -1,6 +1,9 @@
 <% @page_title = "Postings" %>
 
-<h1>Postings</h1>
+<h1 class='allow_inline'>Postings</h1>
+
+<% locals = { resource_name: 'posting' } %>
+<%= render(partial: 'job_applications/faq_add_new', locals: locals) %>
 
 <table class='table table-striped table-hover postings index'>
   <thead>

@@ -138,3 +138,31 @@ a.add_new_member {
   @include link_wraps_font_awesome;
   float: right;
 }
+
+/* FAQ */
+.faq {
+  float: right;
+  text-align: right;
+  @include faq_allow_inline;
+
+  .question {
+    font-style: italic;
+  }
+  .question, .answer, i {
+    clear: both;
+    font-size: 1.2rem;
+    display: block;
+  }
+  a.btn {
+    float: right;
+    margin: 1rem 0;
+    clear: both;
+  }
+  .collapsing {
+    clear: both;
+  }
+}
+
+h1.allow_inline {
+  @include faq_allow_inline;
+}

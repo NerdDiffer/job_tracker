@@ -27,3 +27,9 @@
 @mixin darken_background_intensity($pct) {
   background-color: darken($main_background_color, $pct);
 }
+
+@mixin faq_allow_inline {
+  display: inline-block;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
