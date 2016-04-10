@@ -2,7 +2,11 @@
 
 <h1>Contacts</h1>
 
-<%= link_to 'New contact', new_contact_path %>
+<p>
+  <%= link_to new_contact_path, class: 'add_new_member' do %>
+    <i class='fa fa-plus'><span>New Contact</span></i>
+  <% end %>
+</p>
 
 <table class='table table-striped table-hover contacts index'>
   <thead>
