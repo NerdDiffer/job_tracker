@@ -12,42 +12,32 @@ class ContactsController < ApplicationController
   before_action :set_contact,   only: [:show, :edit, :update, :destroy]
   before_action :check_user,    only: [:show, :edit, :update, :destroy]
 
-  # GET /contacts
-  # GET /contacts.json
   def index
     @contacts = collection_belonging_to_user
     @contacts = @contacts.sorted
     @contacts = custom_index_sort if params[:sort]
   end
 
-  # GET /contacts/1
-  # GET /contacts/1.json
   def show
     @notable = contact
     @notes = @notable.notes
     @note = Note.new
   end
 
-  # GET /contacts/new
   def new
     company_id = params[:company_id]
     opts = { company_id: company_id }
     @contact = Contact.new(opts)
   end
 
-  # GET /contacts/1/edit
   def edit
   end
 
-  # POST /contacts
-  # POST /contacts.json
   def create
     @contact = Contact.new(contact_params_with_associated_ids)
     save_and_respond(contact)
   end
 
-  # PATCH/PUT /contacts/1
-  # PATCH/PUT /contacts/1.json
   def update
     respond_to do |format|
       if contact.update(contact_params_with_associated_ids)
@@ -58,8 +48,6 @@ class ContactsController < ApplicationController
     end
   end
 
-  # DELETE /contacts/1
-  # DELETE /contacts/1.json
   def destroy
     @contact.destroy
     respond_to do |format|

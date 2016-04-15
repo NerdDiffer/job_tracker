@@ -12,20 +12,15 @@ module JobApplications
     before_action :set_posting, only: [:show, :edit, :update, :destroy]
     before_action :check_user,  only: [:show, :edit, :update, :destroy]
 
-    # GET /postings
-    # GET /postings.json
     def index
       @postings = collection_belonging_to_user
       @postings = @postings.sorted
       @postings = custom_index_sort if params[:sort]
     end
 
-    # GET /postings/1
-    # GET /postings/1.json
     def show
     end
 
-    # GET /postings/new
     def new
       opts = {
         job_application_id: params[:job_application_id],
@@ -34,12 +29,9 @@ module JobApplications
       @posting = Posting.new(opts)
     end
 
-    # GET /postings/1/edit
     def edit
     end
 
-    # POST /postings
-    # POST /postings.json
     def create
       @posting = Posting.new(posting_params_with_associated_ids)
 
@@ -52,8 +44,6 @@ module JobApplications
       end
     end
 
-    # PATCH/PUT /postings/1
-    # PATCH/PUT /postings/1.json
     def update
       respond_to do |format|
         if posting.update(posting_params)
@@ -64,8 +54,6 @@ module JobApplications
       end
     end
 
-    # DELETE /postings/1
-    # DELETE /postings/1.json
     def destroy
       @posting.destroy
       respond_to do |format|

@@ -5,20 +5,16 @@ class UsersController < ApplicationController
 
   decorates_assigned :user
 
-  # GET /users/1
   def show
   end
 
-  # GET /users/new
   def new
     @user = new_account
   end
 
-  # GET /users/1/edit
   def edit
   end
 
-  # POST /users
   def create
     @user = new_account(user_params)
 
@@ -31,7 +27,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
       flash[:success] = 'Profile was successfully updated.'
@@ -41,7 +36,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
   def destroy
     @user.destroy
     redirect_to user_url, info: 'Profile was successfully destroyed.'

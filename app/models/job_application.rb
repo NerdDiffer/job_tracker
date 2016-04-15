@@ -11,11 +11,8 @@ class JobApplication < ActiveRecord::Base
 
   validates :user, presence: true
 
-  # scopes
   scope :belonging_to_user, -> (user_id) { where(user_id: user_id) }
   scope :sorted, -> { order(updated_at: :desc) }
-
-  # class methods
 
   # A named scope for selecting active or inactive job applications
   # @param show_active [Boolean], show active or inactive records
@@ -45,7 +42,6 @@ class JobApplication < ActiveRecord::Base
       .where(postings: { job_title: job_title })
   end
 
-  # instance methods
   def title
     title = if company_id?
               company.name

@@ -12,20 +12,15 @@ module JobApplications
     before_action :set_cover_letter, only: [:show, :edit, :update, :destroy]
     before_action :check_user,       only: [:show, :edit, :update, :destroy]
 
-    # GET /cover_letters
-    # GET /cover_letters.json
     def index
       @cover_letters = collection_belonging_to_user
       @cover_letters = @cover_letters.sorted
       @cover_letters = custom_index_sort if params[:sort]
     end
 
-    # GET /cover_letters/1
-    # GET /cover_letters/1.json
     def show
     end
 
-    # GET /cover_letters/new
     def new
       job_application_id = params[:job_application_id]
 
@@ -37,12 +32,9 @@ module JobApplications
       @cover_letter = CoverLetter.new(opts)
     end
 
-    # GET /cover_letters/1/edit
     def edit
     end
 
-    # POST /cover_letters
-    # POST /cover_letters.json
     def create
       @cover_letter = CoverLetter.new(cover_letter_params_with_associated_ids)
 
@@ -55,8 +47,6 @@ module JobApplications
       end
     end
 
-    # PATCH/PUT /cover_letters/1
-    # PATCH/PUT /cover_letters/1.json
     def update
       respond_to do |format|
         if cover_letter.update(cover_letter_params)
@@ -67,8 +57,6 @@ module JobApplications
       end
     end
 
-    # DELETE /cover_letters/1
-    # DELETE /cover_letters/1.json
     def destroy
       @cover_letter.destroy
       respond_to do |format|

@@ -12,8 +12,6 @@ class JobApplicationsController < ApplicationController
   before_action :set_job_application, only: [:show, :edit, :update, :destroy]
   before_action :check_user,          only: [:show, :edit, :update, :destroy]
 
-  # GET /job_applications
-  # GET /job_applications.json
   def index
     active = params[:active]
     @job_applications = collection_belonging_to_user
@@ -21,34 +19,26 @@ class JobApplicationsController < ApplicationController
     @job_applications = custom_index_sort if params[:sort]
   end
 
-  # GET /job_applications/1
-  # GET /job_applications/1.json
   def show
     @notable = job_application
     @notes = @notable.notes
     @note = Note.new
   end
 
-  # GET /job_applications/new
   def new
     company_id = params[:company_id]
     opts = { company_id: company_id }
     @job_application = JobApplication.new(opts)
   end
 
-  # GET /job_applications/1/edit
   def edit
   end
 
-  # POST /job_applications
-  # POST /job_applications.json
   def create
     @job_application = JobApplication.new(job_application_params_with_associated_ids)
     save_and_respond(job_application)
   end
 
-  # PATCH/PUT /job_applications/1
-  # PATCH/PUT /job_applications/1.json
   def update
     respond_to do |format|
       if job_application.update(job_application_params_with_associated_ids)
@@ -59,8 +49,6 @@ class JobApplicationsController < ApplicationController
     end
   end
 
-  # DELETE /job_applications/1
-  # DELETE /job_applications/1.json
   def destroy
     @job_application.destroy
     respond_to do |format|

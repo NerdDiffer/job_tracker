@@ -10,20 +10,15 @@ class CompaniesController < ApplicationController
   before_action :logged_in_user
   before_action :set_company, only: [:show, :edit, :update]
 
-  # GET /companies
-  # GET /companies.json
   def index
     @companies = search_filter_sort
   end
 
-  # GET /companies/1
-  # GET /companies/1.json
   def show
     @contacts = contacts_belonging_to_user_and_current_company
     @job_applications = job_applications_belonging_to_user_and_current_company
   end
 
-  # GET /companies/new
   def new
     @company = Company.new
   end
@@ -31,8 +26,6 @@ class CompaniesController < ApplicationController
   def edit
   end
 
-  # POST /companies
-  # POST /companies.json
   def create
     @company = Company.new(company_params)
     save_and_respond(company)

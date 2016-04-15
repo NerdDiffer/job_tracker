@@ -17,11 +17,9 @@ class Contact < ActiveRecord::Base
     scope: :user_id, message: "Check you don't already have a contact with the same first & last name (case-insensitive)"
   }
 
-  # scopes
   scope :belonging_to_user, -> (user_id) { where(user_id: user_id) }
   scope :sorted, -> { order(first_name: :asc) }
 
-  # class methods
   def self.find_by_name(name)
     name_as_arr = name.split(' ')
     first_name = name_as_arr.first

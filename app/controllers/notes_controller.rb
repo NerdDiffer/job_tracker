@@ -13,29 +13,21 @@ class NotesController < ApplicationController
   before_action :set_note,      only: [:show, :edit, :update, :destroy]
   before_action :check_user,    only: [:show, :edit, :update, :destroy]
 
-  # GET /notes
-  # GET /notes.json
   def index
     @notes = collection_belonging_to_user
     @notes = custom_index_sort if params[:sort]
   end
 
-  # GET /notes/1
-  # GET /notes/1.json
   def show
   end
 
-  # GET /notes/new
   def new
     @note = build_note
   end
 
-  # GET /notes/1/edit
   def edit
   end
 
-  # POST /notes
-  # POST /notes.json
   def create
     @note = build_note
 
@@ -49,8 +41,6 @@ class NotesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /notes/1
-  # PATCH/PUT /notes/1.json
   def update
     respond_to do |format|
       if note.update(note_params)
@@ -62,8 +52,6 @@ class NotesController < ApplicationController
     end
   end
 
-  # DELETE /notes/1
-  # DELETE /notes/1.json
   def destroy
     @note.destroy
     respond_to do |format|
@@ -93,10 +81,11 @@ class NotesController < ApplicationController
     params.require(:note).permit(whitelisted_attr)
   end
 
-  # based off Railscast #154
   def load_notable
-    resource = request_path[1]
-    id = request_path[2]
+    path_of_request = request_path
+    resource = path_of_request[1]
+    id = path_of_request[2]
+
     model = inflect(resource)
     @notable = model.find(id)
   end
@@ -108,18 +97,6 @@ class NotesController < ApplicationController
   def inflect(resource)
     resource.singularize.classify.constantize
   end
-
-  # based off Railscast #154
-  # def load_notable_alternate
-  #   model = [Contact, JobApplication].detect do |m|
-  #     model_id = "#{m.name.underscore}_id"
-  #     params[model_id]
-  #   end
-
-  #   model_param = "#{model.name.underscore}_id"
-  #   model_id = params[model_param]
-  #   @notable = model.find(model_id)
-  # end
 
   def model
     Note
