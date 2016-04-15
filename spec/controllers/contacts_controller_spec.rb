@@ -321,12 +321,13 @@ RSpec.describe ContactsController, type: :controller do
 
     before(:each) do
       allow(controller).to receive(:params).and_return(params)
-      allow(Company).to receive(:get_record_val_by)
+      allow(Company).to receive(:find_by_name).and_return(company)
+      allow(company).to receive(:id).and_return(1)
     end
 
-    it 'calls .get_record_val_by on Company' do
-      expect(Company).to receive(:get_record_val_by).with(:name, 'foo')
-      controller.send(:set_company_id)
+    it 'returns the id of the company' do
+      actual = controller.send(:set_company_id)
+      expect(actual).to eq 1
     end
   end
 

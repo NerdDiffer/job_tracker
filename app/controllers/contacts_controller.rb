@@ -79,7 +79,7 @@ class ContactsController < ApplicationController
 
   def set_company_id
     company_name = params[:contact][:company_name]
-    Company.get_record_val_by(:name, company_name)
+    Company.find_by_name(company_name).id
   end
 
   def model

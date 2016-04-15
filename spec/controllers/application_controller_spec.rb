@@ -244,17 +244,17 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe '#find_user_with_session' do
-    it 'calls User.find_by' do
+    it 'calls User.find' do
       allow(@controller).to receive(:session).and_return(user_id: 1)
-      expect(User).to receive(:find_by).with(id: 1)
+      expect(User).to receive(:find).with(1)
       @controller.send(:find_user_with_session)
     end
   end
 
   describe '#find_user_with_signed_cookie' do
-    it 'calls User.find_by' do
+    it 'calls User.find' do
       allow(cookies).to receive(:signed).and_return(user_id: 1)
-      expect(User).to receive(:find_by).with(id: 1)
+      expect(User).to receive(:find).with(1)
       @controller.send(:find_user_with_signed_cookie)
     end
   end

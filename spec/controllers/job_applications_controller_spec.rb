@@ -267,17 +267,13 @@ RSpec.describe JobApplicationsController, type: :controller do
     params = { job_application: { company_name: 'foo bar' } }
 
     before(:each) do
+      allow(controller).to receive(:params).and_return(params)
+      allow(Company).to receive(:find_by_name).and_return(company)
       allow(company).to receive(:id).and_return(1)
-      allow(Company).to receive(:get_record_val_by).and_return(company.id)
-      allow(@controller).to receive(:params).and_return(params)
     end
 
-    it 'calls Company.get_record_val_by' do
-      expect(Company).to receive(:get_record_val_by).with(:name, 'foo bar')
-      @controller.send(:set_company_id)
-    end
-    it 'returns the id of the company object' do
-      actual = @controller.send(:set_company_id)
+    it 'returns the id of the company' do
+      actual = controller.send(:set_company_id)
       expect(actual).to eq 1
     end
   end
@@ -312,22 +308,6 @@ RSpec.describe JobApplicationsController, type: :controller do
     it 'calls #merge on contact_params' do
       expected_args = { company_id: 1, user_id: 1 }
       expect(job_application_params).to receive(:merge).with(expected_args)
-    end
-  end
-
-  describe '#set_company_id' do
-    let(:params) do
-      { job_application: { company_name: 'foo' } }
-    end
-
-    before(:each) do
-      allow(controller).to receive(:params).and_return(params)
-      allow(Company).to receive(:get_record_val_by)
-    end
-
-    it 'calls .get_record_val_by on Company' do
-      expect(Company).to receive(:get_record_val_by).with(:name, 'foo')
-      controller.send(:set_company_id)
     end
   end
 

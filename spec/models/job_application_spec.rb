@@ -7,21 +7,6 @@ describe JobApplication, type: :model do
     build(:job_application, id: 1, company: company, posting: posting)
   end
 
-  describe '.get_record_val_by' do
-    context 'retrieving real attributes while searching by virtual attribute' do
-      before(:each) do
-        allow(described_class)
-          .to receive(:find_by_title)
-          .with(instance_of(String))
-          .and_return job_application
-      end
-      it 'returns the id of a JobApplication record' do
-        actual = described_class.get_record_val_by(:title, 'foo')
-        expect(actual).to eq 1
-      end
-    end
-  end
-
   describe '#title' do
     let(:time_now) { Time.now }
 

@@ -72,12 +72,12 @@ module SessionsHelper
 
   def find_user_with_session
     id = session[:user_id]
-    User.find_by(id: id)
+    User.find(id)
   end
 
   def find_user_with_signed_cookie
     id = cookies.signed[:user_id]
-    User.find_by(id: id)
+    User.find(id)
   end
 
   def authenticated_user?(user)
