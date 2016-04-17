@@ -49,4 +49,35 @@ RSpec.describe Contact, type: :model do
       expect(contact.name).to eq 'Foo Bar'
     end
   end
+
+  describe '#company_name' do
+    after(:each) do
+      contact.company_name
+    end
+
+    it 'calls #company?' do
+      allow(contact).to receive(:company_id?).and_return(false)
+      expect(contact).to receive(:company_id?)
+    end
+
+    context 'when a contact belongs to a company' do
+      before(:each) do
+        allow(contact).to receive(:company_id?).and_return(true)
+        allow(contact).to receive(:company).and_return(company)
+      end
+
+      it 'calls for #name on the company' do
+        expect(company).to receive(:name)
+      end
+    end
+    context 'when a contact does NOT belong to a company' do
+      before(:each) do
+        allow(contact).to receive(:company_id?).and_return(false)
+      end
+
+      it 'returns nil' do
+        expect(contact.company_name).to be_nil
+      end
+    end
+  end
 end

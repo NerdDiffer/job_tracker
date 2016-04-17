@@ -2,7 +2,7 @@ class Contact < ActiveRecord::Base
   extend FriendlyId
   include Queryable
 
-  attr_accessor :company_name
+  attr_writer :company_name
 
   friendly_id :name
 
@@ -35,5 +35,9 @@ class Contact < ActiveRecord::Base
 
   def permalink
     self.permalink = name.parameterize
+  end
+
+  def company_name
+    company.name if company_id?
   end
 end

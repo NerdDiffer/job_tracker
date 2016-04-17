@@ -56,37 +56,6 @@ describe ContactDecorator do
     end
   end
 
-  describe '#company_name' do
-    after(:each) do
-      contact_decorator.company_name
-    end
-
-    it 'calls #company?' do
-      allow(contact_decorator).to receive(:company_id?).and_return(false)
-      expect(contact_decorator).to receive(:company_id?)
-    end
-
-    context 'when a contact_decorator belongs to a company' do
-      before(:each) do
-        allow(contact_decorator).to receive(:company_id?).and_return(true)
-        allow(contact_decorator).to receive(:company).and_return(company)
-      end
-
-      it 'calls for #name on the company' do
-        expect(company).to receive(:name)
-      end
-    end
-    context 'when a contact_decorator does NOT belong to a company' do
-      before(:each) do
-        allow(contact_decorator).to receive(:company_id?).and_return(false)
-      end
-
-      it 'returns nil' do
-        expect(contact_decorator.company_name).to be_nil
-      end
-    end
-  end
-
   describe '#phone_and_email' do
     before(:each) do
       allow(contact_decorator).to receive(:h).and_return(helper)
